@@ -189,13 +189,6 @@
 	
 	};
 
-
-	// Loading page
-	var loaderPage = function() {
-		$(".colorlib-loader").fadeOut("slow");
-	};
-
-
 	var parallax = function() {
 
 		if ( !isMobile.any() ) {
@@ -251,11 +244,6 @@
 		});
 
 	};
-
-	var bgVideo = function() {
-		$('.player').mb_YTPlayer();
-	};
-
 	
 	$(function(){
 		mobileMenuOutsideClick();
@@ -264,12 +252,10 @@
 		contentWayPoint();
 		dropdown();
 		goToTop();
-		loaderPage();
 		parallax();
 		counter();
 		counterWayPoint();
 		owlCrouselFeatureSlide();
-		bgVideo();
 	});
 
 
