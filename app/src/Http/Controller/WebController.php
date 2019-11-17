@@ -5,11 +5,6 @@ namespace ProycerWeb\Http\Controller;
 class WebController extends AbstractController
 {
 
-    /**
-     * Index action
-     *
-     * @return void
-     */
     public function index()
     {
         $this->prepareView('index.phtml');
@@ -28,7 +23,7 @@ class WebController extends AbstractController
 
     public function nosotros()
     {
-    	$this->prepareView('index.phtml');
+    	$this->prepareView('nosotros.phtml');
         $this->view->title = 'Nosotros | Proycer';
         $this->view->request = $this->request->getRequestUri();
         $this->send();
@@ -36,7 +31,7 @@ class WebController extends AbstractController
 
     public function contacto()
     {
-    	$this->prepareView('index.phtml');
+    	$this->prepareView('contacto.phtml');
         $this->view->title = 'Contacto | Proycer';
         $this->view->request = $this->request->getRequestUri();
         $this->send();
@@ -44,17 +39,12 @@ class WebController extends AbstractController
 
     public function autogestion()
     {
-    	$this->prepareView('index.phtml');
+    	$this->prepareView('autogestion.phtml');
         $this->view->title = 'Autogestion | Proycer';
         $this->view->request = $this->request->getRequestUri();
         $this->send();
     }
 
-    /**
-     * Error action
-     *
-     * @return void
-     */
     public function error()
     {
         $this->prepareView('error.phtml');
