@@ -7,9 +7,14 @@ try {
     $app = new Pop\Application($autoloader, include __DIR__ . '/../app/config/app.http.php');
     $app->register(new ProycerWeb\Module());
     $app->run();
-} catch (\Exception $exception) {
+} catch (Exception $exception) {
     $app = new ProycerWeb\Module();
-    $app->httpError($exception);
+
+	try {
+		$app->httpError($exception);
+	} catch (\Pop\Http\Exception $e) {
+	} catch (\Pop\View\Exception $e) {
+	}
 }
 
 

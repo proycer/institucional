@@ -3,6 +3,7 @@
 namespace ProycerWeb\Http\Controller;
 
 use Pop\Application;
+use Pop\Http\Exception;
 use Pop\Http\Request;
 use Pop\Http\Response;
 use Pop\View\View;
@@ -104,18 +105,22 @@ abstract class AbstractController extends \Pop\Controller\AbstractController
         return (null !== $this->view);
     }
 
-    /**
-     * Redirect method
-     *
-     * @param  string $url
-     * @param  int    $code
-     * @param  string $version
-     * @return void
-     */
+	/**
+	 * Redirect method
+	 *
+	 * @param string $url
+	 * @param int $code
+	 * @param string $version
+	 * @return void
+	 * @throws Exception
+	 */
     public function redirect($url, $code = 302, $version = '1.1')
     {
-        Response::redirect($url, $code, $version);
-        exit();
+	    try {
+		    Response::redirect($url, $code, $version);
+	    } catch (Exception $e) {
+	    }
+	    exit();
     }
 
     /**
@@ -130,15 +135,21 @@ abstract class AbstractController extends \Pop\Controller\AbstractController
     public function send($code = 200, $body = null, $message = null, array $headers = null)
     {
         if ((null === $body) && (null !== $this->view)) {
-            $body = $this->view->render();
+	        try {
+		        $body = $this->view->render();
+	        } catch (\Pop\View\Exception $e) {
+	        }
         }
 
         if (null !== $message) {
             $this->response->setMessage($message);
         }
 
-        $this->response->setCode($code);
-        $this->response->setBody($body . PHP_EOL . PHP_EOL);
+	    try {
+		    $this->response->setCode($code);
+	    } catch (Exception $e) {
+	    }
+	    $this->response->setBody($body . PHP_EOL . PHP_EOL);
         $this->response->send(null, $headers);
     }
 
