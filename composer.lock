@@ -1,0 +1,1800 @@
+{
+    "_readme": [
+        "This file locks the dependencies of your project to a known state",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "This file is @generated automatically"
+    ],
+    "content-hash": "a217aa68ee7233001b45587c3d03ea5d",
+    "packages": [
+        {
+            "name": "popphp/pop-acl",
+            "version": "3.2.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/popphp/pop-acl.git",
+                "reference": "3065ea69cd6c6d685b6cac7022c04d18fc6055e4"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/popphp/pop-acl/zipball/3065ea69cd6c6d685b6cac7022c04d18fc6055e4",
+                "reference": "3065ea69cd6c6d685b6cac7022c04d18fc6055e4",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.1.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^7.0.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "3.2.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Pop\\Acl\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Nick Sagona",
+                    "email": "dev@nolainteractive.com",
+                    "homepage": "http://www.nolainteractive.com/"
+                }
+            ],
+            "description": "Pop ACL Component for Pop PHP Framework",
+            "homepage": "http://www.popphp.org/",
+            "keywords": [
+                "access control list",
+                "acl",
+                "php",
+                "pop",
+                "pop php"
+            ],
+            "time": "2019-01-10T20:58:15+00:00"
+        },
+        {
+            "name": "popphp/pop-audit",
+            "version": "1.1.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/popphp/pop-audit.git",
+                "reference": "5f04a597dbea955eabe6a3eebebce489c1ec7786"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/popphp/pop-audit/zipball/5f04a597dbea955eabe6a3eebebce489c1ec7786",
+                "reference": "5f04a597dbea955eabe6a3eebebce489c1ec7786",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.1.0",
+                "popphp/popphp": "^3.2.3"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^7.0.0",
+                "popphp/pop-db": "^4.5.0",
+                "popphp/pop-http": "^3.2.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.1.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Pop\\Audit\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Nick Sagona",
+                    "email": "dev@nolainteractive.com",
+                    "homepage": "http://www.nolainteractive.com/"
+                }
+            ],
+            "description": "Pop Audit Component for Pop PHP Framework",
+            "homepage": "http://github.com/popphp/pop-audit",
+            "keywords": [
+                "Audit",
+                "application auditing",
+                "auditing",
+                "php",
+                "php audit",
+                "php auditing",
+                "pop",
+                "pop php"
+            ],
+            "time": "2019-03-12T17:25:35+00:00"
+        },
+        {
+            "name": "popphp/pop-auth",
+            "version": "3.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/popphp/pop-auth.git",
+                "reference": "f874d477d45844719f0d6684f0e309e394e099f9"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/popphp/pop-auth/zipball/f874d477d45844719f0d6684f0e309e394e099f9",
+                "reference": "f874d477d45844719f0d6684f0e309e394e099f9",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.1.0",
+                "popphp/pop-db": "^4.5.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^7.0.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "3.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Pop\\Auth\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Nick Sagona",
+                    "email": "dev@nolainteractive.com",
+                    "homepage": "http://www.nolainteractive.com/"
+                }
+            ],
+            "description": "Pop Auth Component for Pop PHP Framework",
+            "homepage": "http://www.popphp.org/",
+            "keywords": [
+                "Authentication",
+                "authorization",
+                "php",
+                "pop",
+                "pop php"
+            ],
+            "time": "2019-03-12T17:28:24+00:00"
+        },
+        {
+            "name": "popphp/pop-cache",
+            "version": "3.2.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/popphp/pop-cache.git",
+                "reference": "eb16431b84ef5468bf3e23a1903a4e16bba9f061"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/popphp/pop-cache/zipball/eb16431b84ef5468bf3e23a1903a4e16bba9f061",
+                "reference": "eb16431b84ef5468bf3e23a1903a4e16bba9f061",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.1.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^7.0.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "3.2.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Pop\\Cache\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Nick Sagona",
+                    "email": "dev@nolainteractive.com",
+                    "homepage": "http://www.nolainteractive.com/"
+                }
+            ],
+            "description": "Pop Cache Component for Pop PHP Framework",
+            "homepage": "http://www.popphp.org/",
+            "keywords": [
+                "apc",
+                "cache",
+                "caching",
+                "memcache",
+                "php",
+                "pop",
+                "pop php"
+            ],
+            "time": "2019-01-10T21:05:01+00:00"
+        },
+        {
+            "name": "popphp/pop-code",
+            "version": "3.1.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/popphp/pop-code.git",
+                "reference": "bfddb0b03ec413f9aec170be9f61448328b1615d"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/popphp/pop-code/zipball/bfddb0b03ec413f9aec170be9f61448328b1615d",
+                "reference": "bfddb0b03ec413f9aec170be9f61448328b1615d",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.1.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^7.0.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "3.1.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Pop\\Code\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Nick Sagona",
+                    "email": "dev@nolainteractive.com",
+                    "homepage": "http://www.nolainteractive.com/"
+                }
+            ],
+            "description": "Pop Code Component for Pop PHP Framework",
+            "homepage": "http://www.popphp.org/",
+            "keywords": [
+                "code generation",
+                "php",
+                "pop",
+                "pop php",
+                "reflection"
+            ],
+            "time": "2019-01-25T04:43:54+00:00"
+        },
+        {
+            "name": "popphp/pop-config",
+            "version": "3.2.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/popphp/pop-config.git",
+                "reference": "c36fac1306971dc6c0a5b2f758411ed17a9266c3"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/popphp/pop-config/zipball/c36fac1306971dc6c0a5b2f758411ed17a9266c3",
+                "reference": "c36fac1306971dc6c0a5b2f758411ed17a9266c3",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.1.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^7.0.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "3.2.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Pop\\Config\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Nick Sagona",
+                    "email": "dev@nolainteractive.com",
+                    "homepage": "http://www.nolainteractive.com/"
+                }
+            ],
+            "description": "Pop Config Component for Pop PHP Framework",
+            "homepage": "http://www.popphp.org/",
+            "keywords": [
+                "app config",
+                "application configuration",
+                "config",
+                "configuration",
+                "php",
+                "pop",
+                "pop php"
+            ],
+            "time": "2019-01-10T22:25:21+00:00"
+        },
+        {
+            "name": "popphp/pop-console",
+            "version": "3.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/popphp/pop-console.git",
+                "reference": "a91a926de9b50fcea8ad2b34cbaef1b03a4d93e1"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/popphp/pop-console/zipball/a91a926de9b50fcea8ad2b34cbaef1b03a4d93e1",
+                "reference": "a91a926de9b50fcea8ad2b34cbaef1b03a4d93e1",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.1.0",
+                "popphp/popphp": "^3.3.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^7.0.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "3.1.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Pop\\Console\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Nick Sagona",
+                    "email": "dev@nolainteractive.com",
+                    "homepage": "http://www.nolainteractive.com/"
+                }
+            ],
+            "description": "Pop Console Component for Pop PHP Framework",
+            "homepage": "http://www.popphp.org/",
+            "keywords": [
+                "cli",
+                "cli application",
+                "console",
+                "console application",
+                "php",
+                "pop",
+                "pop php"
+            ],
+            "time": "2019-02-18T22:45:38+00:00"
+        },
+        {
+            "name": "popphp/pop-cookie",
+            "version": "3.1.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/popphp/pop-cookie.git",
+                "reference": "30f0b99896a5fa9ef86c3615f7a3227fc266e74a"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/popphp/pop-cookie/zipball/30f0b99896a5fa9ef86c3615f7a3227fc266e74a",
+                "reference": "30f0b99896a5fa9ef86c3615f7a3227fc266e74a",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.1.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "3.1.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Pop\\Cookie\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Nick Sagona",
+                    "email": "dev@nolainteractive.com",
+                    "homepage": "http://www.nolainteractive.com/"
+                }
+            ],
+            "description": "Pop Cookie Component for Pop PHP Framework",
+            "homepage": "http://www.popphp.org/",
+            "keywords": [
+                "cookie",
+                "cookies",
+                "php",
+                "pop",
+                "pop php"
+            ],
+            "time": "2019-01-08T23:04:16+00:00"
+        },
+        {
+            "name": "popphp/pop-css",
+            "version": "1.0.7",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/popphp/pop-css.git",
+                "reference": "e6d2e5b61d336368e7c0c15d20ddbce1c19cd007"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/popphp/pop-css/zipball/e6d2e5b61d336368e7c0c15d20ddbce1c19cd007",
+                "reference": "e6d2e5b61d336368e7c0c15d20ddbce1c19cd007",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.1.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^7.0.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Pop\\Css\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Nick Sagona",
+                    "email": "dev@nolainteractive.com",
+                    "homepage": "http://www.nolainteractive.com/"
+                }
+            ],
+            "description": "Pop CSS Component for Pop PHP Framework",
+            "homepage": "http://www.popphp.org/",
+            "keywords": [
+                "CSS parsing",
+                "css generation",
+                "php",
+                "pop",
+                "pop php"
+            ],
+            "time": "2019-01-10T21:06:53+00:00"
+        },
+        {
+            "name": "popphp/pop-csv",
+            "version": "3.1.4",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/popphp/pop-csv.git",
+                "reference": "43a9350cdc91b1a37b1f72ec1d65cd454f041517"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/popphp/pop-csv/zipball/43a9350cdc91b1a37b1f72ec1d65cd454f041517",
+                "reference": "43a9350cdc91b1a37b1f72ec1d65cd454f041517",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.1.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^7.0.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "3.1.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Pop\\Csv\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Nick Sagona",
+                    "email": "dev@nolainteractive.com",
+                    "homepage": "http://www.nolainteractive.com/"
+                }
+            ],
+            "description": "Pop CSV Component for Pop PHP Framework",
+            "homepage": "http://www.popphp.org/",
+            "keywords": [
+                "csv",
+                "php",
+                "pop",
+                "pop php"
+            ],
+            "time": "2019-10-18T15:44:46+00:00"
+        },
+        {
+            "name": "popphp/pop-db",
+            "version": "4.5.7",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/popphp/pop-db.git",
+                "reference": "699f743b168a39378f275a8d54138db22ea13fbb"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/popphp/pop-db/zipball/699f743b168a39378f275a8d54138db22ea13fbb",
+                "reference": "699f743b168a39378f275a8d54138db22ea13fbb",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.1.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^7.0.0",
+                "popphp/pop-csv": "^3.1.1",
+                "popphp/pop-debug": "^1.1.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "4.4.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Pop\\Db\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Nick Sagona",
+                    "email": "dev@nolainteractive.com",
+                    "homepage": "http://www.nolainteractive.com/"
+                }
+            ],
+            "description": "Pop Db Component for Pop PHP Framework",
+            "homepage": "http://www.popphp.org/",
+            "keywords": [
+                "SQL Builder",
+                "database",
+                "database migrations",
+                "mysql",
+                "pdo",
+                "php",
+                "pop",
+                "pop php",
+                "postgresql",
+                "schema builder",
+                "sqlite",
+                "sqlsrv"
+            ],
+            "time": "2019-10-28T19:49:43+00:00"
+        },
+        {
+            "name": "popphp/pop-debug",
+            "version": "1.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/popphp/pop-debug.git",
+                "reference": "a1f7058c5bf830ce4a5ba8e979fba75e48a19b64"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/popphp/pop-debug/zipball/a1f7058c5bf830ce4a5ba8e979fba75e48a19b64",
+                "reference": "a1f7058c5bf830ce4a5ba8e979fba75e48a19b64",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.1.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^7.0.0",
+                "popphp/pop-db": "^4.5.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.1.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Pop\\Debug\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Nick Sagona",
+                    "email": "dev@nolainteractive.com",
+                    "homepage": "http://www.nolainteractive.com/"
+                }
+            ],
+            "description": "Pop Debug Component for Pop PHP Framework",
+            "homepage": "http://www.popphp.org/",
+            "keywords": [
+                "debugger",
+                "php",
+                "php debugger",
+                "pop",
+                "pop php"
+            ],
+            "time": "2019-03-12T17:28:51+00:00"
+        },
+        {
+            "name": "popphp/pop-dir",
+            "version": "3.0.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/popphp/pop-dir.git",
+                "reference": "39a539a5d29de575c9eb19dde6a7d8a7ba385ee3"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/popphp/pop-dir/zipball/39a539a5d29de575c9eb19dde6a7d8a7ba385ee3",
+                "reference": "39a539a5d29de575c9eb19dde6a7d8a7ba385ee3",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.1.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^7.0.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "3.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Pop\\Dir\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Nick Sagona",
+                    "email": "dev@nolainteractive.com",
+                    "homepage": "http://www.nolainteractive.com/"
+                }
+            ],
+            "description": "Pop Directory Component for Pop PHP Framework",
+            "homepage": "http://www.popphp.org/",
+            "keywords": [
+                "directory",
+                "directory traversing",
+                "php",
+                "pop",
+                "pop php"
+            ],
+            "time": "2019-01-10T21:08:32+00:00"
+        },
+        {
+            "name": "popphp/pop-dom",
+            "version": "3.2.6",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/popphp/pop-dom.git",
+                "reference": "dd933862325ee7311e5174e8a60b3d756d0214b3"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/popphp/pop-dom/zipball/dd933862325ee7311e5174e8a60b3d756d0214b3",
+                "reference": "dd933862325ee7311e5174e8a60b3d756d0214b3",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.1.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^7.0.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "3.2.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Pop\\Dom\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Nick Sagona",
+                    "email": "dev@nolainteractive.com",
+                    "homepage": "http://www.nolainteractive.com/"
+                }
+            ],
+            "description": "Pop DOM Component for Pop PHP Framework",
+            "homepage": "http://www.popphp.org/",
+            "keywords": [
+                "document object model",
+                "dom",
+                "dom generation",
+                "dom manipulation",
+                "php",
+                "pop",
+                "pop php"
+            ],
+            "time": "2019-01-10T21:08:48+00:00"
+        },
+        {
+            "name": "popphp/pop-form",
+            "version": "3.4.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/popphp/pop-form.git",
+                "reference": "eb9237698de82e088f21798868422bda5a505fc1"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/popphp/pop-form/zipball/eb9237698de82e088f21798868422bda5a505fc1",
+                "reference": "eb9237698de82e088f21798868422bda5a505fc1",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.1.0",
+                "popphp/pop-acl": "^3.2.0",
+                "popphp/pop-dom": "^3.2.6",
+                "popphp/pop-validator": "^3.1.1"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^7.0.0",
+                "popphp/pop-db": "^4.5.5"
+            },
+            "suggest": {
+                "popphp/pop-db": "To use the dynamic field generation based on database table columns",
+                "popphp/pop-view": "To use render the form fields with a view"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "3.4.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Pop\\Form\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Nick Sagona",
+                    "email": "dev@nolainteractive.com",
+                    "homepage": "http://www.nolainteractive.com/"
+                }
+            ],
+            "description": "Pop Form Component for Pop PHP Framework",
+            "homepage": "http://www.popphp.org/",
+            "keywords": [
+                "Forms",
+                "form generation",
+                "form validation",
+                "html forms",
+                "php",
+                "pop",
+                "pop php"
+            ],
+            "time": "2019-10-18T03:11:25+00:00"
+        },
+        {
+            "name": "popphp/pop-ftp",
+            "version": "3.0.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/popphp/pop-ftp.git",
+                "reference": "f8d18c3fdd0823ee57b74ed3d01e25f3e5970452"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/popphp/pop-ftp/zipball/f8d18c3fdd0823ee57b74ed3d01e25f3e5970452",
+                "reference": "f8d18c3fdd0823ee57b74ed3d01e25f3e5970452",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.1.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "3.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Pop\\Ftp\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Nick Sagona",
+                    "email": "dev@nolainteractive.com",
+                    "homepage": "http://www.nolainteractive.com/"
+                }
+            ],
+            "description": "Pop FTP Component for Pop PHP Framework",
+            "homepage": "http://www.popphp.org/",
+            "keywords": [
+                "ftp",
+                "php",
+                "pop",
+                "pop php"
+            ],
+            "time": "2019-01-09T20:27:00+00:00"
+        },
+        {
+            "name": "popphp/pop-http",
+            "version": "3.2.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/popphp/pop-http.git",
+                "reference": "b2d62ecd39e508aac94d3e633b39584a0f625948"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/popphp/pop-http/zipball/b2d62ecd39e508aac94d3e633b39584a0f625948",
+                "reference": "b2d62ecd39e508aac94d3e633b39584a0f625948",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.1.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^7.0.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "3.2.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Pop\\Http\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Nick Sagona",
+                    "email": "dev@nolainteractive.com",
+                    "homepage": "http://www.nolainteractive.com/"
+                }
+            ],
+            "description": "Pop Http Component for Pop PHP Framework",
+            "homepage": "http://www.popphp.org/",
+            "keywords": [
+                "Streams",
+                "curl",
+                "file uploads",
+                "http",
+                "http client",
+                "http request",
+                "http response",
+                "php",
+                "pop",
+                "pop php"
+            ],
+            "time": "2019-11-11T21:02:56+00:00"
+        },
+        {
+            "name": "popphp/pop-i18n",
+            "version": "3.0.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/popphp/pop-i18n.git",
+                "reference": "42e947fb99ce40b8856228d0c41181f4d441dfdc"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/popphp/pop-i18n/zipball/42e947fb99ce40b8856228d0c41181f4d441dfdc",
+                "reference": "42e947fb99ce40b8856228d0c41181f4d441dfdc",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.1.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^7.0.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "3.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Pop\\I18n\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Nick Sagona",
+                    "email": "dev@nolainteractive.com",
+                    "homepage": "http://www.nolainteractive.com/"
+                }
+            ],
+            "description": "Pop I18n Component for Pop PHP Framework",
+            "homepage": "http://www.popphp.org/",
+            "keywords": [
+                "i18n",
+                "internationalization",
+                "l10n",
+                "language",
+                "locale",
+                "localization",
+                "php",
+                "pop",
+                "pop php",
+                "translation"
+            ],
+            "time": "2019-01-10T21:09:21+00:00"
+        },
+        {
+            "name": "popphp/pop-image",
+            "version": "3.3.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/popphp/pop-image.git",
+                "reference": "70adeccc04e5635000e0da424eb002c986aa686c"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/popphp/pop-image/zipball/70adeccc04e5635000e0da424eb002c986aa686c",
+                "reference": "70adeccc04e5635000e0da424eb002c986aa686c",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.1.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^7.0.0"
+            },
+            "suggest": {
+                "ext-gd": "To use the Gd image adapter",
+                "ext-gmagick": "To use the Gmagick image adapter",
+                "ext-imagick": "To use the Imagick image adapter"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "3.3.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Pop\\Image\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Nick Sagona",
+                    "email": "dev@nolainteractive.com",
+                    "homepage": "http://www.nolainteractive.com/"
+                }
+            ],
+            "description": "PHP Image library for generating, editing and effecting images. A component of the Pop PHP Framework",
+            "homepage": "http://github.com/popphp/pop-image",
+            "keywords": [
+                "draw image",
+                "image",
+                "image crop",
+                "image effects",
+                "image resize",
+                "image text",
+                "php",
+                "php image library",
+                "php image processing",
+                "pop",
+                "pop php"
+            ],
+            "time": "2019-02-22T05:43:34+00:00"
+        },
+        {
+            "name": "popphp/pop-kettle",
+            "version": "1.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/popphp/pop-kettle.git",
+                "reference": "cdf498eb5c63f7859524af1fc09c237de8ae44cd"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/popphp/pop-kettle/zipball/cdf498eb5c63f7859524af1fc09c237de8ae44cd",
+                "reference": "cdf498eb5c63f7859524af1fc09c237de8ae44cd",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.1.0",
+                "popphp/pop-console": "^3.1.0",
+                "popphp/pop-db": "^4.5.0",
+                "popphp/pop-dir": "^3.0.2",
+                "popphp/popcorn": "^3.2.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Pop\\Kettle\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Nick Sagona",
+                    "email": "dev@nolainteractive.com",
+                    "homepage": "http://www.nolainteractive.com/"
+                }
+            ],
+            "description": "A CLI helper application for the Pop PHP Framework.",
+            "time": "2019-04-25T16:44:25+00:00"
+        },
+        {
+            "name": "popphp/pop-loader",
+            "version": "3.0.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/popphp/pop-loader.git",
+                "reference": "41f9bdaa704f3b221d8d752e8bc553ad082c84b2"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/popphp/pop-loader/zipball/41f9bdaa704f3b221d8d752e8bc553ad082c84b2",
+                "reference": "41f9bdaa704f3b221d8d752e8bc553ad082c84b2",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.1.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^7.0.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "3.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Pop\\Loader\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Nick Sagona",
+                    "email": "dev@nolainteractive.com",
+                    "homepage": "http://www.nolainteractive.com/"
+                }
+            ],
+            "description": "Pop Loader Component for Pop PHP Framework",
+            "homepage": "http://www.popphp.org/",
+            "keywords": [
+                "PSR-4",
+                "autoloader",
+                "loader",
+                "pop",
+                "pop php",
+                "psr-0"
+            ],
+            "time": "2019-10-18T04:43:41+00:00"
+        },
+        {
+            "name": "popphp/pop-log",
+            "version": "3.2.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/popphp/pop-log.git",
+                "reference": "61c8de504a5eb55077c48a10910c86ff614ada95"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/popphp/pop-log/zipball/61c8de504a5eb55077c48a10910c86ff614ada95",
+                "reference": "61c8de504a5eb55077c48a10910c86ff614ada95",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.1.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^7.0.0",
+                "popphp/pop-db": "^4.5.7",
+                "popphp/pop-http": "^3.2.2",
+                "popphp/pop-mail": "^3.2.3"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "3.2.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Pop\\Log\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Nick Sagona",
+                    "email": "dev@nolainteractive.com",
+                    "homepage": "http://www.nolainteractive.com/"
+                }
+            ],
+            "description": "Pop Log Component for Pop PHP Framework",
+            "homepage": "http://www.popphp.org/",
+            "keywords": [
+                "log",
+                "logging",
+                "php",
+                "pop",
+                "pop php"
+            ],
+            "time": "2019-10-29T01:00:42+00:00"
+        },
+        {
+            "name": "popphp/pop-mail",
+            "version": "3.2.4",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/popphp/pop-mail.git",
+                "reference": "1a2a7e83384dbb6ce44e3f3237277071d5625502"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/popphp/pop-mail/zipball/1a2a7e83384dbb6ce44e3f3237277071d5625502",
+                "reference": "1a2a7e83384dbb6ce44e3f3237277071d5625502",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.1.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^7.0.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "3.1.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Pop\\Mail\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Nick Sagona",
+                    "email": "dev@nolainteractive.com",
+                    "homepage": "http://www.nolainteractive.com/"
+                }
+            ],
+            "description": "Pop Mail Component for Pop PHP Framework",
+            "homepage": "http://www.popphp.org/",
+            "keywords": [
+                "mail",
+                "mail queue",
+                "php",
+                "pop",
+                "pop php",
+                "send mail"
+            ],
+            "time": "2019-11-11T15:43:58+00:00"
+        },
+        {
+            "name": "popphp/pop-nav",
+            "version": "3.2.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/popphp/pop-nav.git",
+                "reference": "fac96f2bbada10a6a197602d9cc41c1eddcc09db"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/popphp/pop-nav/zipball/fac96f2bbada10a6a197602d9cc41c1eddcc09db",
+                "reference": "fac96f2bbada10a6a197602d9cc41c1eddcc09db",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.1.0",
+                "popphp/pop-acl": "^3.2.0",
+                "popphp/pop-dom": "^3.2.6"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^7.0.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "3.2.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Pop\\Nav\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Nick Sagona",
+                    "email": "dev@nolainteractive.com",
+                    "homepage": "http://www.nolainteractive.com/"
+                }
+            ],
+            "description": "Pop Nav Component for Pop PHP Framework",
+            "homepage": "http://www.popphp.org/",
+            "keywords": [
+                "acl",
+                "html",
+                "nav",
+                "navigation",
+                "php",
+                "pop",
+                "pop php"
+            ],
+            "time": "2019-01-10T22:20:38+00:00"
+        },
+        {
+            "name": "popphp/pop-paginator",
+            "version": "3.0.4",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/popphp/pop-paginator.git",
+                "reference": "8656674831e22749f25369d4cb2db5eb4639b9a7"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/popphp/pop-paginator/zipball/8656674831e22749f25369d4cb2db5eb4639b9a7",
+                "reference": "8656674831e22749f25369d4cb2db5eb4639b9a7",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.1.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^7.0.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "3.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Pop\\Paginator\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Nick Sagona",
+                    "email": "dev@nolainteractive.com",
+                    "homepage": "http://www.nolainteractive.com/"
+                }
+            ],
+            "description": "Pop Paginator Component for Pop PHP Framework",
+            "homepage": "http://www.popphp.org/",
+            "keywords": [
+                "pagination",
+                "paginator",
+                "php",
+                "pop",
+                "pop php"
+            ],
+            "time": "2019-05-21T21:36:57+00:00"
+        },
+        {
+            "name": "popphp/pop-pdf",
+            "version": "3.2.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/popphp/pop-pdf.git",
+                "reference": "80b07e5019eba1a03eebbf145ff4a51b1a8ed217"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/popphp/pop-pdf/zipball/80b07e5019eba1a03eebbf145ff4a51b1a8ed217",
+                "reference": "80b07e5019eba1a03eebbf145ff4a51b1a8ed217",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.1.0",
+                "popphp/pop-css": "^1.0.7",
+                "popphp/pop-dom": "^3.2.6"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^7.0.0"
+            },
+            "suggest": {
+                "ext-gd": "For the image parser"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "3.2.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Pop\\Pdf\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Nick Sagona",
+                    "email": "dev@nolainteractive.com",
+                    "homepage": "http://www.nolainteractive.com/"
+                }
+            ],
+            "description": "PHP PDF library for generating and importing PDF documents. A component of the Pop PHP Framework",
+            "homepage": "http://github.com/popphp/pop-pdf",
+            "keywords": [
+                "create pdf",
+                "import pdf",
+                "pdf",
+                "pdf generation",
+                "php",
+                "php pdf library",
+                "php pdf processing",
+                "pop",
+                "pop php"
+            ],
+            "time": "2019-10-02T18:02:32+00:00"
+        },
+        {
+            "name": "popphp/pop-session",
+            "version": "3.1.4",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/popphp/pop-session.git",
+                "reference": "aedb75d0cbd019c98b969e7b4e619acc82e996b3"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/popphp/pop-session/zipball/aedb75d0cbd019c98b969e7b4e619acc82e996b3",
+                "reference": "aedb75d0cbd019c98b969e7b4e619acc82e996b3",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.1.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "3.1.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Pop\\Session\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Nick Sagona",
+                    "email": "dev@nolainteractive.com",
+                    "homepage": "http://www.nolainteractive.com/"
+                }
+            ],
+            "description": "Pop Session Component for Pop PHP Framework",
+            "homepage": "http://www.popphp.org/",
+            "keywords": [
+                "php",
+                "pop",
+                "pop php",
+                "session",
+                "sessions"
+            ],
+            "time": "2019-01-09T21:56:07+00:00"
+        },
+        {
+            "name": "popphp/pop-validator",
+            "version": "3.1.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/popphp/pop-validator.git",
+                "reference": "5cf0f1e4c10b48b73d18b2cfa3ae2480d5f3a280"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/popphp/pop-validator/zipball/5cf0f1e4c10b48b73d18b2cfa3ae2480d5f3a280",
+                "reference": "5cf0f1e4c10b48b73d18b2cfa3ae2480d5f3a280",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.1.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^7.0.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "3.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Pop\\Validator\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Nick Sagona",
+                    "email": "dev@nolainteractive.com",
+                    "homepage": "http://www.nolainteractive.com/"
+                }
+            ],
+            "description": "Pop Validator Component for Pop PHP Framework",
+            "homepage": "http://www.popphp.org/",
+            "keywords": [
+                "php",
+                "pop",
+                "pop php",
+                "validation",
+                "validator"
+            ],
+            "time": "2019-10-17T23:05:44+00:00"
+        },
+        {
+            "name": "popphp/pop-view",
+            "version": "3.1.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/popphp/pop-view.git",
+                "reference": "dac83efd8a23ed0937b9140842d9710e20774733"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/popphp/pop-view/zipball/dac83efd8a23ed0937b9140842d9710e20774733",
+                "reference": "dac83efd8a23ed0937b9140842d9710e20774733",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.1.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^7.0.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "3.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Pop\\View\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Nick Sagona",
+                    "email": "dev@nolainteractive.com",
+                    "homepage": "http://www.nolainteractive.com/"
+                }
+            ],
+            "description": "Pop View Component for Pop PHP Framework",
+            "homepage": "http://www.popphp.org/",
+            "keywords": [
+                "php",
+                "pop",
+                "pop php",
+                "template",
+                "view",
+                "view template"
+            ],
+            "time": "2019-10-29T15:57:50+00:00"
+        },
+        {
+            "name": "popphp/popcorn",
+            "version": "3.3.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/popphp/popcorn.git",
+                "reference": "1ff5b4f30f9ebdead79046010775dee21133e787"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/popphp/popcorn/zipball/1ff5b4f30f9ebdead79046010775dee21133e787",
+                "reference": "1ff5b4f30f9ebdead79046010775dee21133e787",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.1.0",
+                "popphp/pop-http": "^3.2.2",
+                "popphp/pop-session": "^3.1.4",
+                "popphp/pop-view": "^3.1.0",
+                "popphp/popphp": "^3.3.2"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^7.0.0"
+            },
+            "suggest": {
+                "popphp/pop-db": "For DB management and transactions",
+                "popphp/pop-form": "For HTML form generation and validation"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "3.2.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Popcorn\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Nick Sagona",
+                    "email": "dev@nolainteractive.com",
+                    "homepage": "http://www.nolainteractive.com/"
+                }
+            ],
+            "description": "Popcorn, A REST-Based PHP Micro Framework",
+            "homepage": "http://popcorn.popphp.org/",
+            "keywords": [
+                "php micro framework",
+                "popcorn",
+                "rest framework"
+            ],
+            "time": "2019-11-05T02:45:21+00:00"
+        },
+        {
+            "name": "popphp/popphp",
+            "version": "3.3.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/popphp/popphp.git",
+                "reference": "d557ab8a71cb4d7eee4b9ed8689c94ab641849ff"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/popphp/popphp/zipball/d557ab8a71cb4d7eee4b9ed8689c94ab641849ff",
+                "reference": "d557ab8a71cb4d7eee4b9ed8689c94ab641849ff",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.1.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^7.0.0",
+                "popphp/pop-config": "^3.2.2"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "3.3.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Pop\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Nick Sagona",
+                    "email": "dev@nolainteractive.com",
+                    "homepage": "http://www.nolainteractive.com/"
+                }
+            ],
+            "description": "Pop PHP Framework, a lightweight, robust PHP framework",
+            "homepage": "http://www.popphp.org/",
+            "keywords": [
+                "framework",
+                "php framework",
+                "pop",
+                "pop php"
+            ],
+            "time": "2019-11-06T14:24:50+00:00"
+        },
+        {
+            "name": "popphp/popphp-framework",
+            "version": "4.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/popphp/popphp-framework.git",
+                "reference": "d512e63aa805b50effea041b84a2a5cef1d7fe9b"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/popphp/popphp-framework/zipball/d512e63aa805b50effea041b84a2a5cef1d7fe9b",
+                "reference": "d512e63aa805b50effea041b84a2a5cef1d7fe9b",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.1.0",
+                "popphp/pop-acl": "^3.2.0",
+                "popphp/pop-audit": "^1.1.3",
+                "popphp/pop-auth": "^3.1.0",
+                "popphp/pop-cache": "^3.2.3",
+                "popphp/pop-code": "^3.1.1",
+                "popphp/pop-config": "^3.2.2",
+                "popphp/pop-console": "^3.1.0",
+                "popphp/pop-cookie": "^3.1.3",
+                "popphp/pop-css": "^1.0.7",
+                "popphp/pop-csv": "^3.1.4",
+                "popphp/pop-db": "^4.5.5",
+                "popphp/pop-debug": "^1.1.0",
+                "popphp/pop-dir": "^3.0.2",
+                "popphp/pop-dom": "^3.2.6",
+                "popphp/pop-form": "^3.4.0",
+                "popphp/pop-ftp": "^3.0.2",
+                "popphp/pop-http": "^3.2.2",
+                "popphp/pop-i18n": "^3.0.2",
+                "popphp/pop-image": "^3.3.1",
+                "popphp/pop-kettle": "^1.0.1",
+                "popphp/pop-loader": "^3.0.3",
+                "popphp/pop-log": "^3.1.0",
+                "popphp/pop-mail": "^3.2.3",
+                "popphp/pop-nav": "^3.2.0",
+                "popphp/pop-paginator": "^3.0.4",
+                "popphp/pop-pdf": "^3.2.1",
+                "popphp/pop-session": "^3.1.4",
+                "popphp/pop-validator": "^3.1.1",
+                "popphp/pop-view": "^3.1.0",
+                "popphp/popcorn": "^3.2.1",
+                "popphp/popphp": "^3.3.1"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "4.1.x-dev"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Nick Sagona",
+                    "email": "dev@nolainteractive.com",
+                    "homepage": "http://www.nolainteractive.com/"
+                }
+            ],
+            "description": "The Pop PHP Framework - Full Installation",
+            "homepage": "http://www.popphp.org/",
+            "keywords": [
+                "framework",
+                "php framework",
+                "pop",
+                "pop php"
+            ],
+            "time": "2019-10-18T16:25:16+00:00"
+        }
+    ],
+    "packages-dev": [],
+    "aliases": [],
+    "minimum-stability": "stable",
+    "stability-flags": [],
+    "prefer-stable": false,
+    "prefer-lowest": false,
+    "platform": [],
+    "platform-dev": []
+}

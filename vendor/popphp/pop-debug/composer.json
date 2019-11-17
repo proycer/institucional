@@ -1,0 +1,42 @@
+{
+    "name": "popphp/pop-debug",
+    "description": "Pop Debug Component for Pop PHP Framework",
+    "keywords": [
+        "debugger",
+        "php debugger",
+        "php",
+        "pop",
+        "pop php"
+    ],
+    "homepage": "http://www.popphp.org/",
+    "license": "BSD-3-Clause",
+    "authors": [
+        {
+            "name": "Nick Sagona",
+            "email": "dev@nolainteractive.com",
+            "homepage": "http://www.nolainteractive.com/"
+        }
+    ],
+    "require": {
+        "php": ">=7.1.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^7.0.0",
+        "popphp/pop-db" : "^4.5.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Pop\\Debug\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Pop\\Debug\\Test\\": "tests/"
+        }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.1.x-dev"
+        }
+    }
+}
