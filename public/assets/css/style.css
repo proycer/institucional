@@ -341,7 +341,7 @@ h1, h2, h3, h4, h5, h6, figure {
 }
 
 .video-hero {
-    background-size: cover;
+    height: 300px;
     position: relative;
     background-repeat: no-repeat;
     z-index: 0;
@@ -381,7 +381,7 @@ h1, h2, h3, h4, h5, h6, figure {
 }
 
 .video-hero .display-t.display-t2 {
-    height: 500px;
+    height: 300px;
 }
 
 .video-hero .display-tc {

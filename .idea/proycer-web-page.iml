@@ -17,6 +17,7 @@
       <excludeFolder url="file://$MODULE_DIR$/vendor/popphp/pop-debug" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/popphp/pop-dir" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/popphp/pop-dom" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/popphp/pop-filter" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/popphp/pop-form" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/popphp/pop-ftp" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/popphp/pop-http" />
@@ -26,6 +27,7 @@
       <excludeFolder url="file://$MODULE_DIR$/vendor/popphp/pop-loader" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/popphp/pop-log" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/popphp/pop-mail" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/popphp/pop-mime" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/popphp/pop-nav" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/popphp/pop-paginator" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/popphp/pop-pdf" />

@@ -35,6 +35,8 @@
       <path value="$PROJECT_DIR$/vendor/popphp/pop-http" />
       <path value="$PROJECT_DIR$/vendor/popphp/pop-loader" />
       <path value="$PROJECT_DIR$/vendor/composer" />
+      <path value="$PROJECT_DIR$/vendor/popphp/pop-filter" />
+      <path value="$PROJECT_DIR$/vendor/popphp/pop-mime" />
     </include_path>
   </component>
 </project>

@@ -4,7 +4,7 @@
  *
  * @link       https://github.com/popphp/popphp-framework
  * @author     Nick Sagona, III <dev@nolainteractive.com>
- * @copyright  Copyright (c) 2009-2019 NOLA Interactive, LLC. (http://www.nolainteractive.com)
+ * @copyright  Copyright (c) 2009-2020 NOLA Interactive, LLC. (http://www.nolainteractive.com)
  * @license    http://www.popphp.org/license     New BSD License
  */
 
@@ -13,15 +13,17 @@
  */
 namespace Pop\Http\Client;
 
+use Pop\Mime\Message;
+
 /**
- * HTTP response class
+ * HTTP stream client class
  *
  * @category   Pop
  * @package    Pop\Http
  * @author     Nick Sagona, III <dev@nolainteractive.com>
- * @copyright  Copyright (c) 2009-2019 NOLA Interactive, LLC. (http://www.nolainteractive.com)
+ * @copyright  Copyright (c) 2009-2020 NOLA Interactive, LLC. (http://www.nolainteractive.com)
  * @license    http://www.popphp.org/license     New BSD License
- * @version    3.2.0
+ * @version    3.5.0
  */
 class Stream extends AbstractClient
 {
@@ -45,16 +47,16 @@ class Stream extends AbstractClient
     protected $contextParams = [];
 
     /**
-     * HTTP Response Headers
-     * @var string
-     */
-    protected $httpResponseHeaders = null;
-
-    /**
      * Stream mode
      * @var string
      */
     protected $mode = 'r';
+
+    /**
+     * HTTP response headers
+     * @var array
+     */
+    protected $httpResponseHeaders = null;
 
     /**
      * Constructor
@@ -83,13 +85,14 @@ class Stream extends AbstractClient
     /**
      * Set the method
      *
-     * @param  string $method
+     * @param  string  $method
+     * @param  boolean $strict
      * @throws Exception
      * @return Stream
      */
-    public function setMethod($method)
+    public function setMethod($method, $strict = true)
     {
-        parent::setMethod($method);
+        parent::setMethod($method, $strict);
 
         if (!isset($this->contextOptions['http'])) {
             $this->contextOptions['http'] = [];
@@ -124,62 +127,6 @@ class Stream extends AbstractClient
         } else {
             $this->context = stream_context_create();
         }
-
-        return $this;
-    }
-
-    /**
-     * Create and open stream resource
-     *
-     * @return Stream
-     */
-    public function open()
-    {
-        $http_response_header = null;
-
-        $url     = $this->url;
-        $headers = [];
-
-        if (isset($this->contextOptions['http']['header'])) {
-            $this->contextOptions['http']['header'] = null;
-        }
-
-        // Set query data if there is any
-        if (count($this->fields) > 0) {
-            if ($this->method == 'GET') {
-                $url .= '?' . $this->getQuery();
-            } else {
-                $this->contextOptions['http']['content'] = $this->getQuery();
-                $headers[] = 'Content-Length: ' . $this->getQueryLength();
-            }
-        }
-
-        if ($this->hasRequestHeaders()) {
-            foreach ($this->requestHeaders as $header => $value) {
-                if (is_array($value)) {
-                    foreach ($value as $hdr => $val) {
-                        $headers[] = $hdr . ': ' . $val;
-                    }
-                } else {
-                    $headers[] = $header . ': ' . $value;
-                }
-            }
-
-            if (isset($this->contextOptions['http']['header'])) {
-                $this->contextOptions['http']['header'] .= "\r\n" . implode("\r\n", $headers) . "\r\n";
-            } else {
-                $this->contextOptions['http']['header'] = implode("\r\n", $headers) . "\r\n";
-            }
-        }
-
-        if ((count($this->contextOptions) > 0) || (count($this->contextParams) > 0)) {
-            $this->createContext();
-        }
-
-        $this->resource = (null !== $this->context) ?
-            @fopen($url, $this->mode, false, $this->context) : @fopen($url, $this->mode);
-
-        $this->httpResponseHeaders = $http_response_header;
 
         return $this;
     }
@@ -340,67 +287,115 @@ class Stream extends AbstractClient
     }
 
     /**
+     * Create and open stream resource
+     *
+     * @return Stream
+     */
+    public function open()
+    {
+        $url                  = $this->url;
+        $http_response_header = null;
+
+        if (isset($this->contextOptions['http']['header'])) {
+            $this->contextOptions['http']['header'] = null;
+        }
+
+        if (null !== $this->request) {
+            // Set query data if there is any
+            if ($this->request->hasFields()) {
+                // Append GET query string to URL
+                if ($this->method == 'GET') {
+                    $url .= '?' . $this->request->getQuery();
+                // Else, prepare request data for transmission
+                } else {
+                    // If request if a URL-encoded form
+                    if ($this->request->isUrlEncodedForm()) {
+                        $this->request->addHeader('Content-Type', 'application/x-www-form-urlencoded')
+                            ->addHeader('Content-Length', $this->request->getQueryLength());
+                        $this->contextOptions['http']['content'] = $this->request->getQuery();
+                    // Else, if request if a multipart form
+                    } else if ($this->request->isMultipartForm()) {
+                        $formMessage = Message::createForm($this->request->getFields());
+                        $header      = $formMessage->getHeader('Content-Type');
+                        $content     = $formMessage->render(false);
+                        $formMessage->removeHeader('Content-Type');
+                        $this->request->addHeader($header)
+                            ->addHeader('Content-Length', strlen($content));
+                        $this->contextOptions['http']['content'] = $content;
+                    // Else, basic request with data
+                    } else {
+                        $this->contextOptions['http']['content'] = $this->request->getQuery();
+                    }
+                }
+            }
+
+            if ($this->request->hasHeaders()) {
+                $headers = [];
+
+                foreach ($this->request->getHeaders() as $header => $value) {
+                    if (is_array($value)) {
+                        foreach ($value as $hdr => $val) {
+                            $headers[] = (string)$val;
+                        }
+                    } else {
+                        $headers[] = (string)$value;
+                    }
+                }
+
+                if (isset($this->contextOptions['http']['header'])) {
+                    $this->contextOptions['http']['header'] .= "\r\n" . implode("\r\n", $headers) . "\r\n";
+                } else {
+                    $this->contextOptions['http']['header'] = implode("\r\n", $headers) . "\r\n";
+                }
+            }
+        }
+
+        if ((count($this->contextOptions) > 0) || (count($this->contextParams) > 0)) {
+            $this->createContext();
+        }
+
+        $this->resource = (null !== $this->context) ?
+            @fopen($url, $this->mode, false, $this->context) : @fopen($url, $this->mode);
+
+        $this->httpResponseHeaders = $http_response_header;
+
+        return $this;
+    }
+
+    /**
      * Method to send the request and get the response
      *
      * @return void
      */
     public function send()
     {
-        $headers    = [];
-        $rawHeader  = null;
-        $bodyString = null;
+        $rawHeader = null;
+        $headers   = [];
+        $body      = null;
 
         $this->open();
 
-        if ($this->resource != false) {
-            $meta      = stream_get_meta_data($this->resource);
-            $rawHeader = implode("\r\n", $meta['wrapper_data']) . "\r\n\r\n";
-            $body      = stream_get_contents($this->resource);
-
-            $firstLine     = $meta['wrapper_data'][0];
-            unset($meta['wrapper_data'][0]);
-            $allHeadersAry = $meta['wrapper_data'];
-            $bodyString    = $body;
-        } else if (null !== $this->httpResponseHeaders) {
-            $rawHeader = implode("\r\n", $this->httpResponseHeaders) . "\r\n\r\n";
-            $firstLine = $this->httpResponseHeaders[0];
-            unset($this->httpResponseHeaders[0]);
-            $allHeadersAry = $this->httpResponseHeaders;
+        if (null === $this->response) {
+            $this->response = new Response();
         }
 
-        // Get the version, code and message
-        if (null !== $rawHeader) {
-            $version = substr($firstLine, 0, strpos($firstLine, ' '));
-            $version = substr($version, (strpos($version, '/') + 1));
-            preg_match('/\d\d\d/', trim($firstLine), $match);
-            $code    = $match[0];
-            $message = str_replace('HTTP/' . $version . ' ' . $code . ' ', '', $firstLine);
+        if ($this->resource !== false) {
+            $meta      = stream_get_meta_data($this->resource);
+            $rawHeader = implode("\r\n", $meta['wrapper_data']) . "\r\n\r\n";
+            $headers   = $meta['wrapper_data'];
+            $body      = stream_get_contents($this->resource);
+        } else if (null !== $this->httpResponseHeaders) {
+            $rawHeader = implode("\r\n", $this->httpResponseHeaders) . "\r\n\r\n";
+            $headers   = $this->httpResponseHeaders;
+        }
 
-            // Get the headers
-            foreach ($allHeadersAry as $hdr) {
-                $name  = trim(substr($hdr, 0, strpos($hdr, ':')));
-                $value = trim(substr($hdr, (strpos($hdr, ' ') + 1)));
-                if (isset($headers[$name])) {
-                    if (!is_array($headers[$name])) {
-                        $headers[$name] = [$headers[$name]];
-                    }
-                    $headers[$name][] = $value;
-                } else {
-                    $headers[$name] = $value;
-                }
-            }
+        // Parse response headers
+        $this->response->parseResponseHeaders($headers);
+        $this->response->setBody($body);
+        $this->response->setResponse($rawHeader . $body);
 
-            $this->code            = $code;
-            $this->responseHeader  = $rawHeader;
-            $this->responseHeaders = $headers;
-            $this->body            = $bodyString;
-            $this->response        = $rawHeader . $bodyString;
-            $this->message         = $message;
-            $this->version         = $version;
-
-            if (array_key_exists('Content-Encoding', $this->responseHeaders)) {
-                $this->decodeBody();
-            }
+        if ($this->response->hasHeader('Content-Encoding')) {
+            $this->response->decodeBody();
         }
     }
 

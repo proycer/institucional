@@ -112,7 +112,6 @@ abstract class AbstractController extends \Pop\Controller\AbstractController
 	 * @param int $code
 	 * @param string $version
 	 * @return void
-	 * @throws Exception
 	 */
     public function redirect($url, $code = 302, $version = '1.1')
     {
