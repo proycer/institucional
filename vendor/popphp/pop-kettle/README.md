@@ -10,11 +10,13 @@ the Pop PHP Framework as the command `kettle` within the main directory.
 
 ## BASIC USAGE
 
-* [Initializing an application](#initializing-an-application)
-* [Managing the database](#managing-the-database)
-* [Running the web server](#Running-the-web-server)
+* [Initializing an Application](#initializing-an-application)
+* [Managing the Database](#managing-the-database)
+* [Running the Web Server](#running-the-web-server)
+* [Accessing the Application](#accessing-the-application)
+* [Using on Windows](#using-on-Windows)
 
-### Initializing an application
+### Initializing an Application
 
 By running the following command, you can set up the basic files and folders
 required to run an application:
@@ -30,9 +32,9 @@ application, a CLI-driven console application or any combination thereof.
 
 After the application files and folders are copied over, you will be asked if you
 would like to configure a database. Follow those steps to configure a database and
-create the database configuration file. 
+create the database configuration file.
 
-### Managing the database
+### Managing the Database
 
 Once the application is initialized, you can manage the database by using the database
 and migration commands.
@@ -40,6 +42,7 @@ and migration commands.
 ```bash
 ./kettle db:config                  Configure the database
 ./kettle db:test                    Test the database connection
+./kettle db:create-seed <class>     Create database seed class
 ./kettle db:seed                    Seed the database with data
 ./kettle db:reset                   Reset the database with original seed data
 ./kettle db:clear                   Clear the database of all data
@@ -50,6 +53,8 @@ and migration commands.
 ./kettle migrate:reset              Perform complete rollback of the database
 ```
 
+#### Database Migrations
+
 You can create the initial database migration that would create the tables by running
 the command:
 
@@ -58,14 +63,37 @@ $ ./kettle migrate:create <class>
 ```
 
 Where the `<class>` is the base class name of the migration class that will be created.
-From there, you can populate the initial migration class with the initial schema:
+You will see your new migration class template in the `/database/migrations` folder:
 
 ```php
 <?php
 
 use Pop\Db\Sql\Migration\AbstractMigration;
 
-class MyNewMigration extends AbstractMigration
+class MyFirstMigration5dd822cdede29 extends AbstractMigration
+{
+
+    public function up()
+    {
+
+    }
+
+    public function down()
+    {
+
+    }
+
+} 
+```
+
+From there, you can populate the `up()` and `down()` with the initial schema:
+
+```php
+<?php
+
+use Pop\Db\Sql\Migration\AbstractMigration;
+
+class MyFirstMigration5dd822cdede29 extends AbstractMigration
 {
 
     public function up()
@@ -75,6 +103,7 @@ class MyNewMigration extends AbstractMigration
             ->int('id', 16)->increment()
             ->varchar('username', 255)
             ->varchar('password', 255)
+            ->varchar('email', 255)
             ->primary('id');
         
         $this->db->query($schema);        
@@ -90,15 +119,43 @@ class MyNewMigration extends AbstractMigration
 }
 ```
 
-Then by running the command:
+You can run the initial migration and create the `users` table by running the command:
 
 ```bash
 $ ./kettle migrate:run
 ```
 
-it will run the initial migration and create the `users` table, which can then been seeded,
-as shown below. You can write your own seed files under the `/database/seeds` folder. An
-example be:
+#### Seeding the Database
+ 
+You can then seed the database with data in one of two ways. You can either place a
+SQL file with the extension `.sql` in the `/database/seeds` folder or you can write
+a seed class using PHP. To get a seed class started, you can run
+
+```bash
+$ ./kettle db:create-seed <class>
+```
+
+Where the `<class>` is the base class name of the seeder class that will be created.
+The template seeder class will be copied to the `/database/seeds` folder:
+
+```php
+<?php
+
+use Pop\Db\Adapter\AbstractAdapter;
+use Pop\Db\Sql\Seeder\AbstractSeeder;
+
+class MyFirstSeeder extends AbstractSeeder
+{
+
+    public function run(AbstractAdapter $db)
+    {
+        
+    }
+
+}
+```
+
+From there you can fill in the `run()` method with the SQL you need to seed your data:
 
 ```php
 <?php
@@ -125,20 +182,14 @@ class DatabaseSeeder extends AbstractSeeder
 }
 ```
 
-Then running the command:
+Then running the following command will execute any SQL in any SQL files or any of the SQL
+in the seeder classes:
 
 ```bash
 $ ./kettle db:seed
 ```
 
-will execute any seed files in the `seeds` folder and populate the database with the initial data.
-
-#### Seeding with SQL files
-
-Alternatively, you can place SQL files with the extension `.sql` in the `/database/seeds` folder
-and they will be executed when you run the `./kettle db:seed` command.
-
-### Running the web server
+### Running the Web Server
 
 `pop-kettle` also provides a simple way to run PHP's built-in web-server, by running the command:
 
@@ -148,3 +199,36 @@ $ ./kettle serve [--host=] [--port=] [--folder=]
 
 This is for development environments only and it is strongly advised against using the built-in
 web server in a production environment in any way.
+
+### Accessing the Application
+
+If you have wired up the beginnings of an application, you can then access the default routes
+in the following ways. Assuming you've started the web server as described above using
+`./kettle serve`, you can access the web application by going to the address `http://localhost:8000/`
+in any web browser and seeing the default index web page.
+
+If you want to access the API application, the default route for that is `http://localhost:8000/api`
+and you can access it like this:
+
+```bash
+$ curl -i -X GET http://localhost:8000/api
+```
+
+And, if you `cd script`, you'll see the default CLI application that was created. The default
+route available to the CLI application is the `help` route:
+
+```bash
+$ ./myapp help
+```
+
+### Using on Windows
+
+Most UNIX-based environments should recognize the main `kettle` application script as a PHP
+script and run it accordingly, without having to explicitly call the `php` command and pass
+the script and its parameters into it. However, if you're on an environment like Windows,
+depending on your exact environment set up, you will most likely have to prepend all of the
+command calls with the `php` command, for example:
+
+```bash
+C:\popphp\pop-kettle>php kettle help
+``` 

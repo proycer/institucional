@@ -448,7 +448,7 @@ h1, h2, h3, h4, h5, h6, figure {
 .colorlib-services,
 #colorlib-contact,
 .colorlib-blog {
-    padding: 7em 0;
+    padding: 3em 0;
     clear: both;
 }
 
@@ -1157,7 +1157,6 @@ article p.author-wrap .author {
 
 .qbstp-header-subscribe .col-three-forth, .qbstp-header-subscribe .col-one-third {
     display: table;
-    height: 50px;
     float: left;
 }
 
@@ -1214,7 +1213,7 @@ article p.author-wrap .author {
     border: none;
     padding: 10px 20px;
     text-transform: uppercase;
-    height: 50px;
+    height: 42px;
     width: 100%;
     display: block;
 }

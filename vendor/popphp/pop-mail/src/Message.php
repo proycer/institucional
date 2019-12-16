@@ -4,7 +4,7 @@
  *
  * @link       https://github.com/popphp/popphp-framework
  * @author     Nick Sagona, III <dev@nolainteractive.com>
- * @copyright  Copyright (c) 2009-2019 NOLA Interactive, LLC. (http://www.nolainteractive.com)
+ * @copyright  Copyright (c) 2009-2020 NOLA Interactive, LLC. (http://www.nolainteractive.com)
  * @license    http://www.popphp.org/license     New BSD License
  */
 
@@ -21,9 +21,9 @@ use Pop\Mail\Message\AbstractPart;
  * @category   Pop
  * @package    Pop\Mail
  * @author     Nick Sagona, III <dev@nolainteractive.com>
- * @copyright  Copyright (c) 2009-2019 NOLA Interactive, LLC. (http://www.nolainteractive.com)
+ * @copyright  Copyright (c) 2009-2020 NOLA Interactive, LLC. (http://www.nolainteractive.com)
  * @license    http://www.popphp.org/license     New BSD License
- * @version    3.1.0
+ * @version    3.5.0
  */
 class Message extends Message\AbstractMessage
 {
@@ -234,16 +234,18 @@ class Message extends Message\AbstractMessage
     /**
      * Attach file message part
      *
-     * @param  mixed  $file
-     * @param  string $contentType
-     * @param  string $basename
+     * @param  string $file
      * @param  string $encoding
      * @return Message
      */
-    public function attachFile($file, $contentType = 'file', $basename = 'file.tmp', $encoding = AbstractPart::BASE64)
+    public function attachFile($file, $encoding = AbstractPart::BASE64)
     {
         if (!($file instanceof Message\Attachment)) {
-            $file = new Message\Attachment($file, $contentType, $basename, $encoding);
+            $options = [
+                'encoding' => $encoding,
+                'chunk'    => true
+            ];
+            $file = Message\Attachment::createFromFile($file, $options);
         }
         return $this->addPart($file);
     }
@@ -251,15 +253,19 @@ class Message extends Message\AbstractMessage
     /**
      * Attach file message part from stream
      *
-     * @param  mixed  $fileContents
-     * @param  string $contentType
+     * @param  string $stream
      * @param  string $basename
      * @param  string $encoding
      * @return Message
      */
-    public function attachFileFromStream($fileContents, $contentType = 'file', $basename = 'file.tmp', $encoding = AbstractPart::BASE64)
+    public function attachFileFromStream($stream, $basename = 'file.tmp', $encoding = AbstractPart::BASE64)
     {
-        $file = new Message\Attachment($fileContents, $contentType, $basename, $encoding, true);
+        $options = [
+            'basename' => $basename,
+            'encoding' => $encoding,
+            'chunk'    => true
+        ];
+        $file = Message\Attachment::createFromStream($stream, $options);
         return $this->addPart($file);
     }
 
@@ -541,79 +547,70 @@ class Message extends Message\AbstractMessage
      */
     public static function parse($stream)
     {
+        $parsedMessage = \Pop\Mime\Message::parseMessage($stream);
+        $message       = new self();
 
-        if (strpos($stream, 'Subject:') === false) {
+        if ($parsedMessage->hasHeaders()) {
+            $headers = $parsedMessage->getHeaders();
+            foreach ($headers as $header => $value) {
+                switch (strtolower($header)) {
+                    case 'subject':
+                        $message->setSubject($value->getValue());
+                        break;
+                    case 'to':
+                        $message->setTo($value->getValue());
+                        break;
+                    case 'cc':
+                        $message->setCc($value->getValue());
+                        break;
+                    case 'bcc':
+                        $message->setBcc($value->getValue());
+                        break;
+                    case 'from':
+                        $message->setFrom($value->getValue());
+                        break;
+                    case 'reply-to':
+                        $message->setReplyTo($value->getValue());
+                        break;
+                    case 'sender':
+                        $message->setSender($value->getValue());
+                        break;
+                    case 'return-path':
+                        $message->setReturnPath($value->getValue());
+                        break;
+                    default:
+                        $message->addHeader($header, $value->getValue());
+                }
+            }
+        }
+
+        if (empty($message->getSubject())) {
             throw new Exception('Error: There is no subject in the message contents');
         }
 
-        if (strpos($stream, 'To:') === false) {
-            throw new Exception('Error: There is no recipient in the message contents');
+        if (empty($message->getTo())) {
+            throw new Exception('Error: There is no to address in the message contents');
         }
 
-        $headers = trim(substr($stream, 0, strpos($stream, Message::CRLF . Message::CRLF)));
-        $body    = trim(str_replace($headers, '', $stream));
-        $headers = imap_rfc822_parse_headers($headers);
-        $subject = substr($stream, (strpos($stream, 'Subject: ') + 9));
-        $subject = substr($subject, 0, strpos($subject, Message::CRLF));
+        if ($parsedMessage->hasParts()) {
+            $parts = Message\Part::parseParts($parsedMessage->getParts());
 
-        $message = new self($subject);
-
-        foreach ($headers as $header => $value) {
-            switch ($header) {
-                case 'to':
-                    $message->setTo($value);
-                    break;
-                case 'cc':
-                    $message->setCc($value);
-                    break;
-                case 'bcc':
-                    $message->setBcc($value);
-                    break;
-                case 'from':
-                    $message->setFrom($value);
-                    break;
-                case 'reply_to':
-                    $message->setReplyTo($value);
-                    break;
-                case 'sender':
-                    $message->setSender($value);
-                    break;
-                default:
-                    if (substr($header, -7) != 'address') {
-                        $header = ((strpos($header, '-') != false) || (strpos($header, '_') != false)) ?
-                            str_replace(' ', '-', ucwords(str_replace(['-', '_'], [' ', ' '], strtolower($header)))) :
-                            ucfirst(strtolower($header));
-                        $message->addHeader($header, $value);
-                    }
-            }
-
-            if (stripos($stream, 'Return-Path: ') !== false) {
-                $returnPath = substr($stream, (strpos($stream, 'Return-Path: ') + 13));
-                $returnPath = substr($returnPath, 0, strpos($returnPath, Message::CRLF));
-                $message->setReturnPath($returnPath);
-            }
-        }
-
-        if (substr($body, 0, 2) == '--') {
-            $boundary = substr($body, 2);
-            $boundary = trim(substr($boundary, 0, strpos($boundary, Message::CRLF)));
-            $parts    = (strpos($body, $boundary) !== false) ?
-                explode($boundary, $body) : [$body];
-        } else {
-            $parts = [$body];
-        }
-
-        $parts = Message\Part::parse($parts);
-
-        foreach ($parts as $part) {
-            if ($part->attachment) {
-                $message->addPart(new Message\Attachment($part->content, $part->type, $part->basename));
-            } else if (stripos($part->type, 'html') !== false) {
-                $message->addPart(new Message\Html($part->content));
-            } else if (stripos($part->type, 'text') !== false) {
-                $message->addPart(new Message\Text($part->content));
-            } else {
-                $message->addPart(new Message\Simple($part->content));
+            foreach ($parts as $part) {
+                if ($part->attachment) {
+                    $options = [
+                        'contentType' => $part->type,
+                        'basename'    => $part->basename,
+                        'encoding'    => AbstractPart::BASE64,
+                        'chunk'       => true
+                    ];
+                    $message->addPart(Message\Attachment::createFromStream($part->content, $options));
+                } else if (stripos($part->type, 'html') !== false) {
+                    $message->addPart(new Message\Html($part->content));
+                } else if (stripos($part->type, 'text') !== false) {
+                    $message->addPart(new Message\Text($part->content));
+                } else {
+                    $message->addPart(new Message\Simple($part->content));
+                }
             }
         }
 

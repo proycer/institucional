@@ -4,7 +4,7 @@
  *
  * @link       https://github.com/popphp/pop-bootstrap
  * @author     Nick Sagona, III <nick@nolainteractive.com>
- * @copyright  Copyright (c) 2012-2019 NOLA Interactive, LLC. (http://www.nolainteractive.com)
+ * @copyright  Copyright (c) 2012-2020 NOLA Interactive, LLC. (http://www.nolainteractive.com)
  * @license    http://www.popphp.org/license     New BSD License
  */
 
@@ -24,9 +24,9 @@ use Pop\Kettle\Model;
  * @category   Pop\Kettle
  * @package    Pop\Kettle
  * @author     Nick Sagona, III <nick@nolainteractive.com>
- * @copyright  Copyright (c) 2012-2019 NOLA Interactive, LLC. (http://www.nolainteractive.com)
+ * @copyright  Copyright (c) 2012-2020 NOLA Interactive, LLC. (http://www.nolainteractive.com)
  * @license    http://www.popphp.org/license     New BSD License
- * @version    1.0.0
+ * @version    1.1.0
  */
 class DatabaseController extends AbstractController
 {
@@ -69,6 +69,22 @@ class DatabaseController extends AbstractController
     }
 
     /**
+     * Create seed command
+     *
+     * @param  string $class
+     * @return void
+     */
+    public function createSeed($class)
+    {
+        $classContents = str_replace(
+            'DatabaseSeeder', $class, file_get_contents(__DIR__ . '/../../config/templates/db/DatabaseSeeder.php')
+        );
+        file_put_contents(getcwd() . '/database/seeds/' . $class . '.php', $classContents);
+        $this->console->write('Database seed class created (' . $class . ')');
+    }
+
+
+    /**
      * Seed command
      *
      * @return void
@@ -97,7 +113,7 @@ class DatabaseController extends AbstractController
                         include $location . '/app/config/database.php',
                         $location . '/database/seeds/' . $seed
                     );
-                } else if (stripos('.php', $seed) !== false) {
+                } else if (stripos($seed, '.php') !== false) {
                     include $location . '/database/seeds/' . $seed;
                     $class  = str_replace('.php', '', $seed);
                     $dbSeed = new $class();
@@ -167,7 +183,7 @@ class DatabaseController extends AbstractController
                         include $location . '/app/config/database.php',
                         $location . '/database/seeds/' . $seed
                     );
-                } else if (stripos('.php', $seed) !== false) {
+                } else if (stripos($seed, '.php') !== false) {
                     include $location . '/database/seeds/' . $seed;
                     $class  = str_replace('.php', '', $seed);
                     $dbSeed = new $class();

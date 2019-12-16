@@ -4,7 +4,7 @@
  *
  * @link       https://github.com/popphp/popphp-framework
  * @author     Nick Sagona, III <dev@nolainteractive.com>
- * @copyright  Copyright (c) 2009-2019 NOLA Interactive, LLC. (http://www.nolainteractive.com)
+ * @copyright  Copyright (c) 2009-2020 NOLA Interactive, LLC. (http://www.nolainteractive.com)
  * @license    http://www.popphp.org/license     New BSD License
  */
 
@@ -21,9 +21,9 @@ use Pop\Mail\Message;
  * @category   Pop
  * @package    Pop\Mail
  * @author     Nick Sagona, III <dev@nolainteractive.com>
- * @copyright  Copyright (c) 2009-2019 NOLA Interactive, LLC. (http://www.nolainteractive.com)
+ * @copyright  Copyright (c) 2009-2020 NOLA Interactive, LLC. (http://www.nolainteractive.com)
  * @license    http://www.popphp.org/license     New BSD License
- * @version    3.1.0
+ * @version    3.5.0
  */
 class Imap extends AbstractClient
 {
@@ -433,17 +433,13 @@ class Imap extends AbstractClient
      * Get message parts by message ID
      *
      * @param  int $id
-     * @param  string $encoding
      * @return array
      */
-    public function getMessageParts($id, $encoding = null)
+    public function getMessageParts($id)
     {
         $boundary = $this->getMessageBoundary($id);
         $body     = $this->getMessageBody($id);
-        $parts    = (strpos($body, $boundary) !== false) ?
-            explode($boundary, $body) : [$body];
-
-        return Message\Part::parse($parts, $encoding);
+        return Message\Part::parse($body, $boundary);
     }
 
     /**

@@ -4,7 +4,7 @@
  *
  * @link       https://github.com/popphp/popphp-framework
  * @author     Nick Sagona, III <dev@nolainteractive.com>
- * @copyright  Copyright (c) 2009-2019 NOLA Interactive, LLC. (http://www.nolainteractive.com)
+ * @copyright  Copyright (c) 2009-2020 NOLA Interactive, LLC. (http://www.nolainteractive.com)
  * @license    http://www.popphp.org/license     New BSD License
  */
 
@@ -19,11 +19,11 @@ namespace Pop\Cookie;
  * @category   Pop
  * @package    Pop\Cookie
  * @author     Nick Sagona, III <dev@nolainteractive.com>
- * @copyright  Copyright (c) 2009-2019 NOLA Interactive, LLC. (http://www.nolainteractive.com)
+ * @copyright  Copyright (c) 2009-2020 NOLA Interactive, LLC. (http://www.nolainteractive.com)
  * @license    http://www.popphp.org/license     New BSD License
- * @version    3.1.3
+ * @version    3.2.0
  */
-class Cookie implements \ArrayAccess
+class Cookie implements \ArrayAccess, \Countable, \IteratorAggregate
 {
 
     /**
@@ -245,6 +245,34 @@ class Cookie implements \ArrayAccess
     }
 
     /**
+     * Method to get the count of cookie data
+     *
+     * @return int
+     */
+    public function count()
+    {
+        return count($this->toArray());
+    }
+    /**
+     * Method to iterate over the cookie
+     *
+     * @return \ArrayIterator
+     */
+    public function getIterator()
+    {
+        return new \ArrayIterator($this->toArray());
+    }
+    /**
+     * Get the cookie values as an array
+     *
+     * @return array
+     */
+    public function toArray()
+    {
+        return $_COOKIE;
+    }
+
+    /**
      * Set method to set the value of the $_COOKIE global variable
      *
      * @param  string $name
@@ -307,7 +335,6 @@ class Cookie implements \ArrayAccess
      *
      * @param  mixed $offset
      * @param  mixed $value
-     * @throws Exception
      * @return void
      */
     public function offsetSet($offset, $value)
@@ -341,7 +368,6 @@ class Cookie implements \ArrayAccess
      * ArrayAccess offsetUnset
      *
      * @param  mixed $offset
-     * @throws Exception
      * @return void
      */
     public function offsetUnset($offset)

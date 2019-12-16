@@ -4,7 +4,7 @@
  *
  * @link       https://github.com/popphp/popphp-framework
  * @author     Nick Sagona, III <dev@nolainteractive.com>
- * @copyright  Copyright (c) 2009-2019 NOLA Interactive, LLC. (http://www.nolainteractive.com)
+ * @copyright  Copyright (c) 2009-2020 NOLA Interactive, LLC. (http://www.nolainteractive.com)
  * @license    http://www.popphp.org/license     New BSD License
  */
 
@@ -19,18 +19,24 @@ namespace Pop\Debug\Storage;
  * @category   Pop
  * @package    Pop\Debug
  * @author     Nick Sagona, III <dev@nolainteractive.com>
- * @copyright  Copyright (c) 2009-2019 NOLA Interactive, LLC. (http://www.nolainteractive.com)
+ * @copyright  Copyright (c) 2009-2020 NOLA Interactive, LLC. (http://www.nolainteractive.com)
  * @license    http://www.popphp.org/license     New BSD License
- * @version    1.1.0
+ * @version    1.2.0
  */
 abstract class AbstractStorage implements StorageInterface
 {
 
     /**
-     * Storage format
+     * Format constants
+     */
+    const JSON = 'JSON';
+    const PHP  = 'PHP';
+
+    /**
+     * Storage format (json, php or text)
      * @var string
      */
-    protected $format = 'text';
+    protected $format = null;
 
     /**
      * Constructor
@@ -39,9 +45,11 @@ abstract class AbstractStorage implements StorageInterface
      *
      * @param  string $format
      */
-    public function __construct($format = 'text')
+    public function __construct($format = null)
     {
-        $this->setFormat($format);
+        if (null !== $format) {
+            $this->setFormat($format);
+        }
     }
 
     /**
@@ -52,25 +60,15 @@ abstract class AbstractStorage implements StorageInterface
      */
     public function setFormat($format)
     {
-        if (stripos($format, 'json') !== false) {
-            $this->format = 'json';
-        } else if (stripos($format, 'php') !== false) {
-            $this->format = 'php';
-        } else {
-            $this->format = 'text';
+        switch (strtoupper($format)) {
+            case self::JSON:
+                $this->format = self::JSON;
+                break;
+            case self::PHP:
+                $this->format = self::PHP;
         }
 
         return $this;
-    }
-
-    /**
-     * Determine if the format is text
-     *
-     * @return boolean
-     */
-    public function isText()
-    {
-        return ($this->format == 'text');
     }
 
     /**
@@ -80,7 +78,7 @@ abstract class AbstractStorage implements StorageInterface
      */
     public function isPhp()
     {
-        return ($this->format == 'php');
+        return ($this->format == self::PHP);
     }
 
     /**
@@ -90,7 +88,7 @@ abstract class AbstractStorage implements StorageInterface
      */
     public function isJson()
     {
-        return ($this->format == 'json');
+        return ($this->format == self::JSON);
     }
 
     /**
@@ -147,9 +145,16 @@ abstract class AbstractStorage implements StorageInterface
      * Encode the value based on the format
      *
      * @param  mixed  $value
-     * @throws Exception
      * @return string
      */
     abstract public function encodeValue($value);
+
+    /**
+     * Decode the value based on the format
+     *
+     * @param  mixed  $value
+     * @return mixed
+     */
+    abstract public function decodeValue($value);
 
 }
