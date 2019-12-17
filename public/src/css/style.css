@@ -343,7 +343,9 @@ h1, h2, h3, h4, h5, h6, figure {
 .video-hero {
     height: 300px;
     position: relative;
-    background-repeat: no-repeat;
+    /* background-repeat: no-repeat; */
+    background: url(https://colorlib.com/preview/theme/ithost/img/bg.jpg) center;
+    background-size: cover;
     z-index: 0;
 }
 
@@ -361,7 +363,7 @@ h1, h2, h3, h4, h5, h6, figure {
     left: 0;
     right: 0;
     opacity: 0.95;
-    background: linear-gradient(135deg, #ead649 0%, #ea8379 100%);
+    /* background: linear-gradient(135deg, #ead649 0%, #ea8379 100%); */
     filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#499bea', endColorstr='#798eea', GradientType=1);
     z-index: 1;
 }
