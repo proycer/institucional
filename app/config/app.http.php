@@ -7,6 +7,10 @@ return [
 				'controller' => 'ProycerWeb\Http\Controller\WebController',
 				'action' => 'index'
 			],
+			'/servicios/wisp[/]' => [
+				'controller' => 'ProycerWeb\Http\Controller\WebController',
+				'action' => 'wisp'
+			],
 			'/servicios[/]' => [
 				'controller' => 'ProycerWeb\Http\Controller\WebController',
 				'action' => 'servicios'
