@@ -25,7 +25,7 @@ class WebController extends AbstractController
 
     public function wisp()
     {
-        $this->prepareView('/servicios/detalle.phtml');
+        $this->prepareView('/servicios/wisp.phtml');
         $this->view->title = 'Proycer Wisp';
         $this->view->request = $this->request->getRequestUri();
         $this->send();
