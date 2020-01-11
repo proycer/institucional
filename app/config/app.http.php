@@ -33,6 +33,10 @@ return [
 				'controller' => 'ProycerWeb\Http\Controller\WebController',
 				'action' => 'contacto'
 			],
+			'/contrato[/]' => [
+				'controller' => 'ProycerWeb\Http\Controller\WebController',
+				'action' => 'contratoWisp'
+			]
 		],
 		'*' => [
 			'*' => [

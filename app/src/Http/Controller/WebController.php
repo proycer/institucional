@@ -31,6 +31,43 @@ class WebController extends AbstractController
         $this->send();
     }
 
+    /**
+     * Procesa el formulario de contrato para wisp
+     */
+    public function contratoWisp()
+    {
+        if ($this->request->isPost()) {
+            $data = $this->request->getParsedData();
+            $nombre = $data['nombre'];
+            $contacto = $data['contacto'];
+            $plan = $data['plan'];
+
+            $transport = new Mail\Transport\Smtp('srv001.proycer.com.ar', 465, 'ssl');
+            $transport->setUsername('contacto@proycer.com.ar')
+                ->setPassword('john@astete#38429880');
+
+            $mailer = new Mail\Mailer($transport);
+
+            $message = new Mail\Message('Solicitud Proycer Wisp');
+            $message->setTo('john.astete@proycer.com.ar');
+            $message->setFrom('contacto@proycer.com.ar');
+            
+            $message->addPart();
+            $message->setBody(
+                <<<TEXT
+                Nueva solicitud de Proycer Wisp
+                Nombre: [{nombre}]
+                Contacto: [{contacto}]
+                Plan: [{plan}]
+                TEXT
+            );
+
+            $mailer->send($message);
+        }
+
+        $this->redirect('/servicios/wisp');
+    }
+
     public function nosotros()
     {
     	$this->prepareView('nosotros.phtml');
