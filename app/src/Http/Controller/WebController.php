@@ -15,6 +15,10 @@ class WebController extends AbstractController
         $this->send();
     }
 
+    /**
+     * Muestra la pagina principal de servicios y controla el envio del
+     * email del formulario
+     */
     public function servicios()
     {
         if ($this->request->isGet()) {
@@ -41,6 +45,9 @@ class WebController extends AbstractController
         }
     }
 
+    /**
+     * Muestra la seccion de proycer wisp
+     */
     public function wisp()
     {
         $this->prepareView('/servicios/wisp.phtml');
@@ -50,7 +57,7 @@ class WebController extends AbstractController
     }
 
     /**
-     * Procesa el formulario de contrato para wisp
+     * Procesa el formulario de contrato para proycer wisp
      */
     public function contratoWisp()
     {
@@ -74,6 +81,9 @@ class WebController extends AbstractController
         $this->redirect('/servicios/wisp');
     }
 
+    /**
+     * Muestra la seccion de nosotros
+     */
     public function nosotros()
     {
     	$this->prepareView('nosotros.phtml');
@@ -82,6 +92,10 @@ class WebController extends AbstractController
         $this->send();
     }
 
+    /**
+     * Muestra la pagina de contacto y controla el envio del formulario
+     * de contacto general
+     */
     public function contacto()
     {
     	if ($this->request->isGet()) {
@@ -108,6 +122,9 @@ class WebController extends AbstractController
 	    }
     }
 
+    /**
+     * Mostrara en el futuro la seccion de autogestion para los clientes
+     */
     public function autogestion()
     {
     	$this->prepareView('autogestion.phtml');
@@ -116,12 +133,13 @@ class WebController extends AbstractController
         $this->send();
     }
 
+    /**
+     * Control de errores redirecciona automaticamente; en un futuro
+     * podria mostrar un mensaje u opciones al usuario.
+     */
     public function error()
     {
-        $this->prepareView('error.phtml');
-        $this->view->title = 'Error';
-        $this->view->request = $this->request->getRequestUri();
-        $this->send(404);
+        $this->redirect('/');
     }
 
 }
