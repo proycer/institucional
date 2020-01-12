@@ -17,10 +17,28 @@ class WebController extends AbstractController
 
     public function servicios()
     {
-    	$this->prepareView('/servicios/index.phtml');
-        $this->view->title = 'Servicios';
-        $this->view->request = $this->request->getRequestUri();
-        $this->send();
+        if ($this->request->isGet()) {
+            $this->prepareView('/servicios/index.phtml');
+            $this->view->title = 'Servicios';
+            $this->view->request = $this->request->getRequestUri();
+            $this->send();
+        } elseif ($this->request->isPost()) {
+            $data = $this->request->getParsedData();
+
+            $transport = new Mail\Transport\Smtp('srv001.proycer.com.ar', 465, 'ssl');
+            $transport->setUsername('web@proycer.com.ar')
+                ->setPassword('john@astete#38429880');
+
+            $mailer = new Mail\Mailer($transport);
+
+            $message = new Mail\Message('Contacto Proycer');
+            $message->setTo('contacto@proycer.com.ar');
+            $message->setFrom('web@proycer.com.ar');
+            $message->setBody('Email: ' . $data['email']);
+
+            $mailer->send($message);
+            $this->redirect('/servicios');
+        }
     }
 
     public function wisp()
@@ -38,30 +56,18 @@ class WebController extends AbstractController
     {
         if ($this->request->isPost()) {
             $data = $this->request->getParsedData();
-            $nombre = $data['nombre'];
-            $contacto = $data['contacto'];
-            $plan = $data['plan'];
 
             $transport = new Mail\Transport\Smtp('srv001.proycer.com.ar', 465, 'ssl');
-            $transport->setUsername('contacto@proycer.com.ar')
+            $transport->setUsername('web@proycer.com.ar')
                 ->setPassword('john@astete#38429880');
 
             $mailer = new Mail\Mailer($transport);
 
             $message = new Mail\Message('Solicitud Proycer Wisp');
-            $message->setTo('john.astete@proycer.com.ar');
-            $message->setFrom('contacto@proycer.com.ar');
+            $message->setTo('contacto@proycer.com.ar');
+            $message->setFrom('web@proycer.com.ar');
+            $message->setBody('Nombre: ' . $data['nombre'] . ', Contacto: ' . $data['contacto'] . ', Plan: ' . $data['plan']);
             
-            $message->addPart();
-            $message->setBody(
-                <<<TEXT
-                Nueva solicitud de Proycer Wisp
-                Nombre: [{nombre}]
-                Contacto: [{contacto}]
-                Plan: [{plan}]
-                TEXT
-            );
-
             $mailer->send($message);
         }
 
@@ -84,9 +90,21 @@ class WebController extends AbstractController
 	        $this->view->request = $this->request->getRequestUri();
 	        $this->send();
 	    } elseif ($this->request->isPost()) {
-    		// var_dump($this->request()->getParsedData());
-		    // TODO implementar email o DB
-		    $this->redirect('/');
+            $data = $this->request->getParsedData();
+
+            $transport = new Mail\Transport\Smtp('srv001.proycer.com.ar', 465, 'ssl');
+            $transport->setUsername('web@proycer.com.ar')
+                ->setPassword('john@astete#38429880');
+
+            $mailer = new Mail\Mailer($transport);
+
+            $message = new Mail\Message('Contacto Proycer');
+            $message->setTo('contacto@proycer.com.ar');
+            $message->setFrom('web@proycer.com.ar');
+            $message->setBody('Nombre: ' . $data['nombre'] . ', Contacto: ' . $data['contacto'] . ', Mensaje: ' . $data['mensaje']);
+
+            $mailer->send($message);
+		    $this->redirect('/contacto');
 	    }
     }
 

@@ -36,6 +36,10 @@ return [
 			'/contrato[/]' => [
 				'controller' => 'ProycerWeb\Http\Controller\WebController',
 				'action' => 'contratoWisp'
+			],
+			'/servicios[/]' => [
+				'controller' => 'ProycerWeb\Http\Controller\WebController',
+				'action' => 'servicios'
 			]
 		],
 		'*' => [
