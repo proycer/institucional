@@ -1,0 +1,24 @@
+<nav class="colorlib-nav" role="navigation">
+    <div class="top-menu">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-2">
+                    <div id="colorlib-logo">
+                        <a href="/">
+                            <img src="/assets/images/proycer_logo_low.png" width="70%" alt="logo_proycer">
+                        </a>
+                    </div>
+                </div>
+                <div class="col-md-10 text-right menu-1">
+                    <ul>
+                        <li<?= $request == '/' ? ' class="active"' : ''?>><a href="/">Inicio</a></li>
+                        <li<?= strpos($request, 'servicios') != false ? ' class="active"' : ''?>><a href="/servicios">Servicios</a></li>
+                        <li<?= strpos($request, 'nosotros') != false ? ' class="active"' : ''?>><a href="/nosotros">Nosotros</a></li>
+                        <li<?= strpos($request, 'contacto') != false ? ' class="active"' : ''?>><a href="/contacto">Contacto</a></li>
+                        <li<?= strpos($request, 'autogestion') != false ? ' class="active"' : ''?>><a href="/autogestion">Autogesti&oacute;n</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</nav>

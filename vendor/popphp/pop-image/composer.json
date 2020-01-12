@@ -1,0 +1,52 @@
+{
+    "name": "popphp/pop-image",
+    "description": "PHP Image library for generating, editing and effecting images. A component of the Pop PHP Framework",
+    "keywords": [
+        "image",
+        "image resize",
+        "image effects",
+        "image crop",
+        "image text",
+        "draw image",
+        "php image library",
+        "php image processing",
+        "pop",
+        "pop php",
+        "php"
+    ],
+    "homepage": "http://github.com/popphp/pop-image",
+    "license": "BSD-3-Clause",
+    "authors": [
+        {
+            "name": "Nick Sagona",
+            "email": "dev@nolainteractive.com",
+            "homepage": "http://www.nolainteractive.com/"
+        }
+    ],
+    "require": {
+        "php": ">=7.1.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^7.0.0"
+    },
+    "suggest": {
+        "ext-gd": "To use the Gd image adapter",
+        "ext-imagick": "To use the Imagick image adapter",
+        "ext-gmagick": "To use the Gmagick image adapter"
+    },
+    "autoload": {
+        "psr-4": {
+            "Pop\\Image\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Pop\\Image\\Test\\": "tests/"
+        }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "3.3.x-dev"
+        }
+    }
+}
