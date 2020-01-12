@@ -4,7 +4,7 @@
  *
  * @link       https://github.com/popphp/popphp-framework
  * @author     Nick Sagona, III <dev@nolainteractive.com>
- * @copyright  Copyright (c) 2009-2019 NOLA Interactive, LLC. (http://www.nolainteractive.com)
+ * @copyright  Copyright (c) 2009-2020 NOLA Interactive, LLC. (http://www.nolainteractive.com)
  * @license    http://www.popphp.org/license     New BSD License
  */
 
@@ -22,9 +22,9 @@ use Pop\Http\Client\Stream;
  * @category   Pop
  * @package    Pop\Http
  * @author     Nick Sagona, III <dev@nolainteractive.com>
- * @copyright  Copyright (c) 2009-2019 NOLA Interactive, LLC. (http://www.nolainteractive.com)
+ * @copyright  Copyright (c) 2009-2020 NOLA Interactive, LLC. (http://www.nolainteractive.com)
  * @license    http://www.popphp.org/license     New BSD License
- * @version    3.2.0
+ * @version    3.5.0
  */
 class Parser
 {
@@ -43,18 +43,12 @@ class Parser
         $client  = new Stream($uri, $method, $mode, $options);
         $client->send();
 
-        $code    = $client->getCode();
-        $headers = $client->getResponseHeaders();
-        $body    = $client->getBody();
-        $message = $client->getMessage();
-        $version = $client->getHttpVersion();
-
         return new Http\Response([
-            'code'    => $code,
-            'headers' => $headers,
-            'body'    => $body,
-            'message' => $message,
-            'version' => $version
+            'code'    => $client->response()->getCode(),
+            'headers' => $client->response()->getHeaders(),
+            'body'    => $client->response()->getBody(),
+            'message' => $client->response()->getMessage(),
+            'version' => $client->response()->getVersion()
         ]);
     }
 
@@ -72,8 +66,8 @@ class Parser
         }
 
         if (strpos($responseString, "\r") !== false) {
-            $headerString = substr($responseString, 0, strpos($responseString, "\r\n"));
-            $bodyString   = substr($responseString, (strpos($responseString, "\r\n") + 2));
+            $headerString = substr($responseString, 0, strpos($responseString, "\r\n\r\n"));
+            $bodyString   = substr($responseString, (strpos($responseString, "\r\n\r\n") + 4));
         } else {
             $headerString = substr($responseString, 0, strpos($responseString, "\n\n"));
             $bodyString   = substr($responseString, (strpos($responseString, "\n\n") + 2));

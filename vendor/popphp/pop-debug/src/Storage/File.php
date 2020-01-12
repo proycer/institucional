@@ -4,7 +4,7 @@
  *
  * @link       https://github.com/popphp/popphp-framework
  * @author     Nick Sagona, III <dev@nolainteractive.com>
- * @copyright  Copyright (c) 2009-2019 NOLA Interactive, LLC. (http://www.nolainteractive.com)
+ * @copyright  Copyright (c) 2009-2020 NOLA Interactive, LLC. (http://www.nolainteractive.com)
  * @license    http://www.popphp.org/license     New BSD License
  */
 
@@ -19,9 +19,9 @@ namespace Pop\Debug\Storage;
  * @category   Pop
  * @package    Pop\Debug
  * @author     Nick Sagona, III <dev@nolainteractive.com>
- * @copyright  Copyright (c) 2009-2019 NOLA Interactive, LLC. (http://www.nolainteractive.com)
+ * @copyright  Copyright (c) 2009-2020 NOLA Interactive, LLC. (http://www.nolainteractive.com)
  * @license    http://www.popphp.org/license     New BSD License
- * @version    1.1.0
+ * @version    1.2.0
  */
 class File extends AbstractStorage
 {
@@ -40,7 +40,7 @@ class File extends AbstractStorage
      * @param  string $dir
      * @param  string $format
      */
-    public function __construct($dir, $format = 'text')
+    public function __construct($dir, $format = null)
     {
         parent::__construct($format);
         $this->setDir($dir);
@@ -87,9 +87,9 @@ class File extends AbstractStorage
     {
         $filename = $id;
 
-        if ($this->format == 'json') {
+        if ($this->format == self::JSON) {
             $filename .= '.json';
-        } else if ($this->format == 'php') {
+        } else if ($this->format == self::PHP) {
             $filename .= '.php';
         } else {
             $filename .= '.log';
@@ -108,20 +108,7 @@ class File extends AbstractStorage
      */
     public function get($id)
     {
-        $fileId = $this->dir . DIRECTORY_SEPARATOR . $id;
-
-        if ($this->format == 'json') {
-            $fileId .= '.json';
-            $value   = (file_exists($fileId)) ? json_decode(file_get_contents($fileId), true) : false;
-        } else if ($this->format == 'php') {
-            $fileId .= '.php';
-            $value   = (file_exists($fileId)) ? include $fileId : false;
-        } else {
-            $fileId .= '.log';
-            $value   = (file_exists($fileId)) ? file_get_contents($fileId) : false;
-        }
-
-        return $value;
+        return $this->decodeValue($this->dir . DIRECTORY_SEPARATOR . $id);
     }
 
     /**
@@ -134,9 +121,9 @@ class File extends AbstractStorage
     {
         $fileId = $this->dir . DIRECTORY_SEPARATOR . $id;
 
-        if ($this->format == 'json') {
+        if ($this->format == self::JSON) {
             $fileId .= '.json';
-        } else if ($this->format == 'php') {
+        } else if ($this->format == self::PHP) {
             $fileId .= '.php';
         } else {
             $fileId .= '.log';
@@ -155,9 +142,9 @@ class File extends AbstractStorage
     {
         $fileId = $this->dir . DIRECTORY_SEPARATOR . $id;
 
-        if ($this->format == 'json') {
+        if ($this->format == self::JSON) {
             $fileId .= '.json';
-        } else if ($this->format == 'php') {
+        } else if ($this->format == self::PHP) {
             $fileId .= '.php';
         } else {
             $fileId .= '.log';
@@ -202,12 +189,35 @@ class File extends AbstractStorage
      */
     public function encodeValue($value)
     {
-        if ($this->format == 'json') {
+        if ($this->format == self::JSON) {
             $value = json_encode($value, JSON_PRETTY_PRINT);
-        } else if ($this->format == 'php') {
-            $value = "<?php" . PHP_EOL . "return unserialize(base64_decode('" . base64_encode(serialize($value)) . "'));" . PHP_EOL;
+        } else if ($this->format == self::PHP) {
+            $value = "<?php" . PHP_EOL . "return unserialize(base64_decode('" .
+                base64_encode(serialize($value)) . "'));" . PHP_EOL;
         } else if (!is_string($value)) {
-            throw new Exception('Error: The value must be a string if storing as a text file.');
+            throw new Exception('Error: The value must be a string if storing in text format.');
+        }
+
+        return $value;
+    }
+
+    /**
+     * Decode the value based on the format
+     *
+     * @param  mixed  $value
+     * @return mixed
+     */
+    public function decodeValue($value)
+    {
+        if ($this->format == self::JSON) {
+            $value .= '.json';
+            $value  = (file_exists($value)) ? json_decode(file_get_contents($value), true) : false;
+        } else if ($this->format == self::PHP) {
+            $value .= '.php';
+            $value  = (file_exists($value)) ? include $value : false;
+        } else {
+            $value .= '.log';
+            $value  = (file_exists($value)) ? file_get_contents($value) : false;
         }
 
         return $value;

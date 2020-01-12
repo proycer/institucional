@@ -1,0 +1,25 @@
+{
+  "name": "proycer-web",
+  "version": "1.0.0",
+  "description": "",
+  "private": true,
+  "dependencies": {
+    "jquery": "^2.1.4",
+    "typewriter-effect": "^2.12.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://johnnestebann@bitbucket.org/proycer/proycer-web.git"
+  },
+  "keywords": [
+    "proycer.com.ar",
+    "webpage"
+  ],
+  "author": "john esteban astete arambarri",
+  "license": "ISC",
+  "homepage": "https://bitbucket.org/proycer/proycer-web#readme"
+}

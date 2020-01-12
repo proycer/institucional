@@ -2,65 +2,144 @@
 
 namespace ProycerWeb\Http\Controller;
 
+use Pop\Mail;
+
 class WebController extends AbstractController
 {
 
-    /**
-     * Index action
-     *
-     * @return void
-     */
     public function index()
     {
         $this->prepareView('index.phtml');
-        $this->view->title = 'Inicio | Proycer';
-        $this->view->request = $this->request->getRequestUri();
-        $this->send();
-    }
-
-    public function servicios()
-    {
-    	$this->prepareView('/servicios/index.phtml');
-        $this->view->title = 'Servicios | Proycer';
-        $this->view->request = $this->request->getRequestUri();
-        $this->send();
-    }
-
-    public function nosotros()
-    {
-    	$this->prepareView('index.phtml');
-        $this->view->title = 'Nosotros | Proycer';
-        $this->view->request = $this->request->getRequestUri();
-        $this->send();
-    }
-
-    public function contacto()
-    {
-    	$this->prepareView('index.phtml');
-        $this->view->title = 'Contacto | Proycer';
-        $this->view->request = $this->request->getRequestUri();
-        $this->send();
-    }
-
-    public function autogestion()
-    {
-    	$this->prepareView('index.phtml');
-        $this->view->title = 'Autogestion | Proycer';
+        $this->view->title = 'Inicio';
         $this->view->request = $this->request->getRequestUri();
         $this->send();
     }
 
     /**
-     * Error action
-     *
-     * @return void
+     * Muestra la pagina principal de servicios y controla el envio del
+     * email del formulario
+     */
+    public function servicios()
+    {
+        if ($this->request->isGet()) {
+            $this->prepareView('/servicios/index.phtml');
+            $this->view->title = 'Servicios';
+            $this->view->request = $this->request->getRequestUri();
+            $this->send();
+        } elseif ($this->request->isPost()) {
+            $data = $this->request->getParsedData();
+
+            $transport = new Mail\Transport\Smtp('srv001.proycer.com.ar', 465, 'ssl');
+            $transport->setUsername('web@proycer.com.ar')
+                ->setPassword('john@astete#38429880');
+
+            $mailer = new Mail\Mailer($transport);
+
+            $message = new Mail\Message('Contacto Proycer');
+            $message->setTo('contacto@proycer.com.ar');
+            $message->setFrom('web@proycer.com.ar');
+            $message->setBody('Email: ' . $data['email']);
+
+            $mailer->send($message);
+            $this->redirect('/servicios');
+        }
+    }
+
+    /**
+     * Muestra la seccion de proycer wisp
+     */
+    public function wisp()
+    {
+        $this->prepareView('/servicios/wisp.phtml');
+        $this->view->title = 'Proycer Wisp';
+        $this->view->request = $this->request->getRequestUri();
+        $this->send();
+    }
+
+    /**
+     * Procesa el formulario de contrato para proycer wisp
+     */
+    public function contratoWisp()
+    {
+        if ($this->request->isPost()) {
+            $data = $this->request->getParsedData();
+
+            $transport = new Mail\Transport\Smtp('srv001.proycer.com.ar', 465, 'ssl');
+            $transport->setUsername('web@proycer.com.ar')
+                ->setPassword('john@astete#38429880');
+
+            $mailer = new Mail\Mailer($transport);
+
+            $message = new Mail\Message('Solicitud Proycer Wisp');
+            $message->setTo('contacto@proycer.com.ar');
+            $message->setFrom('web@proycer.com.ar');
+            $message->setBody('Nombre: ' . $data['nombre'] . ', Contacto: ' . $data['contacto'] . ', Plan: ' . $data['plan']);
+            
+            $mailer->send($message);
+        }
+
+        $this->redirect('/servicios/wisp');
+    }
+
+    /**
+     * Muestra la seccion de nosotros
+     */
+    public function nosotros()
+    {
+    	$this->prepareView('nosotros.phtml');
+        $this->view->title = 'Nosotros';
+        $this->view->request = $this->request->getRequestUri();
+        $this->send();
+    }
+
+    /**
+     * Muestra la pagina de contacto y controla el envio del formulario
+     * de contacto general
+     */
+    public function contacto()
+    {
+    	if ($this->request->isGet()) {
+    		$this->prepareView('contacto.phtml');
+	        $this->view->title = 'Contacto';
+	        $this->view->request = $this->request->getRequestUri();
+	        $this->send();
+	    } elseif ($this->request->isPost()) {
+            $data = $this->request->getParsedData();
+
+            $transport = new Mail\Transport\Smtp('srv001.proycer.com.ar', 465, 'ssl');
+            $transport->setUsername('web@proycer.com.ar')
+                ->setPassword('john@astete#38429880');
+
+            $mailer = new Mail\Mailer($transport);
+
+            $message = new Mail\Message('Contacto Proycer');
+            $message->setTo('contacto@proycer.com.ar');
+            $message->setFrom('web@proycer.com.ar');
+            $message->setBody('Nombre: ' . $data['nombre'] . ', Contacto: ' . $data['contacto'] . ', Mensaje: ' . $data['mensaje']);
+
+            $mailer->send($message);
+		    $this->redirect('/contacto');
+	    }
+    }
+
+    /**
+     * Mostrara en el futuro la seccion de autogestion para los clientes
+     */
+    public function autogestion()
+    {
+    	$this->prepareView('autogestion.phtml');
+        $this->view->title = 'Autogestion';
+        $this->view->request = $this->request->getRequestUri();
+        $this->send();
+    }
+
+    /**
+     * Control de errores redirecciona automaticamente; en un futuro
+     * podria mostrar un mensaje u opciones al usuario.
      */
     public function error()
     {
-        $this->prepareView('error.phtml');
-        $this->view->title = 'Error';
-        $this->view->request = $this->request->getRequestUri();
-        $this->send(404);
+        $this->redirect('/');
     }
 
 }

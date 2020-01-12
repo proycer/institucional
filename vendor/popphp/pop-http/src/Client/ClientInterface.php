@@ -4,7 +4,7 @@
  *
  * @link       https://github.com/popphp/popphp-framework
  * @author     Nick Sagona, III <dev@nolainteractive.com>
- * @copyright  Copyright (c) 2009-2019 NOLA Interactive, LLC. (http://www.nolainteractive.com)
+ * @copyright  Copyright (c) 2009-2020 NOLA Interactive, LLC. (http://www.nolainteractive.com)
  * @license    http://www.popphp.org/license     New BSD License
  */
 
@@ -19,9 +19,9 @@ namespace Pop\Http\Client;
  * @category   Pop
  * @package    Pop\Http
  * @author     Nick Sagona, III <dev@nolainteractive.com>
- * @copyright  Copyright (c) 2009-2019 NOLA Interactive, LLC. (http://www.nolainteractive.com)
+ * @copyright  Copyright (c) 2009-2020 NOLA Interactive, LLC. (http://www.nolainteractive.com)
  * @license    http://www.popphp.org/license     New BSD License
- * @version    3.2.0
+ * @version    3.5.0
  */
 interface ClientInterface
 {
@@ -44,10 +44,12 @@ interface ClientInterface
     /**
      * Set the method
      *
-     * @param  string $method
+     * @param  string  $method
+     * @param  boolean $strict
+     * @throws Exception
      * @return ClientInterface
      */
-    public function setMethod($method);
+    public function setMethod($method, $strict = true);
 
     /**
      * Get the method
@@ -55,6 +57,85 @@ interface ClientInterface
      * @return string
      */
     public function getMethod();
+
+    /**
+     * Determine whether or not resource is available
+     *
+     * @return boolean
+     */
+    public function hasResource();
+
+    /**
+     * Get the resource
+     *
+     * @return resource
+     */
+    public function getResource();
+
+    /**
+     * Get the resource (alias method)
+     *
+     * @return resource
+     */
+    public function resource();
+
+    /**
+     * Set the request object
+     *
+     * @param  Request $request
+     * @return ClientInterface
+     */
+    public function setRequest(Request $request);
+
+    /**
+     * Has request object
+     *
+     * @return boolean
+     */
+    public function hasRequest();
+
+    /**
+     * Get the request object
+     *
+     * @return Request
+     */
+    public function getRequest();
+
+    /**
+     * Get the request object (alias method)
+     *
+     * @return Request
+     */
+    public function request();
+
+    /**
+     * Set the response object
+     *
+     * @param  Response $response
+     * @return ClientInterface
+     */
+    public function setResponse(Response $response);
+
+    /**
+     * Has response object
+     *
+     * @return boolean
+     */
+    public function hasResponse();
+
+    /**
+     * Get the response object
+     *
+     * @return Response
+     */
+    public function getResponse();
+
+    /**
+     * Get the response object (alias method)
+     *
+     * @return Response
+     */
+    public function response();
 
     /**
      * Set a field
@@ -97,37 +178,6 @@ interface ClientInterface
     public function removeField($name);
 
     /**
-     * Prepare the HTTP query
-     *
-     * @return string
-     */
-    public function prepareQuery();
-
-    /**
-     * Get HTTP query
-     *
-     * @return string
-     */
-    public function getQuery();
-
-    /**
-     * Get HTTP query length
-     *
-     * @param  boolean $mb
-     * @return int
-     */
-    public function getQueryLength($mb = true);
-
-    /**
-     * Set a request header
-     *
-     * @param  string $name
-     * @param  string $value
-     * @return ClientInterface
-     */
-    public function setRequestHeader($name, $value);
-
-    /**
      * Set all request headers
      *
      * @param  array $headers
@@ -136,7 +186,38 @@ interface ClientInterface
     public function setRequestHeaders(array $headers);
 
     /**
-     * Get a request header
+     * Set request header
+     *
+     * @param  string $name
+     * @param  string $value
+     * @return ClientInterface
+     */
+    public function setRequestHeader($name, $value);
+
+    /**
+     * Has request headers
+     *
+     * @return boolean
+     */
+    public function hasRequestHeaders();
+
+    /**
+     * Has request header
+     *
+     * @param  string $name
+     * @return boolean
+     */
+    public function hasRequestHeader($name);
+
+    /**
+     * Get the request headers
+     *
+     * @return array
+     */
+    public function getRequestHeaders();
+
+    /**
+     * Get the request header
      *
      * @param  string $name
      * @return mixed
@@ -144,21 +225,81 @@ interface ClientInterface
     public function getRequestHeader($name);
 
     /**
-     * Get all request headers
+     * Get the request body
      *
-     * @return array
+     * @return string
      */
-    public function getRequestHeaders();
+    public function getRequestBody();
 
     /**
-     * Determine if there are request headers
+     * Create request as a URL-encoded form
+     *
+     * @return ClientInterface
+     */
+    public function createUrlEncodedForm();
+
+    /**
+     * Check if request is a URL-encoded form
      *
      * @return boolean
      */
-    public function hasRequestHeaders();
+    public function isUrlEncodedForm();
 
     /**
-     * Get a response header
+     * Create request as a multipart form
+     *
+     * @return ClientInterface
+     */
+    public function createMultipartForm();
+
+    /**
+     * Check if request is a multipart form
+     *
+     * @return boolean
+     */
+    public function isMultipartForm();
+
+    /**
+     * Set all response headers
+     *
+     * @param  array $headers
+     * @return ClientInterface
+     */
+    public function setResponseHeaders(array $headers);
+
+    /**
+     * Set response header
+     *
+     * @param  string $name
+     * @param  string $value
+     * @return ClientInterface
+     */
+    public function setResponseHeader($name, $value);
+
+    /**
+     * Has response headers
+     *
+     * @return boolean
+     */
+    public function hasResponseHeaders();
+
+    /**
+     * Has response header
+     *
+     * @param  string $name
+     * @return boolean
+     */
+    public function hasResponseHeader($name);
+
+    /**
+     * Get the response headers
+     *
+     * @return array
+     */
+    public function getResponseHeaders();
+
+    /**
+     * Get the response header
      *
      * @param  string $name
      * @return mixed
@@ -166,81 +307,18 @@ interface ClientInterface
     public function getResponseHeader($name);
 
     /**
-     * Get all response headers
-     *
-     * @return array
-     */
-    public function getResponseHeaders();
-
-    /**
-     * Determine if there are response headers
-     *
-     * @return boolean
-     */
-    public function hasResponseHeaders();
-
-    /**
-     * Get raw response header
-     *
-     * @return string
-     */
-    public function getRawResponseHeader();
-
-    /**
      * Get the response body
      *
      * @return string
      */
-    public function getBody();
+    public function getResponseBody();
 
     /**
      * Get the response code
      *
      * @return string
      */
-    public function getCode();
-
-    /**
-     * Get the response HTTP version
-     *
-     * @return string
-     */
-    public function getHttpVersion();
-
-    /**
-     * Get the response HTTP message
-     *
-     * @return string
-     */
-    public function getMessage();
-
-    /**
-     * Get the raw response
-     *
-     * @return string
-     */
-    public function getResponse();
-
-    /**
-     * Determine whether or not resource is available
-     *
-     * @return boolean
-     */
-    public function hasResource();
-
-    /**
-     * Get the resource
-     *
-     * @return resource
-     */
-    public function getResource();
-
-    /**
-     * Decode the body
-     *
-     * @return resource
-     */
-    public function decodeBody();
+    public function getResponseCode();
 
     /**
      * Throw an exception upon an error.

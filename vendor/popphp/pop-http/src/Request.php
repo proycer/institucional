@@ -4,7 +4,7 @@
  *
  * @link       https://github.com/popphp/popphp-framework
  * @author     Nick Sagona, III <dev@nolainteractive.com>
- * @copyright  Copyright (c) 2009-2019 NOLA Interactive, LLC. (http://www.nolainteractive.com)
+ * @copyright  Copyright (c) 2009-2020 NOLA Interactive, LLC. (http://www.nolainteractive.com)
  * @license    http://www.popphp.org/license     New BSD License
  */
 
@@ -13,17 +13,19 @@
  */
 namespace Pop\Http;
 
+use Pop\Filter\AbstractFilterable;
+
 /**
  * HTTP request class
  *
  * @category   Pop
  * @package    Pop\Http
  * @author     Nick Sagona, III <dev@nolainteractive.com>
- * @copyright  Copyright (c) 2009-2019 NOLA Interactive, LLC. (http://www.nolainteractive.com)
+ * @copyright  Copyright (c) 2009-2020 NOLA Interactive, LLC. (http://www.nolainteractive.com)
  * @license    http://www.popphp.org/license     New BSD License
- * @version    3.2.0
+ * @version    3.5.0
  */
-class Request
+class Request extends AbstractFilterable
 {
 
     /**
@@ -114,8 +116,9 @@ class Request
      *
      * @param  string $uri
      * @param  string $basePath
+     * @param  mixed  $filters
      */
-    public function __construct($uri = null, $basePath = null)
+    public function __construct($uri = null, $basePath = null, $filters = null)
     {
         $this->setRequestUri($uri, $basePath);
 
@@ -125,6 +128,14 @@ class Request
         $this->cookie = (isset($_COOKIE)) ? $_COOKIE : [];
         $this->server = (isset($_SERVER)) ? $_SERVER : [];
         $this->env    = (isset($_ENV))    ? $_ENV    : [];
+
+        if (null !== $filters) {
+            if (is_array($filters)) {
+                $this->addFilters($filters);
+            } else {
+                $this->addFilter($filters);
+            }
+        }
 
         if (isset($_SERVER['REQUEST_METHOD'])) {
             $this->parseData();
@@ -366,7 +377,7 @@ class Request
         if (!empty($this->server['HTTP_HOST'])) {
             $hostname = $this->server['HTTP_HOST'];
         } else if (!empty($this->server['SERVER_NAME'])) {
-            $hostname =$this->server['SERVER_NAME'];
+            $hostname = $this->server['SERVER_NAME'];
         }
 
         if (strpos($hostname, ':') !== false) {
@@ -389,7 +400,7 @@ class Request
         if (!empty($this->server['HTTP_HOST'])) {
             $hostname = $this->server['HTTP_HOST'];
         } else if (!empty($this->server['SERVER_NAME'])) {
-            $hostname =$this->server['SERVER_NAME'];
+            $hostname = $this->server['SERVER_NAME'];
         }
 
         if ((strpos($hostname, ':') === false) && (null !== $port)) {
@@ -671,6 +682,23 @@ class Request
     }
 
     /**
+     * Filter values
+     *
+     * @param  array $values
+     * @return array
+     */
+    public function filter(array $values)
+    {
+        foreach ($this->filters as $filter) {
+            foreach ($values as $key => $value) {
+                $values[$key] = $filter->filter($value, $key);
+            }
+        }
+
+        return $values;
+    }
+
+    /**
      * Magic method to get a value from one of the server/environment variables
      *
      * @param  string $name
@@ -727,25 +755,27 @@ class Request
      */
     protected function parseData()
     {
+        $contentType = null;
+        if (isset($_SERVER['CONTENT_TYPE'])) {
+            $contentType = $_SERVER['CONTENT_TYPE'];
+        } else if (isset($_SERVER['HTTP_CONTENT_TYPE'])) {
+            $contentType = $_SERVER['HTTP_CONTENT_TYPE'];
+        }
+
         if (strtoupper($this->getMethod()) == 'GET') {
             $this->rawData = (isset($_SERVER['QUERY_STRING'])) ? rawurldecode($_SERVER['QUERY_STRING']) : null;
         } else {
-            if (isset($_SERVER['X_POP_HTTP_RAW_DATA'])) { // For testing purposes only
-                $this->rawData = $_SERVER['X_POP_HTTP_RAW_DATA'];
-            } else {
-                $input = fopen('php://input', 'r');
-                while ($data = fread($input, 1024)) {
-                    $this->rawData .= $data;
-                }
-            }
+            // $_SERVER['X_POP_HTTP_RAW_DATA'] is for testing purposes only
+            $this->rawData = (isset($_SERVER['X_POP_HTTP_RAW_DATA'])) ?
+                $_SERVER['X_POP_HTTP_RAW_DATA'] : file_get_contents('php://input');
         }
 
         // If the content-type is JSON
-        if (isset($_SERVER['CONTENT_TYPE']) && (stripos($_SERVER['CONTENT_TYPE'], 'json') !== false) &&
+        if (isset($contentType) && (stripos($contentType, 'json') !== false) &&
             (strtoupper($this->getMethod()) != 'GET')) {
             $this->parsedData = json_decode($this->rawData, true);
         // Else, if the content-type is XML
-        } else if (isset($_SERVER['CONTENT_TYPE']) && (stripos($_SERVER['CONTENT_TYPE'], 'xml') !== false) &&
+        } else if (isset($contentType) && (stripos($contentType, 'xml') !== false) &&
             (strtoupper($this->getMethod()) != 'GET')) {
             $matches = [];
             preg_match_all('/<!\[cdata\[(.*?)\]\]>/is', $this->rawData, $matches);
@@ -760,20 +790,37 @@ class Request
             }
 
             $this->parsedData = json_decode(json_encode((array)simplexml_load_string($this->rawData)), true);
-        // Else, default to a regular URL-encoded string
+        // Else, default regular data parsing
         } else {
             switch (strtoupper($this->getMethod())) {
                 case 'GET':
                     $this->parsedData = $this->get;
                     break;
-
                 case 'POST':
                     $this->parsedData = $this->post;
                     break;
                 default:
-                    if (isset($_SERVER['CONTENT_TYPE']) && (strtolower($_SERVER['CONTENT_TYPE']) == 'application/x-www-form-urlencoded')) {
-                        parse_str($this->rawData, $this->parsedData);
+                    if ((null !== $contentType) && !empty($this->rawData)) {
+                        if (stripos($contentType, 'application/x-www-form-urlencoded') !== false) {
+                            parse_str($this->rawData, $this->parsedData);
+                        } else if (stripos($contentType, 'multipart/form-data') !== false) {
+                            $formContent = (strpos($this->rawData, 'Content-Type:') === false) ?
+                                'Content-Type: ' . $contentType . "\r\n\r\n" . $this->rawData : $this->rawData;
+                            $this->parsedData = \Pop\Mime\Message::parseForm($formContent);
+                        }
                     }
+            }
+        }
+
+        // If request has filters, filter parsed input data
+        if ($this->hasFilters()) {
+            $this->parsedData = $this->filter($this->parsedData);
+
+            if (!empty($this->post)) {
+                $this->post = $this->filter($this->post);
+            }
+            if (!empty($this->get)) {
+                $this->get = $this->filter($this->get);
             }
         }
 

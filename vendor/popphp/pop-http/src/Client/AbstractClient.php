@@ -4,7 +4,7 @@
  *
  * @link       https://github.com/popphp/popphp-framework
  * @author     Nick Sagona, III <dev@nolainteractive.com>
- * @copyright  Copyright (c) 2009-2019 NOLA Interactive, LLC. (http://www.nolainteractive.com)
+ * @copyright  Copyright (c) 2009-2020 NOLA Interactive, LLC. (http://www.nolainteractive.com)
  * @license    http://www.popphp.org/license     New BSD License
  */
 
@@ -13,26 +13,18 @@
  */
 namespace Pop\Http\Client;
 
-use Pop\Http\Response\Parser;
-
 /**
  * Abstract HTTP client class
  *
  * @category   Pop
  * @package    Pop\Http
  * @author     Nick Sagona, III <dev@nolainteractive.com>
- * @copyright  Copyright (c) 2009-2019 NOLA Interactive, LLC. (http://www.nolainteractive.com)
+ * @copyright  Copyright (c) 2009-2020 NOLA Interactive, LLC. (http://www.nolainteractive.com)
  * @license    http://www.popphp.org/license     New BSD License
- * @version    3.2.0
+ * @version    3.5.0
  */
 abstract class AbstractClient implements ClientInterface
 {
-
-    /**
-     * Client resource object
-     * @var resource
-     */
-    protected $resource = null;
 
     /**
      * URL
@@ -47,64 +39,22 @@ abstract class AbstractClient implements ClientInterface
     protected $method = null;
 
     /**
-     * Fields
-     * @var array
+     * Client resource object
+     * @var resource
      */
-    protected $fields = [];
+    protected $resource = null;
 
     /**
-     * Query
-     * @var string
+     * Client request object
+     * @var Request
      */
-    protected $query = null;
+    protected $request = null;
 
     /**
-     * Request headers
-     * @var array
-     */
-    protected $requestHeaders = [];
-
-    /**
-     * HTTP version from response
-     * @var string
-     */
-    protected $version = null;
-
-    /**
-     * Response code
-     * @var int
-     */
-    protected $code = null;
-
-    /**
-     * Response message
-     * @var string
-     */
-    protected $message = null;
-
-    /**
-     * Raw response string
-     * @var string
+     * Client response object
+     * @var Response
      */
     protected $response = null;
-
-    /**
-     * Raw response header
-     * @var string
-     */
-    protected $responseHeader = null;
-
-    /**
-     * Response headers
-     * @var array
-     */
-    protected $responseHeaders = [];
-
-    /**
-     * Response body
-     * @var string
-     */
-    protected $body = null;
 
     /**
      * Set the URL
@@ -131,17 +81,19 @@ abstract class AbstractClient implements ClientInterface
     /**
      * Set the method
      *
-     * @param  string $method
+     * @param  string  $method
+     * @param  boolean $strict
      * @throws Exception
      * @return AbstractClient
      */
-    public function setMethod($method)
+    public function setMethod($method, $strict = true)
     {
-        $valid  = ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'HEAD', 'OPTIONS', 'TRACE', 'CONNECT'];
         $method = strtoupper($method);
 
-        if (!in_array($method, $valid)) {
-            throw new Exception('Error: That request method is not valid.');
+        if ($strict) {
+            if (!in_array($method, ['GET', 'HEAD', 'POST', 'PUT', 'PATCH', 'DELETE', 'CONNECT', 'OPTIONS', 'TRACE'])) {
+                throw new Exception('Error: That request method is not valid.');
+            }
         }
 
         $this->method = $method;
@@ -156,310 +108,6 @@ abstract class AbstractClient implements ClientInterface
     public function getMethod()
     {
         return $this->method;
-    }
-
-    /**
-     * Set a field
-     *
-     * @param  string $name
-     * @param  mixed  $value
-     * @return AbstractClient
-     */
-    public function setField($name, $value)
-    {
-        $this->fields[$name] = $value;
-        $this->prepareQuery();
-
-        return $this;
-    }
-
-    /**
-     * Set all fields
-     *
-     * @param  array $fields
-     * @return AbstractClient
-     */
-    public function setFields(array $fields)
-    {
-        foreach ($fields as $name => $value) {
-            $this->setField($name, $value);
-        }
-
-        $this->prepareQuery();
-
-        return $this;
-    }
-
-    /**
-     * Get a field
-     *
-     * @param  string $name
-     * @return mixed
-     */
-    public function getField($name)
-    {
-        return (isset($this->fields[$name])) ? $this->fields[$name] : null;
-    }
-
-    /**
-     * Get all field
-     *
-     * @return array
-     */
-    public function getFields()
-    {
-        return $this->fields;
-    }
-
-    /**
-     * Remove a field
-     *
-     * @param  string $name
-     * @return AbstractClient
-     */
-    public function removeField($name)
-    {
-        if (isset($this->fields[$name])) {
-            unset($this->fields[$name]);
-        }
-
-        $this->prepareQuery();
-
-        return $this;
-    }
-
-    /**
-     * Prepare the HTTP query
-     *
-     * @return string
-     */
-    public function prepareQuery()
-    {
-        $this->query = http_build_query($this->fields);
-        return $this->query;
-    }
-
-    /**
-     * Get HTTP query
-     *
-     * @return string
-     */
-    public function getQuery()
-    {
-        return $this->query;
-    }
-
-    /**
-     * Get HTTP query length
-     *
-     * @param  boolean $mb
-     * @return int
-     */
-    public function getQueryLength($mb = true)
-    {
-        return ($mb) ? mb_strlen($this->query) : strlen($this->query);
-    }
-
-    /**
-     * Set a request header
-     *
-     * @param  string $name
-     * @param  string $value
-     * @return AbstractClient
-     */
-    public function setRequestHeader($name, $value)
-    {
-        $this->requestHeaders[$name] = $value;
-        return $this;
-    }
-
-    /**
-     * Set all request headers
-     *
-     * @param  array $headers
-     * @return AbstractClient
-     */
-    public function setRequestHeaders(array $headers)
-    {
-        $this->requestHeaders = $headers;
-        return $this;
-    }
-
-    /**
-     * Get a request header
-     *
-     * @param  string $name
-     * @return mixed
-     */
-    public function getRequestHeader($name)
-    {
-        return (isset($this->requestHeaders[$name])) ? $this->requestHeaders[$name] : null;
-    }
-
-    /**
-     * Get all request headers
-     *
-     * @return array
-     */
-    public function getRequestHeaders()
-    {
-        return $this->requestHeaders;
-    }
-
-    /**
-     * Determine if there are request headers
-     *
-     * @return boolean
-     */
-    public function hasRequestHeaders()
-    {
-        return (count($this->requestHeaders) > 0);
-    }
-
-    /**
-     * Get a response header
-     *
-     * @param  string $name
-     * @return mixed
-     */
-    public function getResponseHeader($name)
-    {
-        return (isset($this->responseHeaders[$name])) ? $this->responseHeaders[$name] : null;
-    }
-
-    /**
-     * Get all response headers
-     *
-     * @return array
-     */
-    public function getResponseHeaders()
-    {
-        return $this->responseHeaders;
-    }
-
-    /**
-     * Determine if there are response headers
-     *
-     * @return boolean
-     */
-    public function hasResponseHeaders()
-    {
-        return (count($this->responseHeaders) > 0);
-    }
-
-    /**
-     * Get raw response header
-     *
-     * @return string
-     */
-    public function getRawResponseHeader()
-    {
-        return $this->responseHeader;
-    }
-
-    /**
-     * Get the response body
-     *
-     * @return string
-     */
-    public function getBody()
-    {
-        return $this->body;
-    }
-
-    /**
-     * Get the response code
-     *
-     * @return string
-     */
-    public function getCode()
-    {
-        return $this->code;
-    }
-
-    /**
-     * Determine if the response is a success
-     *
-     * @return boolean
-     */
-    public function isSuccess()
-    {
-        $type = floor($this->code / 100);
-        return (($type == 1) || ($type == 2) || ($type == 3));
-    }
-
-    /**
-     * Determine if the response is a redirect
-     *
-     * @return boolean
-     */
-    public function isRedirect()
-    {
-        $type = floor($this->code / 100);
-        return ($type == 3);
-    }
-
-    /**
-     * Determine if the response is an error
-     *
-     * @return boolean
-     */
-    public function isError()
-    {
-        $type = floor($this->code / 100);
-        return (($type == 4) || ($type == 5));
-    }
-
-    /**
-     * Determine if the response is a client error
-     *
-     * @return boolean
-     */
-    public function isClientError()
-    {
-        $type = floor($this->code / 100);
-        return ($type == 4);
-    }
-
-    /**
-     * Determine if the response is a server error
-     *
-     * @return boolean
-     */
-    public function isServerError()
-    {
-        $type = floor($this->code / 100);
-        return ($type == 5);
-    }
-
-    /**
-     * Get the response HTTP version
-     *
-     * @return string
-     */
-    public function getHttpVersion()
-    {
-        return $this->version;
-    }
-
-    /**
-     * Get the response HTTP message
-     *
-     * @return string
-     */
-    public function getMessage()
-    {
-        return $this->message;
-    }
-
-    /**
-     * Get the raw response
-     *
-     * @return string
-     */
-    public function getResponse()
-    {
-        return $this->response;
     }
 
     /**
@@ -483,16 +131,367 @@ abstract class AbstractClient implements ClientInterface
     }
 
     /**
-     * Decode the body
+     * Get the resource (alias method)
      *
-     * @return void
+     * @return resource
      */
-    public function decodeBody()
+    public function resource()
     {
-        if (isset($this->responseHeaders['Transfer-Encoding']) && ($this->responseHeaders['Transfer-Encoding'] == 'chunked')) {
-            $this->body = Parser::decodeChunkedBody($this->body);
+        return $this->resource;
+    }
+
+    /**
+     * Set the request object
+     *
+     * @param  Request $request
+     * @return AbstractClient
+     */
+    public function setRequest(Request $request)
+    {
+        $this->request = $request;
+        return $this;
+    }
+
+    /**
+     * Has request object
+     *
+     * @return boolean
+     */
+    public function hasRequest()
+    {
+        return (null !== $this->request);
+    }
+
+    /**
+     * Get the request object
+     *
+     * @return Request
+     */
+    public function getRequest()
+    {
+        if (null === $this->request) {
+            $this->request = new Request();
         }
-        $this->body = Parser::decodeBody($this->body, $this->responseHeaders['Content-Encoding']);
+        return $this->request;
+    }
+
+    /**
+     * Get the request object (alias method)
+     *
+     * @return Request
+     */
+    public function request()
+    {
+        return $this->getRequest();
+    }
+
+    /**
+     * Set the response object
+     *
+     * @param  Response $response
+     * @return AbstractClient
+     */
+    public function setResponse(Response $response)
+    {
+        $this->response = $response;
+        return $this;
+    }
+
+    /**
+     * Has response object
+     *
+     * @return boolean
+     */
+    public function hasResponse()
+    {
+        return (null !== $this->response);
+    }
+
+    /**
+     * Get the response object
+     *
+     * @return Response
+     */
+    public function getResponse()
+    {
+        if (null === $this->response) {
+            $this->response = new Response();
+        }
+        return $this->response;
+    }
+
+    /**
+     * Get the response object (alias method)
+     *
+     * @return Response
+     */
+    public function response()
+    {
+        return $this->getResponse();
+    }
+
+    /**
+     * Set a field
+     *
+     * @param  string $name
+     * @param  mixed  $value
+     * @return AbstractClient
+     */
+    public function setField($name, $value)
+    {
+        $this->getRequest()->setField($name, $value);
+        return $this;
+    }
+
+    /**
+     * Set all fields
+     *
+     * @param  array $fields
+     * @return AbstractClient
+     */
+    public function setFields(array $fields)
+    {
+        $this->getRequest()->setFields($fields);
+        return $this;
+    }
+
+    /**
+     * Get a field
+     *
+     * @param  string $name
+     * @return mixed
+     */
+    public function getField($name)
+    {
+        return $this->getRequest()->getField($name);
+    }
+
+    /**
+     * Get all field
+     *
+     * @return array
+     */
+    public function getFields()
+    {
+        return $this->getRequest()->getFields();
+    }
+
+    /**
+     * Remove a field
+     *
+     * @param  string $name
+     * @return AbstractClient
+     */
+    public function removeField($name)
+    {
+        $this->getRequest()->removeField($name);
+        return $this;
+    }
+
+    /**
+     * Set all request headers
+     *
+     * @param  array $headers
+     * @return AbstractClient
+     */
+    public function setRequestHeaders(array $headers)
+    {
+        $this->getRequest()->addHeaders($headers);
+        return $this;
+    }
+
+    /**
+     * Set request header
+     *
+     * @param  string $name
+     * @param  string $value
+     * @return AbstractClient
+     */
+    public function setRequestHeader($name, $value)
+    {
+        $this->getRequest()->addHeader($name, $value);
+        return $this;
+    }
+
+    /**
+     * Has request headers
+     *
+     * @return boolean
+     */
+    public function hasRequestHeaders()
+    {
+        return $this->getRequest()->hasHeaders();
+    }
+
+    /**
+     * Has request header
+     *
+     * @param  string $name
+     * @return boolean
+     */
+    public function hasRequestHeader($name)
+    {
+        return $this->getRequest()->hasHeader($name);
+    }
+
+    /**
+     * Get the request headers
+     *
+     * @return array
+     */
+    public function getRequestHeaders()
+    {
+        return $this->getRequest()->getHeaders();
+    }
+
+    /**
+     * Get the request header
+     *
+     * @param  string $name
+     * @return mixed
+     */
+    public function getRequestHeader($name)
+    {
+        return $this->getRequest()->getHeader($name);
+    }
+
+    /**
+     * Get the request body
+     *
+     * @return string
+     */
+    public function getRequestBody()
+    {
+        return $this->getRequest()->getBody();
+    }
+
+    /**
+     * Create request as a URL-encoded form
+     *
+     * @return AbstractClient
+     */
+    public function createUrlEncodedForm()
+    {
+        $this->request->createUrlEncodedForm();
+        return $this;
+    }
+
+    /**
+     * Check if request is a URL-encoded form
+     *
+     * @return boolean
+     */
+    public function isUrlEncodedForm()
+    {
+        return $this->request->isUrlEncodedForm();
+    }
+
+    /**
+     * Create request as a multipart form
+     *
+     * @return AbstractClient
+     */
+    public function createMultipartForm()
+    {
+        $this->request->createMultipartForm();
+        return $this;
+    }
+
+    /**
+     * Check if request is a multipart form
+     *
+     * @return boolean
+     */
+    public function isMultipartForm()
+    {
+        return $this->request->isMultipartForm();
+    }
+
+    /**
+     * Set all response headers
+     *
+     * @param  array $headers
+     * @return AbstractClient
+     */
+    public function setResponseHeaders(array $headers)
+    {
+        $this->getResponse()->addHeaders($headers);
+        return $this;
+    }
+
+    /**
+     * Set response header
+     *
+     * @param  string $name
+     * @param  string $value
+     * @return AbstractClient
+     */
+    public function setResponseHeader($name, $value)
+    {
+        $this->getResponse()->addHeader($name, $value);
+        return $this;
+    }
+
+    /**
+     * Has response headers
+     *
+     * @return boolean
+     */
+    public function hasResponseHeaders()
+    {
+        return $this->getResponse()->hasHeaders();
+    }
+
+    /**
+     * Has response header
+     *
+     * @param  string $name
+     * @return boolean
+     */
+    public function hasResponseHeader($name)
+    {
+        return $this->getResponse()->hasHeader($name);
+    }
+
+    /**
+     * Get the response headers
+     *
+     * @return array
+     */
+    public function getResponseHeaders()
+    {
+        return $this->getResponse()->getHeaders();
+    }
+
+    /**
+     * Get the response header
+     *
+     * @param  string $name
+     * @return mixed
+     */
+    public function getResponseHeader($name)
+    {
+        return $this->getResponse()->getHeader($name);
+    }
+
+    /**
+     * Get the response body
+     *
+     * @return string
+     */
+    public function getResponseBody()
+    {
+        return $this->getResponse()->getBody();
+    }
+
+    /**
+     * Get the response code
+     *
+     * @return string
+     */
+    public function getResponseCode()
+    {
+        return $this->getResponse()->getCode();
     }
 
     /**

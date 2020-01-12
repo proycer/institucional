@@ -1,0 +1,94 @@
+<?php include 'inc/header.phtml' ?>
+
+<body>
+
+	<div id="page">
+
+		<?php include 'inc/navbar.phtml' ?>
+
+		<section id="home" class="video-hero">
+			<div class="overlay"></div>
+			<div class="display-t display-t2 text-center">
+				<div class="display-tc display-tc2">
+					<div class="container">
+						<div class="col-md-12 col-md-offset-0">
+							<div class="animate-box">
+								<h2 id="titulo"></h2>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+
+		<div id="colorlib-contact">
+			<div class="container">
+				<div class="row">
+					<div class="col-md-4 col-md-push-8 animate-box">
+						<h2>Informaci&oacute;n</h2>
+						<div class="row">
+							<div class="col-md-12">
+								<div class="contact-info-wrap-flex">
+									<div class="con-info">
+										<p><span><i class="icon-location-2"></i></span> Neuqu&eacute;n Capital, Argentina</p>
+									</div>
+									<div class="con-info">
+										<p><span><i class="icon-phone3"></i></span> <a href="tel://#">+54 9 299XXXXXXX</a></p>
+									</div>
+									<div class="con-info">
+										<p><span><i class="icon-paperplane"></i></span> <a href="mailto:contacto@proycer.com.ar">contacto@proycer.com.ar</a></p>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-8 col-md-pull-4 animate-box">
+						<h2>Decinos c&oacute;mo ayudarte!</h2>
+						<form action="/contacto" method="post">
+							<div class="row form-group">
+								<div class="col-md-6">
+									<input type="text" id="nombre" name="nombre" class="form-control" placeholder="Nombre completo" required>
+								</div>
+								<div class="col-md-6">
+									<input type="text" id="contacto" name="contacto" class="form-control" placeholder="Email o tel&eacute;fono de contacto" required>
+								</div>
+							</div>
+
+							<div class="row form-group">
+								<div class="col-md-12">
+									<textarea name="mensaje" id="mensaje" cols="30" rows="10" class="form-control" placeholder="Escribinos tu consulta o solicitud" required></textarea>
+								</div>
+							</div>
+							<div class="form-group">
+								<input type="submit" value="Enviar!" class="btn btn-primary">
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<?php include 'inc/footer.phtml' ?>
+	</div>
+
+	<div class="gototop js-top">
+		<a href="#" class="js-gotop"><i class="icon-arrow-up2"></i></a>
+	</div>
+
+	<script src="/src/js/jquery.min.js"></script>
+	<script src="/src/js/jquery.easing.1.3.js"></script>
+	<script src="/src/js/bootstrap.min.js"></script>
+	<script src="/src/js/jquery.waypoints.min.js"></script>
+	<script src="/src/js/main.js"></script>
+	<script>
+		new Typed('#titulo', {
+			strings: ['Contacto'],
+			typeSpeed: 100,
+			showCursor: false,
+			startDelay: 200
+		})
+	</script>
+
+</body>
+
+</html>

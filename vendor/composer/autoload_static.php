@@ -16,6 +16,7 @@ class ComposerStaticInite1f2e30c67c77585e7215c6fa3c8fd6f
             'Pop\\Pdf\\' => 8,
             'Pop\\Paginator\\' => 14,
             'Pop\\Nav\\' => 8,
+            'Pop\\Mime\\' => 9,
             'Pop\\Mail\\' => 9,
             'Pop\\Log\\' => 8,
             'Pop\\Loader\\' => 11,
@@ -25,6 +26,7 @@ class ComposerStaticInite1f2e30c67c77585e7215c6fa3c8fd6f
             'Pop\\Http\\' => 9,
             'Pop\\Ftp\\' => 8,
             'Pop\\Form\\' => 9,
+            'Pop\\Filter\\' => 11,
             'Pop\\Dom\\' => 8,
             'Pop\\Dir\\' => 8,
             'Pop\\Debug\\' => 10,
@@ -72,6 +74,10 @@ class ComposerStaticInite1f2e30c67c77585e7215c6fa3c8fd6f
         array (
             0 => __DIR__ . '/..' . '/popphp/pop-nav/src',
         ),
+        'Pop\\Mime\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/popphp/pop-mime/src',
+        ),
         'Pop\\Mail\\' => 
         array (
             0 => __DIR__ . '/..' . '/popphp/pop-mail/src',
@@ -107,6 +113,10 @@ class ComposerStaticInite1f2e30c67c77585e7215c6fa3c8fd6f
         'Pop\\Form\\' => 
         array (
             0 => __DIR__ . '/..' . '/popphp/pop-form/src',
+        ),
+        'Pop\\Filter\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/popphp/pop-filter/src',
         ),
         'Pop\\Dom\\' => 
         array (

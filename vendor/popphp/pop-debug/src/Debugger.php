@@ -4,7 +4,7 @@
  *
  * @link       https://github.com/popphp/popphp-framework
  * @author     Nick Sagona, III <dev@nolainteractive.com>
- * @copyright  Copyright (c) 2009-2019 NOLA Interactive, LLC. (http://www.nolainteractive.com)
+ * @copyright  Copyright (c) 2009-2020 NOLA Interactive, LLC. (http://www.nolainteractive.com)
  * @license    http://www.popphp.org/license     New BSD License
  */
 
@@ -22,9 +22,9 @@ use Pop\Debug\Storage;
  * @category   Pop
  * @package    Pop\Debug
  * @author     Nick Sagona, III <dev@nolainteractive.com>
- * @copyright  Copyright (c) 2009-2019 NOLA Interactive, LLC. (http://www.nolainteractive.com)
+ * @copyright  Copyright (c) 2009-2020 NOLA Interactive, LLC. (http://www.nolainteractive.com)
  * @license    http://www.popphp.org/license     New BSD License
- * @version    1.1.0
+ * @version    1.2.0
  */
 class Debugger implements \ArrayAccess
 {
@@ -167,7 +167,7 @@ class Debugger implements \ArrayAccess
     {
         $data = [];
         foreach ($this->handlers as $name => $handler) {
-            $data[$name] = ($this->storage->getFormat() == 'text') ? $handler->prepareAsString() : $handler->prepare();
+            $data[$name] = (null === $this->storage->getFormat()) ? $handler->prepareAsString() : $handler->prepare();
         }
         return $data;
     }
@@ -180,7 +180,7 @@ class Debugger implements \ArrayAccess
     public function save()
     {
         foreach ($this->handlers as $name => $handler) {
-            $data = ($this->storage->getFormat() == 'text') ? $handler->prepareAsString() : $handler->prepare();
+            $data = (null === $this->storage->getFormat()) ? $handler->prepareAsString() : $handler->prepare();
             $this->storage->save($this->getRequestId() . '-' . $name, $data);
         }
     }

@@ -1,23 +1,23 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
     "content-hash": "a217aa68ee7233001b45587c3d03ea5d",
     "packages": [
         {
             "name": "popphp/pop-acl",
-            "version": "3.2.0",
+            "version": "3.2.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/popphp/pop-acl.git",
-                "reference": "3065ea69cd6c6d685b6cac7022c04d18fc6055e4"
+                "reference": "abf6ab5e2efb7c8d8e4e05083ad319d23ed6c060"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/popphp/pop-acl/zipball/3065ea69cd6c6d685b6cac7022c04d18fc6055e4",
-                "reference": "3065ea69cd6c6d685b6cac7022c04d18fc6055e4",
+                "url": "https://api.github.com/repos/popphp/pop-acl/zipball/abf6ab5e2efb7c8d8e4e05083ad319d23ed6c060",
+                "reference": "abf6ab5e2efb7c8d8e4e05083ad319d23ed6c060",
                 "shasum": ""
             },
             "require": {
@@ -57,7 +57,7 @@
                 "pop",
                 "pop php"
             ],
-            "time": "2019-01-10T20:58:15+00:00"
+            "time": "2019-11-20T06:40:02+00:00"
         },
         {
             "name": "popphp/pop-audit",
@@ -174,20 +174,21 @@
         },
         {
             "name": "popphp/pop-cache",
-            "version": "3.2.3",
+            "version": "3.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/popphp/pop-cache.git",
-                "reference": "eb16431b84ef5468bf3e23a1903a4e16bba9f061"
+                "reference": "c1ba6daf26a8284a8e764da02ebb4aa5a7066301"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/popphp/pop-cache/zipball/eb16431b84ef5468bf3e23a1903a4e16bba9f061",
-                "reference": "eb16431b84ef5468bf3e23a1903a4e16bba9f061",
+                "url": "https://api.github.com/repos/popphp/pop-cache/zipball/c1ba6daf26a8284a8e764da02ebb4aa5a7066301",
+                "reference": "c1ba6daf26a8284a8e764da02ebb4aa5a7066301",
                 "shasum": ""
             },
             "require": {
-                "php": ">=7.1.0"
+                "php": ">=7.1.0",
+                "popphp/pop-db": "^4.5.7"
             },
             "require-dev": {
                 "phpunit/phpunit": "^7.0.0"
@@ -195,7 +196,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "3.2.x-dev"
+                    "dev-master": "3.3.x-dev"
                 }
             },
             "autoload": {
@@ -223,22 +224,23 @@
                 "memcache",
                 "php",
                 "pop",
-                "pop php"
+                "pop php",
+                "redis"
             ],
-            "time": "2019-01-10T21:05:01+00:00"
+            "time": "2019-11-22T05:59:01+00:00"
         },
         {
             "name": "popphp/pop-code",
-            "version": "3.1.1",
+            "version": "3.1.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/popphp/pop-code.git",
-                "reference": "bfddb0b03ec413f9aec170be9f61448328b1615d"
+                "reference": "27685533c67c8a850d1b495be4e318a7fde5d9a1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/popphp/pop-code/zipball/bfddb0b03ec413f9aec170be9f61448328b1615d",
-                "reference": "bfddb0b03ec413f9aec170be9f61448328b1615d",
+                "url": "https://api.github.com/repos/popphp/pop-code/zipball/27685533c67c8a850d1b495be4e318a7fde5d9a1",
+                "reference": "27685533c67c8a850d1b495be4e318a7fde5d9a1",
                 "shasum": ""
             },
             "require": {
@@ -278,20 +280,20 @@
                 "pop php",
                 "reflection"
             ],
-            "time": "2019-01-25T04:43:54+00:00"
+            "time": "2019-11-20T06:31:50+00:00"
         },
         {
             "name": "popphp/pop-config",
-            "version": "3.2.2",
+            "version": "3.2.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/popphp/pop-config.git",
-                "reference": "c36fac1306971dc6c0a5b2f758411ed17a9266c3"
+                "reference": "e6803292eebe53dae76a7cd3b74dafb3fde99366"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/popphp/pop-config/zipball/c36fac1306971dc6c0a5b2f758411ed17a9266c3",
-                "reference": "c36fac1306971dc6c0a5b2f758411ed17a9266c3",
+                "url": "https://api.github.com/repos/popphp/pop-config/zipball/e6803292eebe53dae76a7cd3b74dafb3fde99366",
+                "reference": "e6803292eebe53dae76a7cd3b74dafb3fde99366",
                 "shasum": ""
             },
             "require": {
@@ -333,20 +335,20 @@
                 "pop",
                 "pop php"
             ],
-            "time": "2019-01-10T22:25:21+00:00"
+            "time": "2019-11-20T06:28:45+00:00"
         },
         {
             "name": "popphp/pop-console",
-            "version": "3.1.0",
+            "version": "3.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/popphp/pop-console.git",
-                "reference": "a91a926de9b50fcea8ad2b34cbaef1b03a4d93e1"
+                "reference": "abbbc8ed8aa75e8a95fcbd8bdfa371d8203fb2c2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/popphp/pop-console/zipball/a91a926de9b50fcea8ad2b34cbaef1b03a4d93e1",
-                "reference": "a91a926de9b50fcea8ad2b34cbaef1b03a4d93e1",
+                "url": "https://api.github.com/repos/popphp/pop-console/zipball/abbbc8ed8aa75e8a95fcbd8bdfa371d8203fb2c2",
+                "reference": "abbbc8ed8aa75e8a95fcbd8bdfa371d8203fb2c2",
                 "shasum": ""
             },
             "require": {
@@ -389,29 +391,32 @@
                 "pop",
                 "pop php"
             ],
-            "time": "2019-02-18T22:45:38+00:00"
+            "time": "2019-11-20T06:24:10+00:00"
         },
         {
             "name": "popphp/pop-cookie",
-            "version": "3.1.3",
+            "version": "3.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/popphp/pop-cookie.git",
-                "reference": "30f0b99896a5fa9ef86c3615f7a3227fc266e74a"
+                "reference": "3b9dfbd6411464884f473c4e9b2adcbf0baa8fff"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/popphp/pop-cookie/zipball/30f0b99896a5fa9ef86c3615f7a3227fc266e74a",
-                "reference": "30f0b99896a5fa9ef86c3615f7a3227fc266e74a",
+                "url": "https://api.github.com/repos/popphp/pop-cookie/zipball/3b9dfbd6411464884f473c4e9b2adcbf0baa8fff",
+                "reference": "3b9dfbd6411464884f473c4e9b2adcbf0baa8fff",
                 "shasum": ""
             },
             "require": {
                 "php": ">=7.1.0"
             },
+            "require-dev": {
+                "phpunit/phpunit": "^7.0.0"
+            },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "3.1.x-dev"
+                    "dev-master": "3.2.x-dev"
                 }
             },
             "autoload": {
@@ -439,20 +444,20 @@
                 "pop",
                 "pop php"
             ],
-            "time": "2019-01-08T23:04:16+00:00"
+            "time": "2019-11-21T04:51:27+00:00"
         },
         {
             "name": "popphp/pop-css",
-            "version": "1.0.7",
+            "version": "1.0.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/popphp/pop-css.git",
-                "reference": "e6d2e5b61d336368e7c0c15d20ddbce1c19cd007"
+                "reference": "de44f52fe6ff3a0296d232da6dbac35b9ca0ac30"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/popphp/pop-css/zipball/e6d2e5b61d336368e7c0c15d20ddbce1c19cd007",
-                "reference": "e6d2e5b61d336368e7c0c15d20ddbce1c19cd007",
+                "url": "https://api.github.com/repos/popphp/pop-css/zipball/de44f52fe6ff3a0296d232da6dbac35b9ca0ac30",
+                "reference": "de44f52fe6ff3a0296d232da6dbac35b9ca0ac30",
                 "shasum": ""
             },
             "require": {
@@ -492,20 +497,20 @@
                 "pop",
                 "pop php"
             ],
-            "time": "2019-01-10T21:06:53+00:00"
+            "time": "2019-11-20T05:40:16+00:00"
         },
         {
             "name": "popphp/pop-csv",
-            "version": "3.1.4",
+            "version": "3.1.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/popphp/pop-csv.git",
-                "reference": "43a9350cdc91b1a37b1f72ec1d65cd454f041517"
+                "reference": "62a396ae12c600e9eeb0878b8f9dcb13949d8800"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/popphp/pop-csv/zipball/43a9350cdc91b1a37b1f72ec1d65cd454f041517",
-                "reference": "43a9350cdc91b1a37b1f72ec1d65cd454f041517",
+                "url": "https://api.github.com/repos/popphp/pop-csv/zipball/62a396ae12c600e9eeb0878b8f9dcb13949d8800",
+                "reference": "62a396ae12c600e9eeb0878b8f9dcb13949d8800",
                 "shasum": ""
             },
             "require": {
@@ -544,7 +549,7 @@
                 "pop",
                 "pop php"
             ],
-            "time": "2019-10-18T15:44:46+00:00"
+            "time": "2019-11-20T05:35:15+00:00"
         },
         {
             "name": "popphp/pop-db",
@@ -610,29 +615,31 @@
         },
         {
             "name": "popphp/pop-debug",
-            "version": "1.1.0",
+            "version": "1.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/popphp/pop-debug.git",
-                "reference": "a1f7058c5bf830ce4a5ba8e979fba75e48a19b64"
+                "reference": "ad63e0d1f8a484d648dcce469d60618b0af45581"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/popphp/pop-debug/zipball/a1f7058c5bf830ce4a5ba8e979fba75e48a19b64",
-                "reference": "a1f7058c5bf830ce4a5ba8e979fba75e48a19b64",
+                "url": "https://api.github.com/repos/popphp/pop-debug/zipball/ad63e0d1f8a484d648dcce469d60618b0af45581",
+                "reference": "ad63e0d1f8a484d648dcce469d60618b0af45581",
                 "shasum": ""
             },
             "require": {
-                "php": ">=7.1.0"
+                "php": ">=7.1.0",
+                "popphp/pop-db": "^4.5.0",
+                "popphp/pop-http": "^3.5.0",
+                "popphp/pop-session": "^3.2.0"
             },
             "require-dev": {
-                "phpunit/phpunit": "^7.0.0",
-                "popphp/pop-db": "^4.5.0"
+                "phpunit/phpunit": "^7.0.0"
             },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.1.x-dev"
+                    "dev-master": "1.2.x-dev"
                 }
             },
             "autoload": {
@@ -660,20 +667,20 @@
                 "pop",
                 "pop php"
             ],
-            "time": "2019-03-12T17:28:51+00:00"
+            "time": "2019-11-22T06:03:00+00:00"
         },
         {
             "name": "popphp/pop-dir",
-            "version": "3.0.2",
+            "version": "3.0.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/popphp/pop-dir.git",
-                "reference": "39a539a5d29de575c9eb19dde6a7d8a7ba385ee3"
+                "reference": "c8dfddeebfddbc0a81ff21fa65298af7f589fcf5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/popphp/pop-dir/zipball/39a539a5d29de575c9eb19dde6a7d8a7ba385ee3",
-                "reference": "39a539a5d29de575c9eb19dde6a7d8a7ba385ee3",
+                "url": "https://api.github.com/repos/popphp/pop-dir/zipball/c8dfddeebfddbc0a81ff21fa65298af7f589fcf5",
+                "reference": "c8dfddeebfddbc0a81ff21fa65298af7f589fcf5",
                 "shasum": ""
             },
             "require": {
@@ -713,20 +720,20 @@
                 "pop",
                 "pop php"
             ],
-            "time": "2019-01-10T21:08:32+00:00"
+            "time": "2019-11-20T05:24:24+00:00"
         },
         {
             "name": "popphp/pop-dom",
-            "version": "3.2.6",
+            "version": "3.2.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/popphp/pop-dom.git",
-                "reference": "dd933862325ee7311e5174e8a60b3d756d0214b3"
+                "reference": "7693529776f4da8434d21954cf0676ff8671b272"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/popphp/pop-dom/zipball/dd933862325ee7311e5174e8a60b3d756d0214b3",
-                "reference": "dd933862325ee7311e5174e8a60b3d756d0214b3",
+                "url": "https://api.github.com/repos/popphp/pop-dom/zipball/7693529776f4da8434d21954cf0676ff8671b272",
+                "reference": "7693529776f4da8434d21954cf0676ff8671b272",
                 "shasum": ""
             },
             "require": {
@@ -768,26 +775,81 @@
                 "pop",
                 "pop php"
             ],
-            "time": "2019-01-10T21:08:48+00:00"
+            "time": "2019-11-20T05:20:07+00:00"
         },
         {
-            "name": "popphp/pop-form",
-            "version": "3.4.0",
+            "name": "popphp/pop-filter",
+            "version": "3.0.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/popphp/pop-form.git",
-                "reference": "eb9237698de82e088f21798868422bda5a505fc1"
+                "url": "https://github.com/popphp/pop-filter.git",
+                "reference": "2d0ef5a93d61955217915f4c31e67ee88ea955e6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/popphp/pop-form/zipball/eb9237698de82e088f21798868422bda5a505fc1",
-                "reference": "eb9237698de82e088f21798868422bda5a505fc1",
+                "url": "https://api.github.com/repos/popphp/pop-filter/zipball/2d0ef5a93d61955217915f4c31e67ee88ea955e6",
+                "reference": "2d0ef5a93d61955217915f4c31e67ee88ea955e6",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.1.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^7.0.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "3.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Pop\\Filter\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "\"BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Nick Sagona",
+                    "email": "dev@nolainteractive.com",
+                    "homepage": "http://www.nolainteractive.com/"
+                }
+            ],
+            "description": "Pop Filter Component for Pop PHP Framework",
+            "homepage": "http://www.popphp.org/",
+            "keywords": [
+                "filter",
+                "php",
+                "pop",
+                "pop php",
+                "string",
+                "string filter"
+            ],
+            "time": "2019-11-18T04:33:52+00:00"
+        },
+        {
+            "name": "popphp/pop-form",
+            "version": "3.5.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/popphp/pop-form.git",
+                "reference": "720ad6b3f297697f6064cda702a4f584a033c24d"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/popphp/pop-form/zipball/720ad6b3f297697f6064cda702a4f584a033c24d",
+                "reference": "720ad6b3f297697f6064cda702a4f584a033c24d",
                 "shasum": ""
             },
             "require": {
                 "php": ">=7.1.0",
                 "popphp/pop-acl": "^3.2.0",
                 "popphp/pop-dom": "^3.2.6",
+                "popphp/pop-filter": "^3.0.0",
                 "popphp/pop-validator": "^3.1.1"
             },
             "require-dev": {
@@ -801,7 +863,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "3.4.x-dev"
+                    "dev-master": "3.5.x-dev"
                 }
             },
             "autoload": {
@@ -831,20 +893,20 @@
                 "pop",
                 "pop php"
             ],
-            "time": "2019-10-18T03:11:25+00:00"
+            "time": "2019-11-19T05:25:15+00:00"
         },
         {
             "name": "popphp/pop-ftp",
-            "version": "3.0.2",
+            "version": "3.0.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/popphp/pop-ftp.git",
-                "reference": "f8d18c3fdd0823ee57b74ed3d01e25f3e5970452"
+                "reference": "a0964da6599c3b6b51f615b9c9242dd97b7f7648"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/popphp/pop-ftp/zipball/f8d18c3fdd0823ee57b74ed3d01e25f3e5970452",
-                "reference": "f8d18c3fdd0823ee57b74ed3d01e25f3e5970452",
+                "url": "https://api.github.com/repos/popphp/pop-ftp/zipball/a0964da6599c3b6b51f615b9c9242dd97b7f7648",
+                "reference": "a0964da6599c3b6b51f615b9c9242dd97b7f7648",
                 "shasum": ""
             },
             "require": {
@@ -880,24 +942,26 @@
                 "pop",
                 "pop php"
             ],
-            "time": "2019-01-09T20:27:00+00:00"
+            "time": "2019-11-20T05:14:37+00:00"
         },
         {
             "name": "popphp/pop-http",
-            "version": "3.2.3",
+            "version": "3.5.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/popphp/pop-http.git",
-                "reference": "b2d62ecd39e508aac94d3e633b39584a0f625948"
+                "reference": "b092c60f4acf1d73d1d0de4d804e50aad9954e15"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/popphp/pop-http/zipball/b2d62ecd39e508aac94d3e633b39584a0f625948",
-                "reference": "b2d62ecd39e508aac94d3e633b39584a0f625948",
+                "url": "https://api.github.com/repos/popphp/pop-http/zipball/b092c60f4acf1d73d1d0de4d804e50aad9954e15",
+                "reference": "b092c60f4acf1d73d1d0de4d804e50aad9954e15",
                 "shasum": ""
             },
             "require": {
-                "php": ">=7.1.0"
+                "php": ">=7.1.0",
+                "popphp/pop-filter": "^3.0.0",
+                "popphp/pop-mime": "^1.0.0"
             },
             "require-dev": {
                 "phpunit/phpunit": "^7.0.0"
@@ -905,7 +969,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "3.2.x-dev"
+                    "dev-master": "3.5.x-dev"
                 }
             },
             "autoload": {
@@ -938,20 +1002,20 @@
                 "pop",
                 "pop php"
             ],
-            "time": "2019-11-11T21:02:56+00:00"
+            "time": "2019-11-18T05:19:22+00:00"
         },
         {
             "name": "popphp/pop-i18n",
-            "version": "3.0.2",
+            "version": "3.0.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/popphp/pop-i18n.git",
-                "reference": "42e947fb99ce40b8856228d0c41181f4d441dfdc"
+                "reference": "0b9bff7d3bafd84ae2103fc81e4d37ad74522be5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/popphp/pop-i18n/zipball/42e947fb99ce40b8856228d0c41181f4d441dfdc",
-                "reference": "42e947fb99ce40b8856228d0c41181f4d441dfdc",
+                "url": "https://api.github.com/repos/popphp/pop-i18n/zipball/0b9bff7d3bafd84ae2103fc81e4d37ad74522be5",
+                "reference": "0b9bff7d3bafd84ae2103fc81e4d37ad74522be5",
                 "shasum": ""
             },
             "require": {
@@ -996,20 +1060,20 @@
                 "pop php",
                 "translation"
             ],
-            "time": "2019-01-10T21:09:21+00:00"
+            "time": "2019-11-20T05:11:59+00:00"
         },
         {
             "name": "popphp/pop-image",
-            "version": "3.3.1",
+            "version": "3.3.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/popphp/pop-image.git",
-                "reference": "70adeccc04e5635000e0da424eb002c986aa686c"
+                "reference": "175ff91c0dc82fd2371416143b754e47937fa703"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/popphp/pop-image/zipball/70adeccc04e5635000e0da424eb002c986aa686c",
-                "reference": "70adeccc04e5635000e0da424eb002c986aa686c",
+                "url": "https://api.github.com/repos/popphp/pop-image/zipball/175ff91c0dc82fd2371416143b754e47937fa703",
+                "reference": "175ff91c0dc82fd2371416143b754e47937fa703",
                 "shasum": ""
             },
             "require": {
@@ -1060,33 +1124,33 @@
                 "pop",
                 "pop php"
             ],
-            "time": "2019-02-22T05:43:34+00:00"
+            "time": "2019-11-20T20:20:34+00:00"
         },
         {
             "name": "popphp/pop-kettle",
-            "version": "1.0.1",
+            "version": "1.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/popphp/pop-kettle.git",
-                "reference": "cdf498eb5c63f7859524af1fc09c237de8ae44cd"
+                "reference": "3b802d4437f8b40625db367b36b4b71849aad2ff"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/popphp/pop-kettle/zipball/cdf498eb5c63f7859524af1fc09c237de8ae44cd",
-                "reference": "cdf498eb5c63f7859524af1fc09c237de8ae44cd",
+                "url": "https://api.github.com/repos/popphp/pop-kettle/zipball/3b802d4437f8b40625db367b36b4b71849aad2ff",
+                "reference": "3b802d4437f8b40625db367b36b4b71849aad2ff",
                 "shasum": ""
             },
             "require": {
                 "php": ">=7.1.0",
-                "popphp/pop-console": "^3.1.0",
-                "popphp/pop-db": "^4.5.0",
-                "popphp/pop-dir": "^3.0.2",
-                "popphp/popcorn": "^3.2.0"
+                "popphp/pop-console": "^3.1.1",
+                "popphp/pop-db": "^4.5.7",
+                "popphp/pop-dir": "^3.0.3",
+                "popphp/popcorn": "^3.3.0"
             },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.0.x-dev"
+                    "dev-master": "1.1.x-dev"
                 }
             },
             "autoload": {
@@ -1106,20 +1170,20 @@
                 }
             ],
             "description": "A CLI helper application for the Pop PHP Framework.",
-            "time": "2019-04-25T16:44:25+00:00"
+            "time": "2019-11-22T18:48:17+00:00"
         },
         {
             "name": "popphp/pop-loader",
-            "version": "3.0.3",
+            "version": "3.0.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/popphp/pop-loader.git",
-                "reference": "41f9bdaa704f3b221d8d752e8bc553ad082c84b2"
+                "reference": "6000258e1d3f8ad7a2eeb9fce1e1b9b94786318d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/popphp/pop-loader/zipball/41f9bdaa704f3b221d8d752e8bc553ad082c84b2",
-                "reference": "41f9bdaa704f3b221d8d752e8bc553ad082c84b2",
+                "url": "https://api.github.com/repos/popphp/pop-loader/zipball/6000258e1d3f8ad7a2eeb9fce1e1b9b94786318d",
+                "reference": "6000258e1d3f8ad7a2eeb9fce1e1b9b94786318d",
                 "shasum": ""
             },
             "require": {
@@ -1160,7 +1224,7 @@
                 "pop php",
                 "psr-0"
             ],
-            "time": "2019-10-18T04:43:41+00:00"
+            "time": "2019-11-20T05:05:05+00:00"
         },
         {
             "name": "popphp/pop-log",
@@ -1168,12 +1232,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/popphp/pop-log.git",
-                "reference": "61c8de504a5eb55077c48a10910c86ff614ada95"
+                "reference": "2e71bda34d0a86dff0a0605ffe12d5f81811b68e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/popphp/pop-log/zipball/61c8de504a5eb55077c48a10910c86ff614ada95",
-                "reference": "61c8de504a5eb55077c48a10910c86ff614ada95",
+                "url": "https://api.github.com/repos/popphp/pop-log/zipball/2e71bda34d0a86dff0a0605ffe12d5f81811b68e",
+                "reference": "2e71bda34d0a86dff0a0605ffe12d5f81811b68e",
                 "shasum": ""
             },
             "require": {
@@ -1220,20 +1284,21 @@
         },
         {
             "name": "popphp/pop-mail",
-            "version": "3.2.4",
+            "version": "3.5.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/popphp/pop-mail.git",
-                "reference": "1a2a7e83384dbb6ce44e3f3237277071d5625502"
+                "reference": "a0cbf1819fb9224b61df68ac3b74be22f2417634"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/popphp/pop-mail/zipball/1a2a7e83384dbb6ce44e3f3237277071d5625502",
-                "reference": "1a2a7e83384dbb6ce44e3f3237277071d5625502",
+                "url": "https://api.github.com/repos/popphp/pop-mail/zipball/a0cbf1819fb9224b61df68ac3b74be22f2417634",
+                "reference": "a0cbf1819fb9224b61df68ac3b74be22f2417634",
                 "shasum": ""
             },
             "require": {
-                "php": ">=7.1.0"
+                "php": ">=7.1.0",
+                "popphp/pop-mime": "^1.0.0"
             },
             "require-dev": {
                 "phpunit/phpunit": "^7.0.0"
@@ -1241,7 +1306,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "3.1.x-dev"
+                    "dev-master": "3.5.x-dev"
                 }
             },
             "autoload": {
@@ -1270,20 +1335,74 @@
                 "pop php",
                 "send mail"
             ],
-            "time": "2019-11-11T15:43:58+00:00"
+            "time": "2019-11-20T00:14:10+00:00"
         },
         {
-            "name": "popphp/pop-nav",
-            "version": "3.2.0",
+            "name": "popphp/pop-mime",
+            "version": "1.0.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/popphp/pop-nav.git",
-                "reference": "fac96f2bbada10a6a197602d9cc41c1eddcc09db"
+                "url": "https://github.com/popphp/pop-mime.git",
+                "reference": "f6772691748c5cf4d390f5ed1f8e67188edfd713"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/popphp/pop-nav/zipball/fac96f2bbada10a6a197602d9cc41c1eddcc09db",
-                "reference": "fac96f2bbada10a6a197602d9cc41c1eddcc09db",
+                "url": "https://api.github.com/repos/popphp/pop-mime/zipball/f6772691748c5cf4d390f5ed1f8e67188edfd713",
+                "reference": "f6772691748c5cf4d390f5ed1f8e67188edfd713",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.1.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^7.0.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Pop\\Mime\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Nick Sagona",
+                    "email": "dev@nolainteractive.com",
+                    "homepage": "http://www.nolainteractive.com/"
+                }
+            ],
+            "description": "Pop Mime Component for Pop PHP Framework",
+            "homepage": "http://www.popphp.org/",
+            "keywords": [
+                "mime",
+                "mime generator",
+                "mime parser",
+                "php",
+                "pop",
+                "pop php"
+            ],
+            "time": "2019-11-18T04:49:05+00:00"
+        },
+        {
+            "name": "popphp/pop-nav",
+            "version": "3.2.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/popphp/pop-nav.git",
+                "reference": "90264776b28cfad424acf3aab60fade363d3b979"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/popphp/pop-nav/zipball/90264776b28cfad424acf3aab60fade363d3b979",
+                "reference": "90264776b28cfad424acf3aab60fade363d3b979",
                 "shasum": ""
             },
             "require": {
@@ -1327,20 +1446,20 @@
                 "pop",
                 "pop php"
             ],
-            "time": "2019-01-10T22:20:38+00:00"
+            "time": "2019-11-20T05:00:25+00:00"
         },
         {
             "name": "popphp/pop-paginator",
-            "version": "3.0.4",
+            "version": "3.0.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/popphp/pop-paginator.git",
-                "reference": "8656674831e22749f25369d4cb2db5eb4639b9a7"
+                "reference": "d1121951d72b368cc72b3feb2c788d096870126e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/popphp/pop-paginator/zipball/8656674831e22749f25369d4cb2db5eb4639b9a7",
-                "reference": "8656674831e22749f25369d4cb2db5eb4639b9a7",
+                "url": "https://api.github.com/repos/popphp/pop-paginator/zipball/d1121951d72b368cc72b3feb2c788d096870126e",
+                "reference": "d1121951d72b368cc72b3feb2c788d096870126e",
                 "shasum": ""
             },
             "require": {
@@ -1380,7 +1499,7 @@
                 "pop",
                 "pop php"
             ],
-            "time": "2019-05-21T21:36:57+00:00"
+            "time": "2019-11-20T04:38:48+00:00"
         },
         {
             "name": "popphp/pop-pdf",
@@ -1446,25 +1565,28 @@
         },
         {
             "name": "popphp/pop-session",
-            "version": "3.1.4",
+            "version": "3.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/popphp/pop-session.git",
-                "reference": "aedb75d0cbd019c98b969e7b4e619acc82e996b3"
+                "reference": "8756d3f6d2634d0e348565b7855c42ef5d502ebe"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/popphp/pop-session/zipball/aedb75d0cbd019c98b969e7b4e619acc82e996b3",
-                "reference": "aedb75d0cbd019c98b969e7b4e619acc82e996b3",
+                "url": "https://api.github.com/repos/popphp/pop-session/zipball/8756d3f6d2634d0e348565b7855c42ef5d502ebe",
+                "reference": "8756d3f6d2634d0e348565b7855c42ef5d502ebe",
                 "shasum": ""
             },
             "require": {
                 "php": ">=7.1.0"
             },
+            "require-dev": {
+                "phpunit/phpunit": "^7.0.0"
+            },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "3.1.x-dev"
+                    "dev-master": "3.2.x-dev"
                 }
             },
             "autoload": {
@@ -1492,20 +1614,20 @@
                 "session",
                 "sessions"
             ],
-            "time": "2019-01-09T21:56:07+00:00"
+            "time": "2019-11-21T04:44:41+00:00"
         },
         {
             "name": "popphp/pop-validator",
-            "version": "3.1.1",
+            "version": "3.1.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/popphp/pop-validator.git",
-                "reference": "5cf0f1e4c10b48b73d18b2cfa3ae2480d5f3a280"
+                "reference": "58a2859fbc57fa0ed3fa782b2fb893e34bd8b884"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/popphp/pop-validator/zipball/5cf0f1e4c10b48b73d18b2cfa3ae2480d5f3a280",
-                "reference": "5cf0f1e4c10b48b73d18b2cfa3ae2480d5f3a280",
+                "url": "https://api.github.com/repos/popphp/pop-validator/zipball/58a2859fbc57fa0ed3fa782b2fb893e34bd8b884",
+                "reference": "58a2859fbc57fa0ed3fa782b2fb893e34bd8b884",
                 "shasum": ""
             },
             "require": {
@@ -1517,7 +1639,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "3.0.x-dev"
+                    "dev-master": "3.1.x-dev"
                 }
             },
             "autoload": {
@@ -1545,24 +1667,25 @@
                 "validation",
                 "validator"
             ],
-            "time": "2019-10-17T23:05:44+00:00"
+            "time": "2019-11-20T03:22:32+00:00"
         },
         {
             "name": "popphp/pop-view",
-            "version": "3.1.1",
+            "version": "3.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/popphp/pop-view.git",
-                "reference": "dac83efd8a23ed0937b9140842d9710e20774733"
+                "reference": "b602daa5141224d1dca8e08da1e0034fb089317c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/popphp/pop-view/zipball/dac83efd8a23ed0937b9140842d9710e20774733",
-                "reference": "dac83efd8a23ed0937b9140842d9710e20774733",
+                "url": "https://api.github.com/repos/popphp/pop-view/zipball/b602daa5141224d1dca8e08da1e0034fb089317c",
+                "reference": "b602daa5141224d1dca8e08da1e0034fb089317c",
                 "shasum": ""
             },
             "require": {
-                "php": ">=7.1.0"
+                "php": ">=7.1.0",
+                "popphp/pop-filter": "^3.0.0."
             },
             "require-dev": {
                 "phpunit/phpunit": "^7.0.0"
@@ -1570,7 +1693,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "3.0.x-dev"
+                    "dev-master": "3.2.x-dev"
                 }
             },
             "autoload": {
@@ -1599,7 +1722,7 @@
                 "view",
                 "view template"
             ],
-            "time": "2019-10-29T15:57:50+00:00"
+            "time": "2019-11-18T05:40:50+00:00"
         },
         {
             "name": "popphp/popcorn",
@@ -1607,12 +1730,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/popphp/popcorn.git",
-                "reference": "1ff5b4f30f9ebdead79046010775dee21133e787"
+                "reference": "a3c8cf99c79d5d383dd57166b8581828fca31a48"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/popphp/popcorn/zipball/1ff5b4f30f9ebdead79046010775dee21133e787",
-                "reference": "1ff5b4f30f9ebdead79046010775dee21133e787",
+                "url": "https://api.github.com/repos/popphp/popcorn/zipball/a3c8cf99c79d5d383dd57166b8581828fca31a48",
+                "reference": "a3c8cf99c79d5d383dd57166b8581828fca31a48",
                 "shasum": ""
             },
             "require": {
@@ -1666,12 +1789,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/popphp/popphp.git",
-                "reference": "d557ab8a71cb4d7eee4b9ed8689c94ab641849ff"
+                "reference": "37148c6de186730cddf3715c4116c3a644ecba2f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/popphp/popphp/zipball/d557ab8a71cb4d7eee4b9ed8689c94ab641849ff",
-                "reference": "d557ab8a71cb4d7eee4b9ed8689c94ab641849ff",
+                "url": "https://api.github.com/repos/popphp/popphp/zipball/37148c6de186730cddf3715c4116c3a644ecba2f",
+                "reference": "37148c6de186730cddf3715c4116c3a644ecba2f",
                 "shasum": ""
             },
             "require": {

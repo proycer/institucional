@@ -4,7 +4,7 @@
  *
  * @link       https://github.com/popphp/popphp-framework
  * @author     Nick Sagona, III <dev@nolainteractive.com>
- * @copyright  Copyright (c) 2009-2019 NOLA Interactive, LLC. (http://www.nolainteractive.com)
+ * @copyright  Copyright (c) 2009-2020 NOLA Interactive, LLC. (http://www.nolainteractive.com)
  * @license    http://www.popphp.org/license     New BSD License
  */
 
@@ -19,11 +19,11 @@ namespace Pop\Session;
  * @category   Pop
  * @package    Pop\Session
  * @author     Nick Sagona, III <dev@nolainteractive.com>
- * @copyright  Copyright (c) 2009-2019 NOLA Interactive, LLC. (http://www.nolainteractive.com)
+ * @copyright  Copyright (c) 2009-2020 NOLA Interactive, LLC. (http://www.nolainteractive.com)
  * @license    http://www.popphp.org/license     New BSD License
- * @version    3.1.4
+ * @version    3.2.0
  */
-class SessionNamespace implements \ArrayAccess
+class SessionNamespace extends AbstractSession
 {
 
     /**
@@ -134,6 +134,18 @@ class SessionNamespace implements \ArrayAccess
     }
 
     /**
+     * Kill the session namespace
+     *
+     * @return void
+     */
+    public function kill()
+    {
+        if (isset($_SESSION[$this->namespace])) {
+            unset($_SESSION[$this->namespace]);
+        }
+    }
+
+    /**
      * Check the request-based session values
      *
      * @return void
@@ -143,7 +155,9 @@ class SessionNamespace implements \ArrayAccess
         foreach ($_SESSION[$this->namespace] as $key => $value) {
             if (isset($_SESSION['_POP_SESSION_'][$this->namespace]['requests'][$key])) {
                 $_SESSION['_POP_SESSION_'][$this->namespace]['requests'][$key]['current']++;
-                if ($_SESSION['_POP_SESSION_'][$this->namespace]['requests'][$key]['current'] > $_SESSION['_POP_SESSION_'][$this->namespace]['requests'][$key]['limit']) {
+                $current = $_SESSION['_POP_SESSION_'][$this->namespace]['requests'][$key]['current'];
+                $limit   = $_SESSION['_POP_SESSION_'][$this->namespace]['requests'][$key]['limit'];
+                if ($current > $limit) {
                     unset($_SESSION[$this->namespace][$key]);
                     unset($_SESSION['_POP_SESSION_'][$this->namespace]['requests'][$key]);
                 }
@@ -159,11 +173,22 @@ class SessionNamespace implements \ArrayAccess
     private function checkExpirations()
     {
         foreach ($_SESSION[$this->namespace] as $key => $value) {
-            if (isset($_SESSION['_POP_SESSION_'][$this->namespace]['expirations'][$key]) && (time() > $_SESSION['_POP_SESSION_'][$this->namespace]['expirations'][$key])) {
+            if (isset($_SESSION['_POP_SESSION_'][$this->namespace]['expirations'][$key]) &&
+                (time() > $_SESSION['_POP_SESSION_'][$this->namespace]['expirations'][$key])) {
                 unset($_SESSION[$this->namespace][$key]);
                 unset($_SESSION['_POP_SESSION_'][$this->namespace]['expirations'][$key]);
             }
         }
+    }
+
+    /**
+     * Get the session values as an array
+     *
+     * @return array
+     */
+    public function toArray()
+    {
+        return (isset($_SESSION[$this->namespace])) ? $_SESSION[$this->namespace] : null;
     }
 
     /**
@@ -210,53 +235,6 @@ class SessionNamespace implements \ArrayAccess
     {
         $_SESSION[$this->namespace][$name] = null;
         unset($_SESSION[$this->namespace][$name]);
-    }
-
-    /**
-     * ArrayAccess offsetSet
-     *
-     * @param  mixed $offset
-     * @param  mixed $value
-     * @throws Exception
-     * @return void
-     */
-    public function offsetSet($offset, $value)
-    {
-        $this->__set($offset, $value);
-    }
-
-    /**
-     * ArrayAccess offsetGet
-     *
-     * @param  mixed $offset
-     * @return mixed
-     */
-    public function offsetGet($offset)
-    {
-        return $this->__get($offset);
-    }
-
-    /**
-     * ArrayAccess offsetExists
-     *
-     * @param  mixed $offset
-     * @return boolean
-     */
-    public function offsetExists($offset)
-    {
-        return $this->__isset($offset);
-    }
-
-    /**
-     * ArrayAccess offsetUnset
-     *
-     * @param  mixed $offset
-     * @throws Exception
-     * @return void
-     */
-    public function offsetUnset($offset)
-    {
-        $this->__unset($offset);
     }
 
 }

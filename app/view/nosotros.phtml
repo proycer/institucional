@@ -1,0 +1,63 @@
+<?php include 'inc/header.phtml' ?>
+
+<body>
+
+	<div id="page">
+
+		<?php include 'inc/navbar.phtml' ?>
+
+		<section id="home" class="video-hero">
+			<div class="overlay"></div>
+			<div class="display-t display-t2 text-center">
+				<div class="display-tc display-tc2">
+					<div class="container">
+						<div class="col-md-12 col-md-offset-0">
+							<div class="animate-box">
+								<h2 id="titulo"></h2>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+
+		<div class="colorlib-about">
+			<div class="container">
+				<div class="row">
+					<div class="col-md-6 animate-box">
+						<div class="video colorlib-video" style="background-image: url(/src/images/office.jpg);"></div>
+					</div>
+					<div class="col-md-6 animate-box">
+						<h2>Proycer</h2>
+						<p>Somos una empresa seria, con un gran esp&iacute;ritu emprendedor; conocedores y usuarios de las tecnolog&iacute;as que cambian las organizaciones.</p>
+						<p>Nuestra pasi&oacute;n es vivir ayudando a los dem&aacute;s a lograr sus objetivos, y en este mundo globalizado, eso significa implementar los avances tecnol&oacute;gicos que muchos otros ya est&aacute;n usando, para no quedar rezagados y morir sin haberlo intentado.</p>
+						<p>T&uacute; &eacute;xito determina el nuestro. Lo hacemos con vos!</p>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<?php include 'inc/footer.phtml' ?>
+	</div>
+
+	<div class="gototop js-top">
+		<a href="#" class="js-gotop"><i class="icon-arrow-up2"></i></a>
+	</div>
+
+	<script src="/src/js/jquery.min.js"></script>
+	<script src="/src/js/jquery.easing.1.3.js"></script>
+	<script src="/src/js/bootstrap.min.js"></script>
+	<script src="/src/js/jquery.waypoints.min.js"></script>
+	<script src="/src/js/main.js"></script>
+	<script>
+		new Typed('#titulo', {
+			strings: ['Nosotros'],
+			typeSpeed: 100,
+			showCursor: false,
+			startDelay: 200
+		})
+	</script>
+
+</body>
+
+</html>
