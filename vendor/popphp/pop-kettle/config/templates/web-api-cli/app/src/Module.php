@@ -109,14 +109,14 @@ class Module extends \Pop\Module\Module
         $request  = new Request();
         $response = new Response();
         $message  = $exception->getMessage();
-        if (stripos($request->getHeader('Accept')->getValue(), 'text/html') !== false) {
+        if (stripos($request->getHeader('Accept'), 'text/html') !== false) {
             $view          = new View(__DIR__ . '/../view/exception.phtml');
             $view->title   = 'Exception';
             $view->message = $message;
-            $response->addHeader('Content-Type', 'text/html');
+            $response->setHeader('Content-Type', 'text/html');
             $response->setBody($view->render());
         } else {
-            $response->addHeaders($this->config['http_options_headers']);
+            $response->setHeaders($this->config['http_options_headers']);
             $response->setBody(json_encode(['error' => $exception->getMessage()], JSON_PRETTY_PRINT) . PHP_EOL);
         }
         $response->send(500);

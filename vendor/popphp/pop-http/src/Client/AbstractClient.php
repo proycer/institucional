@@ -289,25 +289,25 @@ abstract class AbstractClient implements ClientInterface
     }
 
     /**
-     * Set all request headers
+     * Add request headers
      *
      * @param  array $headers
      * @return AbstractClient
      */
-    public function setRequestHeaders(array $headers)
+    public function addRequestHeaders(array $headers)
     {
         $this->getRequest()->addHeaders($headers);
         return $this;
     }
 
     /**
-     * Set request header
+     * Add request header
      *
      * @param  string $name
      * @param  string $value
      * @return AbstractClient
      */
-    public function setRequestHeader($name, $value)
+    public function addRequestHeader($name, $value)
     {
         $this->getRequest()->addHeader($name, $value);
         return $this;
@@ -366,6 +366,27 @@ abstract class AbstractClient implements ClientInterface
     }
 
     /**
+     * Create request as JSON
+     *
+     * @return AbstractClient
+     */
+    public function createAsJson()
+    {
+        $this->request->createAsJson();
+        return $this;
+    }
+
+    /**
+     * Check if request is JSON
+     *
+     * @return boolean
+     */
+    public function isJson()
+    {
+        return $this->request->isJson();
+    }
+
+    /**
      * Create request as a URL-encoded form
      *
      * @return AbstractClient
@@ -408,25 +429,25 @@ abstract class AbstractClient implements ClientInterface
     }
 
     /**
-     * Set all response headers
+     * Add response headers
      *
      * @param  array $headers
      * @return AbstractClient
      */
-    public function setResponseHeaders(array $headers)
+    public function addResponseHeaders(array $headers)
     {
         $this->getResponse()->addHeaders($headers);
         return $this;
     }
 
     /**
-     * Set response header
+     * Add response header
      *
      * @param  string $name
      * @param  string $value
      * @return AbstractClient
      */
-    public function setResponseHeader($name, $value)
+    public function addResponseHeader($name, $value)
     {
         $this->getResponse()->addHeader($name, $value);
         return $this;

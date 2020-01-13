@@ -4,7 +4,7 @@
  *
  * @link       https://github.com/popphp/popphp-framework
  * @author     Nick Sagona, III <dev@nolainteractive.com>
- * @copyright  Copyright (c) 2009-2020 NOLA Interactive, LLC. (http://www.nolainteractive.com)
+ * @copyright  Copyright (c) 2009-2019 NOLA Interactive, LLC. (http://www.nolainteractive.com)
  * @license    http://www.popphp.org/license     New BSD License
  */
 
@@ -19,9 +19,9 @@ namespace Pop\Debug\Storage;
  * @category   Pop
  * @package    Pop\Debug
  * @author     Nick Sagona, III <dev@nolainteractive.com>
- * @copyright  Copyright (c) 2009-2020 NOLA Interactive, LLC. (http://www.nolainteractive.com)
+ * @copyright  Copyright (c) 2009-2019 NOLA Interactive, LLC. (http://www.nolainteractive.com)
  * @license    http://www.popphp.org/license     New BSD License
- * @version    1.2.0
+ * @version    1.1.0
  */
 class Redis extends AbstractStorage
 {
@@ -42,7 +42,7 @@ class Redis extends AbstractStorage
      * @param  int    $port
      * @throws Exception
      */
-    public function __construct($format = null, $host = 'localhost', $port = 6379)
+    public function __construct($format = 'json', $host = 'localhost', $port = 6379)
     {
         if (!class_exists('Redis', false)) {
             throw new Exception('Error: Redis is not available.');
@@ -97,7 +97,15 @@ class Redis extends AbstractStorage
      */
     public function get($id)
     {
-        return $this->decodeValue($this->redis->get($id));
+        $value = $this->redis->get($id);
+        if ($value !== false) {
+            if ($this->format == 'json') {
+                $value = json_decode($value, true);
+            } else if ($this->format == 'php') {
+                $value = unserialize($value);
+            }
+        }
+        return $value;
     }
 
     /**
@@ -119,7 +127,7 @@ class Redis extends AbstractStorage
      */
     public function delete($id)
     {
-        $this->redis->del($id);
+        $this->redis->delete($id);
         return $this;
     }
 
@@ -143,31 +151,12 @@ class Redis extends AbstractStorage
      */
     public function encodeValue($value)
     {
-        if ($this->format == self::JSON) {
+        if ($this->format == 'json') {
             $value = json_encode($value, JSON_PRETTY_PRINT);
-        } else if ($this->format == self::PHP) {
+        } else if ($this->format == 'php') {
             $value = serialize($value);
         } else if (!is_string($value)) {
             throw new Exception('Error: The value must be a string if storing as a text file.');
-        }
-
-        return $value;
-    }
-
-    /**
-     * Decode the value based on the format
-     *
-     * @param  mixed  $value
-     * @return mixed
-     */
-    public function decodeValue($value)
-    {
-        if ($value !== false) {
-            if ($this->format == self::JSON) {
-                $value = json_decode($value, true);
-            } else if ($this->format == self::PHP) {
-                $value = unserialize($value);
-            }
         }
 
         return $value;
