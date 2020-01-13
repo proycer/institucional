@@ -16,11 +16,6 @@ return [
         'action'     => 'test',
         'help'       => 'Test the database connection'
     ],
-    'db:create-seed <class>' => [
-        'controller' => 'Pop\Kettle\Controller\DatabaseController',
-        'action'     => 'createSeed',
-        'help'       => 'Create database seed class'
-    ],
     'db:seed' => [
         'controller' => 'Pop\Kettle\Controller\DatabaseController',
         'action'     => 'seed',
@@ -39,7 +34,7 @@ return [
     'migrate:create <class>' => [
         'controller' => 'Pop\Kettle\Controller\MigrationController',
         'action'     => 'create',
-        'help'       => 'Create new database migration class'
+        'help'       => 'Create new database migration'
     ],
     'migrate:run [<steps>]' => [
         'controller' => 'Pop\Kettle\Controller\MigrationController',

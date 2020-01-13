@@ -24,7 +24,7 @@ use Pop\Model\AbstractModel;
  * @author     Nick Sagona, III <dev@nolainteractive.com>
  * @copyright  Copyright (c) 2009-2020 NOLA Interactive, LLC. (http://www.nolainteractive.com)
  * @license    http://www.popphp.org/license     New BSD License
- * @version    1.1.0
+ * @version    1.0.2
  */
 class Application extends AbstractModel
 {
@@ -76,11 +76,11 @@ class Application extends AbstractModel
     public function install($install, $location, $namespace)
     {
         $script = strtolower(str_replace('\\', '-', $namespace));
-        $path   = realpath(__DIR__ . '/../../config/templates/' . $install);
+        $path   = __DIR__ . '/../../config/templates/' . $install;
         $dir    = new Dir($path);
         foreach ($dir as $entry) {
-            if ($path . DIRECTORY_SEPARATOR . $entry) {
-                $d = new Dir($path . DIRECTORY_SEPARATOR . $entry);
+            if (is_dir($path . '/' . $entry)) {
+                $d = new Dir($path . '/' . $entry);
                 $d->copyTo($location);
             }
         }
@@ -95,29 +95,20 @@ class Application extends AbstractModel
             file_put_contents($file, str_replace(['MyApp', 'myapp'], [$namespace, $script], file_get_contents($file)));
         }
 
-        if (file_exists($location . DIRECTORY_SEPARATOR . 'public')) {
+        if (file_exists($location . '/public')) {
             file_put_contents(
-                $location . DIRECTORY_SEPARATOR . 'public' . DIRECTORY_SEPARATOR . 'index.php',
-                str_replace(
-                    ['MyApp', 'myapp'], [$namespace, $script],
-                    file_get_contents($location . DIRECTORY_SEPARATOR . 'public' . DIRECTORY_SEPARATOR . 'index.php')
-                )
+                $location . '/public/index.php',
+                str_replace(['MyApp', 'myapp'], [$namespace, $script], file_get_contents($location . '/public/index.php'))
             );
         }
 
-        if (file_exists($location . DIRECTORY_SEPARATOR . 'script')) {
+        if (file_exists($location . '/script')) {
             file_put_contents(
-                $location . DIRECTORY_SEPARATOR . 'script' . DIRECTORY_SEPARATOR . 'myapp',
-                str_replace(
-                    ['MyApp', 'myapp'], [$namespace, $script],
-                    file_get_contents($location . DIRECTORY_SEPARATOR . 'script' . DIRECTORY_SEPARATOR . 'myapp')
-                )
+                $location . '/script/myapp',
+                str_replace(['MyApp', 'myapp'], [$namespace, $script], file_get_contents($location . '/script/myapp'))
             );
-            rename(
-                $location . DIRECTORY_SEPARATOR . 'script' . DIRECTORY_SEPARATOR . 'myapp',
-                $location . DIRECTORY_SEPARATOR . 'script' . DIRECTORY_SEPARATOR . $script
-            );
-            chmod($location . DIRECTORY_SEPARATOR . 'script' . DIRECTORY_SEPARATOR . $script, 0755);
+            rename($location . '/script/myapp', $location . '/script/' . $script);
+            chmod($location . '/script/' . $script, 0755);
         }
     }
 

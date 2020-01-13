@@ -23,7 +23,7 @@ use Pop\Acl\Assertion\AssertionInterface;
  * @author     Nick Sagona, III <dev@nolainteractive.com>
  * @copyright  Copyright (c) 2009-2020 NOLA Interactive, LLC. (http://www.nolainteractive.com)
  * @license    http://www.popphp.org/license     New BSD License
- * @version    3.2.1
+ * @version    3.3.0
  */
 class Acl
 {
@@ -60,6 +60,12 @@ class Acl
         'allowed' => [],
         'denied'  => []
     ];
+
+    /**
+     * Array of policies
+     * @var array
+     */
+    protected $policies = [];
 
     /**
      * Constructor
@@ -411,13 +417,18 @@ class Acl
             }
         }
 
-        // Check for assertion
+        // Check for assertions
         if (($result) && ($this->hasAssertionKey('allowed', $role, $resource, $permission))) {
             $assertionKey      = $this->getAssertionKey('allowed', $role, $resource, $permission);
             $assertionRole     = $this->roles[(string)$role];
             $assertionResource = (null !== $resource) ?  $this->resources[(string)$resource] : null;
             $result            =
                 $this->assertions['allowed'][$assertionKey]->assert($this, $assertionRole, $assertionResource, $permission);
+        }
+
+        // Check for policies
+        if ($this->hasPolicies()) {
+            $result = $this->evaluatePolicies($role, $resource, $permission);
         }
 
         return $result;
@@ -515,13 +526,18 @@ class Acl
             }
         }
 
-        // Check for assertion
+        // Check for assertions
         if ($this->hasAssertionKey('denied', $role, $resource, $permission)) {
             $assertionKey      = $this->getAssertionKey('denied', $role, $resource, $permission);
             $assertionRole     = $this->roles[(string)$role];
             $assertionResource = (null !== $resource) ?  $this->resources[(string)$resource] : null;
             $result            =
                 $this->assertions['denied'][$assertionKey]->assert($this, $assertionRole, $assertionResource, $permission);
+        }
+
+        // Check for policies
+        if ($this->hasPolicies()) {
+            $result = (!$this->evaluatePolicies($role, $resource, $permission));
         }
 
         return $result;
@@ -576,6 +592,191 @@ class Acl
     }
 
     /**
+     * Create assertion
+     *
+     * @param  AssertionInterface $assertion
+     * @param  string             $type
+     * @param  mixed              $role
+     * @param  mixed              $resource
+     * @param  string             $permission
+     * @throws \InvalidArgumentException
+     * @return void
+     */
+    public function createAssertion(AssertionInterface $assertion, $type, $role, $resource = null, $permission = null)
+    {
+        $key = $this->generateAssertionKey($role, $resource, $permission);
+
+        if (($type != 'allowed') && ($type != 'denied')) {
+            throw new \InvalidArgumentException("Error: The assertion type must be either 'allowed' or 'denied'.");
+        }
+        $this->assertions[$type][$key] = $assertion;
+    }
+
+    /**
+     * Delete assertion
+     *
+     * @param  string $type
+     * @param  mixed  $role
+     * @param  mixed  $resource
+     * @param  string $permission
+     * @return void
+     */
+    public function deleteAssertion($type, $role, $resource = null, $permission = null)
+    {
+        $key = $this->generateAssertionKey($role, $resource, $permission);
+
+        if (isset($this->assertions[$type][$key])) {
+            unset($this->assertions[$type][$key]);
+        }
+    }
+
+    /**
+     * Has assertion key
+     *
+     * @param  string $type
+     * @param  mixed  $role
+     * @param  mixed  $resource
+     * @param  string $permission
+     * @throws \InvalidArgumentException
+     * @return boolean
+     */
+    public function hasAssertionKey($type, $role, $resource = null, $permission = null)
+    {
+        $key = $this->generateAssertionKey($role, $resource, $permission);
+
+        if (($type != 'allowed') && ($type != 'denied')) {
+            throw new \InvalidArgumentException("Error: The assertion type must be either 'allowed' or 'denied'.");
+        }
+
+        return (isset($this->assertions[$type][$key]));
+    }
+
+    /**
+     * Get assertion key
+     *
+     * @param  string $type
+     * @param  mixed  $role
+     * @param  mixed  $resource
+     * @param  string $permission
+     * @throws \InvalidArgumentException
+     * @return string
+     */
+    public function getAssertionKey($type, $role, $resource = null, $permission = null)
+    {
+        $key = $this->generateAssertionKey($role, $resource, $permission);
+
+        if (($type != 'allowed') && ($type != 'denied')) {
+            throw new \InvalidArgumentException("Error: The assertion type must be either 'allowed' or 'denied'.");
+        }
+
+        return (isset($this->assertions[$type][$key])) ? $key : null;
+    }
+
+    /**
+     * Add policy
+     *
+     * @param  string $method
+     * @param  mixed  $role
+     * @param  mixed  $resource
+     * @return Acl
+     */
+    public function addPolicy($method, $role, $resource = null)
+    {
+        $this->policies[] = [
+            'method'   => $method,
+            'role'     => $role,
+            'resource' => $resource
+        ];
+
+        return $this;
+    }
+
+    /**
+     * Has policies
+     *
+     * @return boolean
+     */
+    public function hasPolicies()
+    {
+        return (count($this->policies) > 0);
+    }
+
+    /**
+     * Evaluate policies
+     *
+     * @param  mixed $role
+     * @param  mixed $resource
+     * @param  mixed $permission
+     * @return boolean|null
+     */
+    public function evaluatePolicies($role = null, $resource = null, $permission = null)
+    {
+        $result = null;
+
+        if ((null === $role) && (null === $resource) && (null === $permission)) {
+            foreach ($this->policies as $policy) {
+                $result = $this->evaluatePolicy($policy['method'], $policy['role'], $policy['resource']);
+                if ($result === false) {
+                    return false;
+                }
+            }
+        } else {
+            $policyRole     = null;
+            $policyResource = null;
+            $policyMethod   = (null !== $permission) ? $permission : null;
+
+            if (null !== $role) {
+                $this->verifyRole($role);
+                $policyRole = ($role instanceof AclRole) ? $role->getName() : $role;
+            }
+            if (null !== $resource) {
+                $this->verifyResource($resource);
+                $policyResource = ($resource instanceof AclResource) ? $resource->getName() : $resource;
+            }
+
+            foreach ($this->policies as $policy) {
+                if (((null === $policyRole) || ($policyRole == $policy['role'])) &&
+                    ((null === $policyResource) || ($policyResource == $policy['resource'])) &&
+                    ((null === $policyMethod) || ($policyMethod == $policy['method']))) {
+                    $result = $this->evaluatePolicy($policy['method'], $policy['role'], $policy['resource']);
+                    if ($result === false) {
+                        return false;
+                    }
+                }
+            }
+        }
+
+        return $result;
+    }
+
+    /**
+     * Evaluate policy
+     *
+     * @param  string $method
+     * @param  mixed  $role
+     * @param  mixed  $resource
+     * @throws Exception
+     * @return boolean
+     */
+    public function evaluatePolicy($method, $role, $resource = null)
+    {
+        if (is_string($role) && ($this->verifyRole($role))) {
+            $role = $this->roles[(string)$role];
+        }
+
+        if (!in_array('Pop\Acl\Policy\PolicyTrait', class_uses($role))) {
+            throw new Exception('Error: The role must use Pop\Acl\Policy\PolicyTrait.');
+        }
+
+        if (null !== $resource) {
+            $this->verifyResource($resource);
+            $resource = $this->resources[(string)$resource];
+        }
+
+        return $role->can($method, $resource);
+    }
+
+    /**
      * Verify role
      *
      * @param  mixed $role
@@ -611,87 +812,6 @@ class Acl
         }
 
         return true;
-    }
-
-    /**
-     * Create assertion
-     *
-     * @param  AssertionInterface $assertion
-     * @param  string             $type
-     * @param  mixed              $role
-     * @param  mixed              $resource
-     * @param  string             $permission
-     * @throws \InvalidArgumentException
-     * @return void
-     */
-    protected function createAssertion(AssertionInterface $assertion, $type, $role, $resource = null, $permission = null)
-    {
-        $key = $this->generateAssertionKey($role, $resource, $permission);
-
-        if (($type != 'allowed') && ($type != 'denied')) {
-            throw new \InvalidArgumentException("Error: The assertion type must be either 'allowed' or 'denied'.");
-        }
-        $this->assertions[$type][$key] = $assertion;
-    }
-
-    /**
-     * Delete assertion
-     *
-     * @param  string $type
-     * @param  mixed  $role
-     * @param  mixed  $resource
-     * @param  string $permission
-     * @return void
-     */
-    protected function deleteAssertion($type, $role, $resource = null, $permission = null)
-    {
-        $key = $this->generateAssertionKey($role, $resource, $permission);
-
-        if (isset($this->assertions[$type][$key])) {
-            unset($this->assertions[$type][$key]);
-        }
-    }
-
-    /**
-     * Has assertion key
-     *
-     * @param  string $type
-     * @param  mixed  $role
-     * @param  mixed  $resource
-     * @param  string $permission
-     * @throws \InvalidArgumentException
-     * @return boolean
-     */
-    protected function hasAssertionKey($type, $role, $resource = null, $permission = null)
-    {
-        $key = $this->generateAssertionKey($role, $resource, $permission);
-
-        if (($type != 'allowed') && ($type != 'denied')) {
-            throw new \InvalidArgumentException("Error: The assertion type must be either 'allowed' or 'denied'.");
-        }
-
-        return (isset($this->assertions[$type][$key]));
-    }
-
-    /**
-     * Get assertion key
-     *
-     * @param  string $type
-     * @param  mixed  $role
-     * @param  mixed  $resource
-     * @param  string $permission
-     * @throws \InvalidArgumentException
-     * @return string
-     */
-    protected function getAssertionKey($type, $role, $resource = null, $permission = null)
-    {
-        $key = $this->generateAssertionKey($role, $resource, $permission);
-
-        if (($type != 'allowed') && ($type != 'denied')) {
-            throw new \InvalidArgumentException("Error: The assertion type must be either 'allowed' or 'denied'.");
-        }
-
-        return (isset($this->assertions[$type][$key])) ? $key : null;
     }
 
     /**

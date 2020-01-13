@@ -13,7 +13,8 @@
  */
 namespace Pop\View;
 
-use Pop\Filter\AbstractFilterable;
+use Pop\Filter\FilterableTrait;
+use Pop\Utils;
 
 /**
  * View class
@@ -25,8 +26,10 @@ use Pop\Filter\AbstractFilterable;
  * @license    http://www.popphp.org/license     New BSD License
  * @version    3.2.0
  */
-class View extends AbstractFilterable implements \ArrayAccess
+class View extends Utils\ArrayObject
 {
+
+    use FilterableTrait;
 
     /**
      * View template object
@@ -61,7 +64,7 @@ class View extends AbstractFilterable implements \ArrayAccess
             $this->setTemplate($template);
         }
         if (null !== $data) {
-            $this->setData($data);
+            parent::__construct($data);
         }
         if (null !== $filters) {
             if (is_array($filters)) {
@@ -248,96 +251,6 @@ class View extends AbstractFilterable implements \ArrayAccess
     public function __toString()
     {
         return $this->render();
-    }
-
-    /**
-     * Get method to return the value of data[$name].
-     *
-     * @param  string $name
-     * @return mixed
-     */
-    public function __get($name)
-    {
-        return $this->get($name);
-    }
-
-    /**
-     * Set method to set the property to the value of data[$name].
-     *
-     * @param  string $name
-     * @param  mixed $value
-     * @return mixed
-     */
-    public function __set($name, $value)
-    {
-        return $this->set($name, $value);
-    }
-
-    /**
-     * Return the isset value of data[$name].
-     *
-     * @param  string $name
-     * @return boolean
-     */
-    public function __isset($name)
-    {
-        return isset($this->data[$name]);
-    }
-
-    /**
-     * Unset data[$name].
-     *
-     * @param  string $name
-     * @return void
-     */
-    public function __unset($name)
-    {
-        unset($this->data[$name]);
-    }
-
-    /**
-     * ArrayAccess offsetGet
-     *
-     * @param  mixed $offset
-     * @return mixed
-     */
-    public function offsetGet($offset)
-    {
-        return $this->get($offset);
-    }
-
-    /**
-     * ArrayAccess offsetSet
-     *
-     * @param  mixed $offset
-     * @param  mixed $value
-     * @return mixed
-     */
-    public function offsetSet($offset, $value)
-    {
-        return $this->set($offset, $value);
-    }
-
-    /**
-     * ArrayAccess offsetExists
-     *
-     * @param  mixed $offset
-     * @return boolean
-     */
-    public function offsetExists($offset)
-    {
-        return $this->__isset($offset);
-    }
-
-    /**
-     * ArrayAccess offsetUnset
-     *
-     * @param  mixed $offset
-     * @return void
-     */
-    public function offsetUnset($offset)
-    {
-        $this->__unset($offset);
     }
 
 }

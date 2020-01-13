@@ -9,6 +9,7 @@ return array(
     'Popcorn\\' => array($vendorDir . '/popphp/popcorn/src'),
     'Pop\\View\\' => array($vendorDir . '/popphp/pop-view/src'),
     'Pop\\Validator\\' => array($vendorDir . '/popphp/pop-validator/src'),
+    'Pop\\Utils\\' => array($vendorDir . '/popphp/pop-utils/src'),
     'Pop\\Session\\' => array($vendorDir . '/popphp/pop-session/src'),
     'Pop\\Pdf\\' => array($vendorDir . '/popphp/pop-pdf/src'),
     'Pop\\Paginator\\' => array($vendorDir . '/popphp/pop-paginator/src'),

@@ -80,12 +80,12 @@ class Form extends Child implements FormInterface, \ArrayAccess, \Countable, \It
     /**
      * Method to create form object and fields from config
      *
-     * @param  array  $config
-     * @param  string $action
-     * @param  string $method
+     * @param  array|FormConfig $config
+     * @param  string           $action
+     * @param  string           $method
      * @return Form
      */
-    public static function createFromConfig(array $config, $action = null, $method = 'post')
+    public static function createFromConfig($config, $action = null, $method = 'post')
     {
         $form = new static(null, $action, $method);
         $form->addFieldsFromConfig($config);
@@ -95,13 +95,13 @@ class Form extends Child implements FormInterface, \ArrayAccess, \Countable, \It
     /**
      * Method to create form object and fields from config
      *
-     * @param  array  $config
-     * @param  string $container
-     * @param  string $action
-     * @param  string $method
+     * @param  array|FormConfig $config
+     * @param  string           $container
+     * @param  string           $action
+     * @param  string           $method
      * @return Form
      */
-    public static function createFromFieldsetConfig(array $config, $container = null, $action = null, $method = 'post')
+    public static function createFromFieldsetConfig($config, $container = null, $action = null, $method = 'post')
     {
         $form = new static(null, $action, $method);
         $form->addFieldsetsFromConfig($config, $container);
@@ -434,10 +434,10 @@ class Form extends Child implements FormInterface, \ArrayAccess, \Countable, \It
     /**
      * Method to add form fields from config
      *
-     * @param  array $config
+     * @param  array|FormConfig $config
      * @return Form
      */
-    public function addFieldsFromConfig(array $config)
+    public function addFieldsFromConfig($config)
     {
         $i = 1;
         foreach ($config as $name => $field) {
@@ -464,11 +464,11 @@ class Form extends Child implements FormInterface, \ArrayAccess, \Countable, \It
     /**
      * Method to add form fieldsets from config
      *
-     * @param  array  $fieldsets
+     * @param  array|FormConfig $fieldsets
      * @param  string $container
      * @return Form
      */
-    public function addFieldsetsFromConfig(array $fieldsets, $container = null)
+    public function addFieldsetsFromConfig($fieldsets, $container = null)
     {
         foreach ($fieldsets as $legend => $config) {
             if (!is_numeric($legend)) {
@@ -728,10 +728,11 @@ class Form extends Child implements FormInterface, \ArrayAccess, \Countable, \It
     {
         $result = true;
         $fields = $this->getFields();
+        $values = $this->toArray();
 
         // Check each element for validators, validate them and return the result.
         foreach ($fields as $field) {
-            if ($field->validate() == false) {
+            if ($field->validate($values) == false) {
                 $result = false;
             }
         }

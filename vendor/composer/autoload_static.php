@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInite1f2e30c67c77585e7215c6fa3c8fd6f
+class ComposerStaticInit596a0c4799c22c99b69d7291ebae04c5
 {
     public static $prefixLengthsPsr4 = array (
         'P' => 
@@ -12,6 +12,7 @@ class ComposerStaticInite1f2e30c67c77585e7215c6fa3c8fd6f
             'Popcorn\\' => 8,
             'Pop\\View\\' => 9,
             'Pop\\Validator\\' => 14,
+            'Pop\\Utils\\' => 10,
             'Pop\\Session\\' => 12,
             'Pop\\Pdf\\' => 8,
             'Pop\\Paginator\\' => 14,
@@ -57,6 +58,10 @@ class ComposerStaticInite1f2e30c67c77585e7215c6fa3c8fd6f
         'Pop\\Validator\\' => 
         array (
             0 => __DIR__ . '/..' . '/popphp/pop-validator/src',
+        ),
+        'Pop\\Utils\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/popphp/pop-utils/src',
         ),
         'Pop\\Session\\' => 
         array (
@@ -183,8 +188,8 @@ class ComposerStaticInite1f2e30c67c77585e7215c6fa3c8fd6f
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInite1f2e30c67c77585e7215c6fa3c8fd6f::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInite1f2e30c67c77585e7215c6fa3c8fd6f::$prefixDirsPsr4;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit596a0c4799c22c99b69d7291ebae04c5::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit596a0c4799c22c99b69d7291ebae04c5::$prefixDirsPsr4;
 
         }, null, ClassLoader::class);
     }

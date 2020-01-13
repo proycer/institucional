@@ -4,7 +4,7 @@
  *
  * @link       https://github.com/popphp/popphp-framework
  * @author     Nick Sagona, III <dev@nolainteractive.com>
- * @copyright  Copyright (c) 2009-2020 NOLA Interactive, LLC. (http://www.nolainteractive.com)
+ * @copyright  Copyright (c) 2009-2019 NOLA Interactive, LLC. (http://www.nolainteractive.com)
  * @license    http://www.popphp.org/license     New BSD License
  */
 
@@ -19,9 +19,9 @@ namespace Pop\Debug\Storage;
  * @category   Pop
  * @package    Pop\Debug
  * @author     Nick Sagona, III <dev@nolainteractive.com>
- * @copyright  Copyright (c) 2009-2020 NOLA Interactive, LLC. (http://www.nolainteractive.com)
+ * @copyright  Copyright (c) 2009-2019 NOLA Interactive, LLC. (http://www.nolainteractive.com)
  * @license    http://www.popphp.org/license     New BSD License
- * @version    1.2.0
+ * @version    1.1.0
  */
 interface StorageInterface
 {
@@ -33,6 +33,13 @@ interface StorageInterface
      * @return StorageInterface
      */
     public function setFormat($format);
+
+    /**
+     * Determine if the format is text
+     *
+     * @return boolean
+     */
+    public function isText();
 
     /**
      * Determine if the format is PHP
@@ -99,16 +106,9 @@ interface StorageInterface
      * Encode the value based on the format
      *
      * @param  mixed  $value
+     * @throws Exception
      * @return string
      */
     public function encodeValue($value);
-
-    /**
-     * Decode the value based on the format
-     *
-     * @param  mixed  $value
-     * @return mixed
-     */
-    public function decodeValue($value);
 
 }
