@@ -29,18 +29,41 @@ class WebController extends AbstractController
         } elseif ($this->request->isPost()) {
             $data = $this->request->getParsedData();
 
-            $transport = new Mail\Transport\Smtp('srv001.proycer.com.ar', 465, 'ssl');
-            $transport->setUsername('web@proycer.com.ar')
-                ->setPassword('john@astete#38429880');
+            $recaptcha = $data['g-recaptcha-response'];
 
-            $mailer = new Mail\Mailer($transport);
+            $url = 'https://www.google.com/recaptcha/api/siteverify';
 
-            $message = new Mail\Message('Contacto Proycer');
-            $message->setTo('contacto@proycer.com.ar');
-            $message->setFrom('web@proycer.com.ar');
-            $message->setBody('Email: ' . $data['email']);
+            $content = array(
+                'secret' => '6LczSM8UAAAAAMsLnzLI1mwH6EpgOCMUV4MI79YI',
+                'response' => $recaptcha
+            );
 
-            $mailer->send($message);
+            $options = array(
+                'http' => array(
+                    'method' => 'POST',
+                    'content' => http_build_query($content)
+                )
+            );
+
+            $context  = stream_context_create($options);
+            $verify = file_get_contents($url, false, $context);
+            $captcha_success = json_decode($verify);
+
+            if ($captcha_success->success) {
+                $transport = new Mail\Transport\Smtp('srv001.proycer.com.ar', 465, 'ssl');
+                $transport->setUsername('web@proycer.com.ar')
+                    ->setPassword('john@astete#38429880');
+
+                $mailer = new Mail\Mailer($transport);
+
+                $message = new Mail\Message('Contacto Proycer');
+                $message->setTo('contacto@proycer.com.ar');
+                $message->setFrom('web@proycer.com.ar');
+                $message->setBody('Email: ' . $data['email']);
+
+                $mailer->send($message);
+            }
+
             $this->redirect('/servicios');
         }
     }
@@ -64,18 +87,40 @@ class WebController extends AbstractController
         if ($this->request->isPost()) {
             $data = $this->request->getParsedData();
 
-            $transport = new Mail\Transport\Smtp('srv001.proycer.com.ar', 465, 'ssl');
-            $transport->setUsername('web@proycer.com.ar')
-                ->setPassword('john@astete#38429880');
+            $recaptcha = $data['g-recaptcha-response'];
 
-            $mailer = new Mail\Mailer($transport);
+            $url = 'https://www.google.com/recaptcha/api/siteverify';
 
-            $message = new Mail\Message('Solicitud Proycer Wisp');
-            $message->setTo('contacto@proycer.com.ar');
-            $message->setFrom('web@proycer.com.ar');
-            $message->setBody('Nombre: ' . $data['nombre'] . ', Contacto: ' . $data['contacto'] . ', Plan: ' . $data['plan']);
-            
-            $mailer->send($message);
+            $content = array(
+                'secret' => '6LdQ7M4UAAAAAET0QV6dcJBZ0x4N1oWUvY6_jmxI',
+                'response' => $recaptcha
+            );
+
+            $options = array(
+                'http' => array(
+                    'method' => 'POST',
+                    'content' => http_build_query($content)
+                )
+            );
+
+            $context  = stream_context_create($options);
+            $verify = file_get_contents($url, false, $context);
+            $captcha_success = json_decode($verify);
+
+            if ($captcha_success->success) {
+                $transport = new Mail\Transport\Smtp('srv001.proycer.com.ar', 465, 'ssl');
+                $transport->setUsername('web@proycer.com.ar')
+                    ->setPassword('john@astete#38429880');
+
+                $mailer = new Mail\Mailer($transport);
+
+                $message = new Mail\Message('Solicitud Proycer Wisp');
+                $message->setTo('contacto@proycer.com.ar');
+                $message->setFrom('web@proycer.com.ar');
+                $message->setBody('Nombre: ' . $data['nombre'] . ', Contacto: ' . $data['contacto'] . ', Plan: ' . $data['plan']);
+
+                $mailer->send($message);
+            }
         }
 
         $this->redirect('/servicios/wisp');
