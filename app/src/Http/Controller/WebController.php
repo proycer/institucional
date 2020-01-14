@@ -109,7 +109,8 @@ class WebController extends AbstractController
             $recaptcha = $data['g-recaptcha-response'];
 
             $url = 'https://www.google.com/recaptcha/api/siteverify';
-            $data = array(
+
+            $content = array(
                 'secret' => '6Lc47M4UAAAAAJcpTQMm71VE0U_vl-osLY2RL884',
                 'response' => $recaptcha
             );
@@ -117,7 +118,7 @@ class WebController extends AbstractController
             $options = array(
                 'http' => array(
                     'method' => 'POST',
-                    'content' => http_build_query($data)
+                    'content' => http_build_query($content)
                 )
             );
 
