@@ -106,18 +106,40 @@ class WebController extends AbstractController
 	    } elseif ($this->request->isPost()) {
             $data = $this->request->getParsedData();
 
-            $transport = new Mail\Transport\Smtp('srv001.proycer.com.ar', 465, 'ssl');
-            $transport->setUsername('web@proycer.com.ar')
-                ->setPassword('john@astete#38429880');
+            $recaptcha = $data['g-recaptcha-response'];
 
-            $mailer = new Mail\Mailer($transport);
+            $url = 'https://www.google.com/recaptcha/api/siteverify';
+            $data = array(
+                'secret' => '6Lc47M4UAAAAAJcpTQMm71VE0U_vl-osLY2RL884',
+                'response' => $recaptcha
+            );
 
-            $message = new Mail\Message('Contacto Proycer');
-            $message->setTo('contacto@proycer.com.ar');
-            $message->setFrom('web@proycer.com.ar');
-            $message->setBody('Nombre: ' . $data['nombre'] . ', Contacto: ' . $data['contacto'] . ', Mensaje: ' . $data['mensaje']);
+            $options = array(
+                'http' => array(
+                    'method' => 'POST',
+                    'content' => http_build_query($data)
+                )
+            );
 
-            $mailer->send($message);
+            $context  = stream_context_create($options);
+            $verify = file_get_contents($url, false, $context);
+            $captcha_success = json_decode($verify);
+
+            if ($captcha_success->success) {
+                $transport = new Mail\Transport\Smtp('srv001.proycer.com.ar', 465, 'ssl');
+                $transport->setUsername('web@proycer.com.ar')
+                    ->setPassword('john@astete#38429880');
+
+                $mailer = new Mail\Mailer($transport);
+
+                $message = new Mail\Message('Contacto Proycer');
+                $message->setTo('contacto@proycer.com.ar');
+                $message->setFrom('web@proycer.com.ar');
+                $message->setBody('Nombre: ' . $data['nombre'] . ', Contacto: ' . $data['contacto'] . ', Mensaje: ' . $data['mensaje']);
+
+                $mailer->send($message);
+            }
+
 		    $this->redirect('/contacto');
 	    }
     }
