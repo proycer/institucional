@@ -13,6 +13,9 @@
  */
 namespace Pop\Code;
 
+use Pop\Code\Generator\GeneratorInterface;
+use Pop\Code\Generator\Traits;
+
 /**
  * Generator code class
  *
@@ -21,88 +24,30 @@ namespace Pop\Code;
  * @author     Nick Sagona, III <dev@nolainteractive.com>
  * @copyright  Copyright (c) 2009-2020 NOLA Interactive, LLC. (http://www.nolainteractive.com)
  * @license    http://www.popphp.org/license     New BSD License
- * @version    3.1.2
+ * @version    4.0.0
  */
-class Generator
+class Generator extends Generator\AbstractGenerator
 {
 
+    use Traits\DocblockTrait;
+
     /**
-     * Constant to not use a class or interface
+     * Code generator objects
+     * @var array
+     */
+    protected $code = [];
+
+    /**
+     * Namespaces for the code generator objects
+     * @var array
+     */
+    protected $namespaces = [];
+
+    /**
+     * Environment setting, i.e. #!/usr/bin/php
      * @var string
      */
-    const CREATE_EMPTY = 'CREATE_EMPTY';
-
-    /**
-     * Constant to create a class
-     * @var string
-     */
-    const CREATE_CLASS = 'CREATE_CLASS';
-
-    /**
-     * Constant to create an interface
-     * @var int
-     */
-    const CREATE_INTERFACE = 'CREATE_INTERFACE';
-
-    /**
-     * Full path and name of the file, i.e. '/some/dir/file.ext'
-     * @var string
-     */
-    protected $fullpath = null;
-
-    /**
-     * Full basename of file, i.e. 'file.ext'
-     * @var string
-     */
-    protected $basename = null;
-
-    /**
-     * Full filename of file, i.e. 'file'
-     * @var string
-     */
-    protected $filename = null;
-
-    /**
-     * File extension, i.e. 'ext'
-     * @var string
-     */
-    protected $extension = null;
-
-    /**
-     * File output data.
-     * @var string
-     */
-    protected $output = null;
-
-    /**
-     * Code object
-     * @var Generator\ClassGenerator|Generator\InterfaceGenerator
-     */
-    protected $code = null;
-
-    /**
-     * Docblock generator object
-     * @var Generator\DocblockGenerator
-     */
-    protected $docblock = null;
-
-    /**
-     * Namespace generator object
-     * @var Generator\NamespaceGenerator
-     */
-    protected $namespace = null;
-
-    /**
-     * Code body
-     * @var string
-     */
-    protected $body = null;
-
-    /**
-     * Code indent
-     * @var string
-     */
-    protected $indent = null;
+    protected $env = null;
 
     /**
      * Flag to close the code file with ?>
@@ -111,75 +56,98 @@ class Generator
     protected $close = false;
 
     /**
-     * Environment setting
+     * Code filename
      * @var string
      */
-    protected $env = null;
-
-    /**
-     * Array of allowed file types.
-     * @var array
-     */
-    protected $allowed = [
-        'php'   => 'text/plain',
-        'php3'  => 'text/plain',
-        'phtml' => 'text/plain'
-    ];
+    protected $filename = null;
 
     /**
      * Constructor
      *
      * Instantiate the code generator object
      *
-     * @param  string $file
-     * @param  string $type
+     * @param  mixed $code
+     * @throws Exception
      */
-    public function __construct($file, $type = Generator::CREATE_EMPTY)
+    public function __construct($code = null)
     {
-        $fileInfo = pathinfo($file);
-
-        $this->fullpath  = $file;
-        $this->basename  = $fileInfo['basename'];
-        $this->filename  = $fileInfo['filename'];
-        $this->extension = (isset($fileInfo['extension'])) ? $fileInfo['extension'] : null;
-
-        if ($type == self::CREATE_CLASS) {
-            $this->createClass();
-        } else if ($type == self::CREATE_INTERFACE) {
-            $this->createInterface();
-        } else if (($type == self::CREATE_EMPTY) && file_exists($file)) {
-            $body = str_replace('<?php', '', file_get_contents($file));
-            $body = trim(str_replace('?>', '', $body)) . PHP_EOL;
-            $this->setBody($body);
+        if (null !== $code) {
+            if (is_array($code)) {
+                $this->addCodeObjects($code);
+            } else if ($code instanceof GeneratorInterface) {
+                $this->addCodeObject($code);
+            } else {
+                throw new Exception('Error: The code parameter was not the correct type.');
+            }
         }
     }
 
     /**
-     * Create a class generator object
+     * Add code generator objects
      *
+     * @param  array $codeObjects
      * @return Generator
      */
-    public function createInterface()
+    public function addCodeObjects(array $codeObjects)
     {
-        $this->code = new Generator\InterfaceGenerator($this->filename);
+        foreach ($codeObjects as $namespace => $codeObject) {
+            if (!is_numeric($namespace)) {
+                if (is_array($codeObject)) {
+                    foreach ($codeObject as $code) {
+                        $this->addCodeObject($code, $namespace);
+                    }
+                } else {
+                    $this->addCodeObject($codeObject, $namespace);
+                }
+            } else {
+                $this->addCodeObject($codeObject);
+            }
+        }
         return $this;
     }
 
     /**
-     * Create a class generator object
+     * Add a code generator object
      *
+     * @param  Generator\GeneratorInterface $codeObject
+     * @param  string                       $namespace
      * @return Generator
      */
-    public function createClass()
+    public function addCodeObject(Generator\GeneratorInterface $codeObject, $namespace = null)
     {
-        $this->code = new Generator\ClassGenerator($this->filename);
+        $this->code[] = $codeObject;
+
+        if (null !== $namespace) {
+            $key = count($this->code) - 1;
+            $this->namespaces[$key] = $namespace;
+        }
         return $this;
+    }
+
+    /**
+     * Has code generator objects
+     *
+     * @return boolean
+     */
+    public function hasCode()
+    {
+        return (!empty($this->code));
     }
 
     /**
      * Access the code generator object
      *
-     * @return Generator\ClassGenerator|Generator\InterfaceGenerator
+     * @return array
+     */
+    public function getCode()
+    {
+        return $this->code;
+    }
+
+    /**
+     * Access the code generator objects (alias method)
+     *
+     * @return array
      */
     public function code()
     {
@@ -241,164 +209,43 @@ class Generator
     }
 
     /**
-     * Set the code indent
+     * Set the filename
      *
-     * @param  string $indent
+     * @param  string $filename
      * @return Generator
      */
-    public function setIndent($indent = null)
+    public function setFilename($filename)
     {
-        $this->indent = $indent;
+        $this->filename = $filename;
         return $this;
     }
 
     /**
-     * Get the code indent
+     * Has filename
+     *
+     * @return boolean
+     */
+    public function hasFilename()
+    {
+        return (null !== $this->filename);
+    }
+
+    /**
+     * Get filename
      *
      * @return string
      */
-    public function getIndent()
+    public function getFilename()
     {
-        return $this->indent;
-    }
-
-    /**
-     * Set the namespace generator object
-     *
-     * @param  Generator\NamespaceGenerator $namespace
-     * @return Generator
-     */
-    public function setNamespace(Generator\NamespaceGenerator $namespace)
-    {
-        $this->namespace = $namespace;
-        return $this;
-    }
-
-    /**
-     * Access the namespace generator object
-     *
-     * @return Generator\NamespaceGenerator
-     */
-    public function getNamespace()
-    {
-        return $this->namespace;
-    }
-
-    /**
-     * Set the docblock generator object
-     *
-     * @param  Generator\DocblockGenerator $docblock
-     * @return Generator
-     */
-    public function setDocblock(Generator\DocblockGenerator $docblock)
-    {
-        $this->docblock = $docblock;
-        return $this;
-    }
-
-    /**
-     * Access the docblock generator object
-     *
-     * @return Generator\DocblockGenerator
-     */
-    public function getDocblock()
-    {
-        return $this->docblock;
-    }
-
-    /**
-     * Set the code body
-     *
-     * @param  string $body
-     * @param  boolean $newline
-     * @return Generator
-     */
-    public function setBody($body, $newline = true)
-    {
-        $this->body = $this->indent . str_replace(PHP_EOL, PHP_EOL . $this->indent, $body);
-        if ($newline) {
-            $this->body .= PHP_EOL;
-        }
-
-        return $this;
-    }
-
-    /**
-     * Append to the code body
-     *
-     * @param  string $body
-     * @param  boolean $newline
-     * @return Generator
-     */
-    public function appendToBody($body, $newline = true)
-    {
-        $body = str_replace(PHP_EOL, PHP_EOL . $this->indent, $body);
-        $this->body .= $this->indent . $body;
-        if ($newline) {
-            $this->body .= PHP_EOL;
-        }
-        return $this;
-    }
-
-    /**
-     * Get the method body
-     *
-     * @return string
-     */
-    public function getBody()
-    {
-        return $this->body;
-    }
-
-    /**
-     * Get the fullpath
-     *
-     * @return string
-     */
-    public function getFullpath()
-    {
-        return $this->fullpath;
-    }
-
-    /**
-     * Read data from the code file.
-     *
-     * @param  int|string $off
-     * @param  int|string $len
-     * @return string
-     */
-    public function read($off = null, $len = null)
-    {
-        $data = null;
-
-        // Read from the output buffer
-        if (null !== $this->output) {
-            if (null !== $off) {
-                $data = (null !== $len) ? substr($this->output, $off, $len) : substr($this->output, $off);
-            } else {
-                $data = $this->output;
-            }
-            // Else, if the file exists, then read the data from the actual file
-        } else if (file_exists($this->fullpath)) {
-            if (null !== $off) {
-                $data = (null !== $len) ?
-                    file_get_contents($this->fullpath, null, null, $off, $len) :
-                    $this->output = file_get_contents($this->fullpath, null, null, $off);
-            } else {
-                $data = file_get_contents($this->fullpath);
-            }
-        }
-
-        return $data;
+        return $this->filename;
     }
 
     /**
      * Render method
      *
-     * @param  boolean $ret
-     * @return mixed
+     * @return string
      */
-    public function render($ret = false)
+    public function render()
     {
         $this->output = '';
 
@@ -406,79 +253,97 @@ class Generator
             $this->output .= $this->env . PHP_EOL;
         }
 
-        $this->output .= '<?php' . PHP_EOL;
-        $this->output .= (null !== $this->docblock) ? $this->docblock->render(true) . PHP_EOL : null;
+        $this->output    .= '<?php' . PHP_EOL;
+        $this->output    .= (null !== $this->docblock) ? $this->docblock->render() . PHP_EOL : null;
+        $currentNamespace = null;
+        $inNamespace      = false;
 
-        if (null !== $this->namespace) {
-            $this->output .= $this->namespace->render(true) . PHP_EOL;
+        foreach ($this->code as $key => $code) {
+            if (isset($this->namespaces[$key]) && ($currentNamespace != $this->namespaces[$key])) {
+                if (null !== $currentNamespace) {
+                    $this->output .= '}' . PHP_EOL . PHP_EOL;
+                }
+                $namespace        = ($this->namespaces[$key] != '*') ? $this->namespaces[$key] . ' ' : null;
+                $this->output    .= 'namespace ' . $namespace . '{' . PHP_EOL;
+                $currentNamespace = $this->namespaces[$key];
+                $inNamespace      = true;
+            } else if (!isset($this->namespaces[$key]) && (null !== $currentNamespace)) {
+                $this->output .= '}' . PHP_EOL . PHP_EOL;
+                $inNamespace   = false;
+            }
+
+            if (null !== $currentNamespace) {
+                $code->setIndent($code->getIndent() + $this->indent);
+                if ($code->hasDocblock()) {
+                    $code->getDocblock()->setIndent($code->getDocblock()->getIndent() + $this->indent);
+                }
+                if (in_array('Pop\Code\Generator\Traits\BodyTrait', class_uses($code))) {
+                    $code->indentBody($this->indent);
+                }
+            }
+
+            $this->output .= $code;
         }
 
-        if (null !== $this->code) {
-            $this->output .= $this->code->render(true) . PHP_EOL;
-        }
-
-        if (null !== $this->body) {
-            $this->output .= PHP_EOL . $this->body . PHP_EOL . PHP_EOL;
+        if ($inNamespace) {
+            $this->output .= '}' . PHP_EOL . PHP_EOL;
         }
 
         if ($this->close) {
             $this->output .= '?>' . PHP_EOL;
         }
 
-        if ($ret) {
-            return $this->output;
-        } else {
-            echo $this->output;
-        }
+        return $this->output;
     }
 
     /**
-     * Output the code object directly.
+     * Write to file
      *
-     * @param  boolean $download
-     * @return Generator
+     * @param  string $filename
+     * @throws Exception
+     * @return void
      */
-    public function output($download = false)
+    public function writeToFile($filename = null)
     {
-        $this->render(true);
-
-        // Determine if the force download argument has been passed.
-        $attach = ($download) ? 'attachment; ' : null;
-
-        header('Content-type: text/plain');
-        header('Content-disposition: ' . $attach . 'filename=' . $this->basename);
-
-        if (isset($_SERVER['SERVER_PORT']) && ($_SERVER['SERVER_PORT'] == 443)) {
-            header('Expires: 0');
-            header('Cache-Control: private, must-revalidate');
-            header('Pragma: cache');
+        if ((null !== $this->filename) && (null === $filename)) {
+            $filename = $this->filename;
+        }
+        if (empty($filename)) {
+            throw new Exception('Error: The filename has not been set.');
         }
 
-        echo $this->output;
-
-        return $this;
+        file_put_contents($filename, $this->render());
     }
 
     /**
-     * Save the code object to disk.
+     * Output to HTTP
      *
-     * @param  string $to
-     * @param  boolean $append
-     * @return Generator
+     * @param  string  $filename
+     * @param  boolean $forceDownload
+     * @param  array   $headers
+     * @return void
      */
-    public function save($to = null, $append = false)
+    public function outputToHttp($filename = null, $forceDownload = false, array $headers = [])
     {
-        $this->render(true);
-
-        $file = (null === $to) ? $this->fullpath : $to;
-
-        if ($append) {
-            file_put_contents($file, $this->output, FILE_APPEND);
-        } else {
-            file_put_contents($file, $this->output);
+        if ((null !== $this->filename) && (null === $filename)) {
+            $filename = $this->filename;
+        }
+        if (empty($filename)) {
+            $filename = 'code.php';
         }
 
-        return $this;
+        $headers['Content-Type']        = 'text/plain';
+        $headers['Content-Disposition'] = (($forceDownload) ? 'attachment; ' : null) . 'filename=' . $filename;
+
+        // Send the headers and output the PDF
+        if (!headers_sent()) {
+            header('HTTP/1.1 200 OK');
+            foreach ($headers as $name => $value) {
+                header($name . ': ' . $value);
+            }
+        }
+
+        echo $this->render();
     }
 
     /**
@@ -488,7 +353,7 @@ class Generator
      */
     public function __toString()
     {
-        return $this->render(true);
+        return $this->render();
     }
 
 }

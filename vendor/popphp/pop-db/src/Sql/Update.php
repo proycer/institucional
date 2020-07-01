@@ -4,7 +4,7 @@
  *
  * @link       https://github.com/popphp/popphp-framework
  * @author     Nick Sagona, III <dev@nolainteractive.com>
- * @copyright  Copyright (c) 2009-2019 NOLA Interactive, LLC. (http://www.nolainteractive.com)
+ * @copyright  Copyright (c) 2009-2020 NOLA Interactive, LLC. (http://www.nolainteractive.com)
  * @license    http://www.popphp.org/license     New BSD License
  */
 
@@ -19,74 +19,12 @@ namespace Pop\Db\Sql;
  * @category   Pop
  * @package    Pop\Db
  * @author     Nick Sagona, III <dev@nolainteractive.com>
- * @copyright  Copyright (c) 2009-2019 NOLA Interactive, LLC. (http://www.nolainteractive.com)
+ * @copyright  Copyright (c) 2009-2020 NOLA Interactive, LLC. (http://www.nolainteractive.com)
  * @license    http://www.popphp.org/license     New BSD License
- * @version    4.5.0
+ * @version    5.0.0
  */
-class Update extends AbstractClause
+class Update extends AbstractPredicateClause
 {
-
-    /**
-     * WHERE predicate object
-     * @var Where
-     */
-    protected $where = null;
-
-    /**
-     * Access the WHERE clause
-     *
-     * @param  mixed $where
-     * @return Update
-     */
-    public function where($where = null)
-    {
-        if (null !== $where) {
-            if ($where instanceof Where) {
-                $this->where = $where;
-            } else {
-                if (null === $this->where) {
-                    $this->where = (new Where($this))->add($where);
-                } else {
-                    $this->where->add($where);
-                }
-            }
-        }
-        if (null === $this->where) {
-            $this->where = new Where($this);
-        }
-
-        return $this;
-    }
-
-    /**
-     * Access the WHERE clause with AND
-     *
-     * @param  mixed $where
-     * @return Update
-     */
-    public function andWhere($where = null)
-    {
-        if ($this->where->hasPredicates()) {
-            $this->where->getLastPredicateSet()->setCombine('AND');
-        }
-        $this->where($where);
-        return $this;
-    }
-
-    /**
-     * Access the WHERE clause with OR
-     *
-     * @param  mixed $where
-     * @return Update
-     */
-    public function orWhere($where = null)
-    {
-        if ($this->where->hasPredicates()) {
-            $this->where->getLastPredicateSet()->setCombine('OR');
-        }
-        $this->where($where);
-        return $this;
-    }
 
     /**
      * Set a value
@@ -132,10 +70,11 @@ class Update extends AbstractClause
                 substr($column, (strpos($column, '.') + 1)) : $column;
 
             // Check for named parameters
-            if ((':' . $colValue == substr($value, 0, strlen(':' . $colValue))) && ($dbType !== self::SQLITE)) {
+            if ((':' . $colValue == substr($value, 0, strlen(':' . $colValue))) &&
+                ($dbType !== self::SQLITE) && (!($this->db instanceof \Pop\Db\Adapter\Pdo))) {
                 if (($dbType == self::MYSQL) || ($dbType == self::SQLSRV)) {
                     $value = '?';
-                } else if (($dbType == self::PGSQL) && (!($this->db instanceof \Pop\Db\Adapter\Pdo))) {
+                } else if ($dbType == self::PGSQL) {
                     $value = '$' . $paramCount;
                     $paramCount++;
                 }
@@ -148,7 +87,7 @@ class Update extends AbstractClause
 
         // Build any WHERE clauses
         if (null !== $this->where) {
-            $sql .= ' WHERE ' . $this->where->render($paramCount);
+            $sql .= ' WHERE ' . $this->where;
         }
 
         return $sql;

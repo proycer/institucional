@@ -4,7 +4,7 @@
  *
  * @link       https://github.com/popphp/popphp-framework
  * @author     Nick Sagona, III <dev@nolainteractive.com>
- * @copyright  Copyright (c) 2009-2019 NOLA Interactive, LLC. (http://www.nolainteractive.com)
+ * @copyright  Copyright (c) 2009-2020 NOLA Interactive, LLC. (http://www.nolainteractive.com)
  * @license    http://www.popphp.org/license     New BSD License
  */
 
@@ -19,72 +19,22 @@ namespace Pop\Db\Sql;
  * @category   Pop
  * @package    Pop\Db
  * @author     Nick Sagona, III <dev@nolainteractive.com>
- * @copyright  Copyright (c) 2009-2019 NOLA Interactive, LLC. (http://www.nolainteractive.com)
+ * @copyright  Copyright (c) 2009-2020 NOLA Interactive, LLC. (http://www.nolainteractive.com)
  * @license    http://www.popphp.org/license     New BSD License
- * @version    4.5.0
+ * @version    5.0.0
  */
-class Delete extends AbstractClause
+class Delete extends AbstractPredicateClause
 {
 
     /**
-     * WHERE predicate object
-     * @var Where
-     */
-    protected $where = null;
-
-    /**
-     * Access the WHERE clause
+     * Set from table
      *
-     * @param  mixed $where
+     * @param  mixed  $table
      * @return Delete
      */
-    public function where($where = null)
+    public function from($table)
     {
-        if (null !== $where) {
-            if ($where instanceof Where) {
-                $this->where = $where;
-            } else {
-                if (null === $this->where) {
-                    $this->where = (new Where($this))->add($where);
-                } else {
-                    $this->where->add($where);
-                }
-            }
-        }
-        if (null === $this->where) {
-            $this->where = new Where($this);
-        }
-
-        return $this;
-    }
-
-    /**
-     * Access the WHERE clause with AND
-     *
-     * @param  mixed $where
-     * @return Delete
-     */
-    public function andWhere($where = null)
-    {
-        if ($this->where->hasPredicates()) {
-            $this->where->getLastPredicateSet()->setCombine('AND');
-        }
-        $this->where($where);
-        return $this;
-    }
-
-    /**
-     * Access the WHERE clause with OR
-     *
-     * @param  mixed $where
-     * @return Delete
-     */
-    public function orWhere($where = null)
-    {
-        if ($this->where->hasPredicates()) {
-            $this->where->getLastPredicateSet()->setCombine('OR');
-        }
-        $this->where($where);
+        $this->setTable($table);
         return $this;
     }
 

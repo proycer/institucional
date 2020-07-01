@@ -4,7 +4,7 @@
  *
  * @link       https://github.com/popphp/popphp-framework
  * @author     Nick Sagona, III <dev@nolainteractive.com>
- * @copyright  Copyright (c) 2009-2019 NOLA Interactive, LLC. (http://www.nolainteractive.com)
+ * @copyright  Copyright (c) 2009-2020 NOLA Interactive, LLC. (http://www.nolainteractive.com)
  * @license    http://www.popphp.org/license     New BSD License
  */
 
@@ -13,15 +13,17 @@
  */
 namespace Pop\Pdf\Build;
 
+use Pop\Pdf\Document;
+
 /**
  * Abstract Pdf compiler class
  *
  * @category   Pop
  * @package    Pop\Pdf
  * @author     Nick Sagona, III <dev@nolainteractive.com>
- * @copyright  Copyright (c) 2009-2019 NOLA Interactive, LLC. (http://www.nolainteractive.com)
+ * @copyright  Copyright (c) 2009-2020 NOLA Interactive, LLC. (http://www.nolainteractive.com)
  * @license    http://www.popphp.org/license     New BSD License
- * @version    3.2.0
+ * @version    4.0.0
  */
 abstract class AbstractCompiler implements CompilerInterface
 {
@@ -46,13 +48,13 @@ abstract class AbstractCompiler implements CompilerInterface
 
     /**
      * Document object
-     * @var \Pop\Pdf\Document $document
+     * @var Document $document
      */
     protected $document = null;
 
     /**
      * Pages array
-     * @var array
+     * @var Document\Page[]
      */
     protected $pages = [];
 
@@ -101,7 +103,7 @@ abstract class AbstractCompiler implements CompilerInterface
     /**
      * Get the document object
      *
-     * @return \Pop\Pdf\Document
+     * @return Document
      */
     public function getDocument()
     {
@@ -136,6 +138,26 @@ abstract class AbstractCompiler implements CompilerInterface
     public function getInfo()
     {
         return $this->info;
+    }
+
+    /**
+     * Get the fonts
+     *
+     * @return array
+     */
+    public function getFonts()
+    {
+        return $this->fonts;
+    }
+
+    /**
+     * Get the font references
+     *
+     * @return array
+     */
+    public function getFontReferences()
+    {
+        return $this->fontReferences;
     }
 
     /**
@@ -211,7 +233,7 @@ abstract class AbstractCompiler implements CompilerInterface
      */
     protected function calculateByteLength($string)
     {
-        return strlen(str_replace("\n", "", $string));
+        return strlen($string);
     }
 
     /**
@@ -262,25 +284,25 @@ abstract class AbstractCompiler implements CompilerInterface
     /**
      * Set the document object
      *
-     * @param  \Pop\Pdf\Document $document
+     * @param  Document\AbstractDocument $document
      * @return Compiler
      */
-    abstract public function setDocument(\Pop\Pdf\Document $document);
+    abstract public function setDocument(Document\AbstractDocument $document);
 
     /**
      * Compile and finalize the PDF document
      *
-     * @param  \Pop\Pdf\AbstractDocument $document
+     * @param  Document\AbstractDocument $document
      * @return void
      */
-    abstract public function finalize(\Pop\Pdf\AbstractDocument $document);
+    abstract public function finalize(Document\AbstractDocument $document = null);
 
     /**
      * Prepare the font objects
      *
      * @return void
      */
-    abstract protected function prepareFonts();
+    abstract public function prepareFonts();
 
     /**
      * Prepare the image objects

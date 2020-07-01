@@ -4,7 +4,7 @@
  *
  * @link       https://github.com/popphp/popphp-framework
  * @author     Nick Sagona, III <dev@nolainteractive.com>
- * @copyright  Copyright (c) 2009-2019 NOLA Interactive, LLC. (http://www.nolainteractive.com)
+ * @copyright  Copyright (c) 2009-2020 NOLA Interactive, LLC. (http://www.nolainteractive.com)
  * @license    http://www.popphp.org/license     New BSD License
  */
 
@@ -19,9 +19,9 @@ namespace Pop\Pdf\Document\Page;
  * @category   Pop
  * @package    Pop\Pdf
  * @author     Nick Sagona, III <dev@nolainteractive.com>
- * @copyright  Copyright (c) 2009-2019 NOLA Interactive, LLC. (http://www.nolainteractive.com)
+ * @copyright  Copyright (c) 2009-2020 NOLA Interactive, LLC. (http://www.nolainteractive.com)
  * @license    http://www.popphp.org/license     New BSD License
- * @version    3.2.0
+ * @version    4.0.0
  */
 class Text
 {
@@ -31,6 +31,12 @@ class Text
      * @var string
      */
     protected $string = null;
+
+    /**
+     * Text strings as array for streaming
+     * @var array
+     */
+    protected $strings = [];
 
     /**
      * Text strings with offset values
@@ -91,6 +97,12 @@ class Text
     protected $wrap = null;
 
     /**
+     * Text stream object
+     * @var Text\Stream
+     */
+    protected $stream = null;
+
+    /**
      * Text parameters
      * @var array
      */
@@ -111,10 +123,14 @@ class Text
      * @param  string $string
      * @param  string $size
      */
-    public function __construct($string, $size)
+    public function __construct($string = null, $size = null)
     {
-        $this->setString($string);
-        $this->setSize($size);
+        if (null !== $string) {
+            $this->setString($string);
+        }
+        if (null !== $size) {
+            $this->setSize($size);
+        }
     }
 
     /**
@@ -131,6 +147,33 @@ class Text
             }
         }
         $this->string = $string;
+        return $this;
+    }
+
+    /**
+     * Set the text strings
+     *
+     * @param  array $strings
+     * @return Text
+     */
+    public function setStrings(array $strings)
+    {
+        if (function_exists('mb_strlen')) {
+            $strings = array_map(function($value) {
+                if ($value instanceof Text) {
+                    $v = $value->getString();
+                    if (mb_strlen($v, 'UTF-8') < strlen($v)) {
+                        return utf8_decode($v);
+                    }
+                    $value->setString($v);
+                } else if (mb_strlen($value, 'UTF-8') < strlen($value)) {
+                    $value = utf8_decode($value);
+                }
+                return $value;
+            }, $strings);
+
+        }
+        $this->strings = $strings;
         return $this;
     }
 
@@ -288,6 +331,18 @@ class Text
     }
 
     /**
+     * Method to set the text stream
+     *
+     * @param  Text\Stream $stream
+     * @return Text
+     */
+    public function setTextStream(Text\Stream $stream)
+    {
+        $this->stream = $stream;
+        return $this;
+    }
+
+    /**
      * Escape string
      *
      * @param  mixed $search
@@ -299,7 +354,7 @@ class Text
         $searchAry  = ['(', ')'];
         $replaceAry = ['\(', '\)'];
 
-        if (!empty($search) && !empty($replace)) {
+        if ((null !== $search) && (null !== $replace)) {
             if (!is_array($search)) {
                 $search = [$search];
             }
@@ -322,6 +377,16 @@ class Text
     public function getString()
     {
         return $this->string;
+    }
+
+    /**
+     * Get the text string array
+     *
+     * @return array
+     */
+    public function getStrings()
+    {
+        return $this->strings;
     }
 
     /**
@@ -385,6 +450,16 @@ class Text
     }
 
     /**
+     * Get number of wrapped lines from character wrap
+     *
+     * @return int
+     */
+    public function getNumberOfWrappedLines()
+    {
+        return count(explode("\n", wordwrap($this->string, $this->charWrap, "\n")));
+    }
+
+    /**
      * Get character wrap leading
      *
      * @return int
@@ -412,6 +487,36 @@ class Text
     public function getWrap()
     {
         return $this->wrap;
+    }
+
+    /**
+     * Get text stream
+     *
+     * @return Text\Stream
+     */
+    public function getTextStream()
+    {
+        return $this->stream;
+    }
+
+    /**
+     * Has text string
+     *
+     * @return boolean
+     */
+    public function hasString()
+    {
+        return (null !== $this->string);
+    }
+
+    /**
+     * Has text string array
+     *
+     * @return boolean
+     */
+    public function hasStrings()
+    {
+        return !empty($this->strings);
     }
 
     /**
@@ -452,6 +557,16 @@ class Text
     public function hasWrap()
     {
         return (null !== $this->wrap);
+    }
+
+    /**
+     * Has text stream
+     *
+     * @return boolean
+     */
+    public function hasTextStream()
+    {
+        return (null !== $this->stream);
     }
 
     /**
@@ -547,24 +662,7 @@ class Text
             $stream       .= "    {$fontReference} {$this->size} Tf\n";
         }
 
-        if (null !== $this->fillColor) {
-            if ($this->fillColor instanceof Color\Rgb) {
-                $stream .= '    ' . $this->fillColor . " rg\n";
-            } else if ($this->fillColor instanceof Color\Cmyk) {
-                $stream .= '    ' . $this->fillColor . " k\n";
-            } else if ($this->fillColor instanceof Color\Gray) {
-                $stream .= '    ' . $this->fillColor . " g\n";
-            }
-        }
-        if (null !== $this->strokeColor) {
-            if ($this->strokeColor instanceof Color\Rgb) {
-                $stream .= '    ' . $this->strokeColor . " RG\n";
-            } else if ($this->strokeColor instanceof Color\Cmyk) {
-                $stream .= '    ' . $this->strokeColor . " K\n";
-            } else if ($this->strokeColor instanceof Color\Gray) {
-                $stream .= '    ' . $this->strokeColor . " G\n";
-            }
-        }
+        $stream .= $this->getColorStream();
 
         if (count($this->stringsWithOffsets) > 0) {
             $stream .= "    [({$this->string})";
@@ -588,6 +686,37 @@ class Text
                 }
             } else {
                 $stream .= "    ({$this->string})Tj\n";
+            }
+        }
+
+        return $stream;
+    }
+
+    /**
+     * Get the partial color stream
+     *
+     * @return string
+     */
+    public function getColorStream()
+    {
+        $stream = '';
+
+        if (null !== $this->fillColor) {
+            if ($this->fillColor instanceof Color\Rgb) {
+                $stream .= '    ' . $this->fillColor . " rg\n";
+            } else if ($this->fillColor instanceof Color\Cmyk) {
+                $stream .= '    ' . $this->fillColor . " k\n";
+            } else if ($this->fillColor instanceof Color\Gray) {
+                $stream .= '    ' . $this->fillColor . " g\n";
+            }
+        }
+        if (null !== $this->strokeColor) {
+            if ($this->strokeColor instanceof Color\Rgb) {
+                $stream .= '    ' . $this->strokeColor . " RG\n";
+            } else if ($this->strokeColor instanceof Color\Cmyk) {
+                $stream .= '    ' . $this->strokeColor . " K\n";
+            } else if ($this->strokeColor instanceof Color\Gray) {
+                $stream .= '    ' . $this->strokeColor . " G\n";
             }
         }
 

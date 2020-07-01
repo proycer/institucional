@@ -4,7 +4,7 @@
  *
  * @link       https://github.com/popphp/popphp-framework
  * @author     Nick Sagona, III <dev@nolainteractive.com>
- * @copyright  Copyright (c) 2009-2019 NOLA Interactive, LLC. (http://www.nolainteractive.com)
+ * @copyright  Copyright (c) 2009-2020 NOLA Interactive, LLC. (http://www.nolainteractive.com)
  * @license    http://www.popphp.org/license     New BSD License
  */
 
@@ -19,9 +19,9 @@ namespace Pop\Db\Record;
  * @category   Pop
  * @package    Pop\Db
  * @author     Nick Sagona, III <dev@nolainteractive.com>
- * @copyright  Copyright (c) 2009-2019 NOLA Interactive, LLC. (http://www.nolainteractive.com)
+ * @copyright  Copyright (c) 2009-2020 NOLA Interactive, LLC. (http://www.nolainteractive.com)
  * @license    http://www.popphp.org/license     New BSD License
- * @version    4.5.0
+ * @version    5.0.0
  */
 class Encoded extends \Pop\Db\Record
 {
@@ -63,10 +63,10 @@ class Encoded extends \Pop\Db\Record
     protected $hashAlgorithm = PASSWORD_BCRYPT;
 
     /**
-     * Hash options ('salt', 'cost')
+     * Hash options
      * @var array
      */
-    protected $hashOptions = [];
+    protected $hashOptions = ['cost' => 10];
 
     /**
      * Cipher method
@@ -147,7 +147,7 @@ class Encoded extends \Pop\Db\Record
                 $value = serialize($value);
             }
         } else if (in_array($key, $this->base64Fields)) {
-            if (!(is_string($value) && (@base64_decode($value, true) !== false))) {
+            if (!(is_string($value) && (base64_encode(base64_decode($value)) === $value))) {
                 $value = base64_encode($value);
             }
         } else if (in_array($key, $this->hashFields)) {

@@ -4,7 +4,7 @@
  *
  * @link       https://github.com/popphp/popphp-framework
  * @author     Nick Sagona, III <dev@nolainteractive.com>
- * @copyright  Copyright (c) 2009-2019 NOLA Interactive, LLC. (http://www.nolainteractive.com)
+ * @copyright  Copyright (c) 2009-2020 NOLA Interactive, LLC. (http://www.nolainteractive.com)
  * @license    http://www.popphp.org/license     New BSD License
  */
 
@@ -13,15 +13,17 @@
  */
 namespace Pop\Pdf\Build\Font;
 
+use Pop\Utils\ArrayObject as Data;
+
 /**
  * Font abstract class
  *
  * @category   Pop
  * @package    Pop\Pdf
  * @author     Nick Sagona, III <dev@nolainteractive.com>
- * @copyright  Copyright (c) 2009-2019 NOLA Interactive, LLC. (http://www.nolainteractive.com)
+ * @copyright  Copyright (c) 2009-2020 NOLA Interactive, LLC. (http://www.nolainteractive.com)
  * @license    http://www.popphp.org/license     New BSD License
- * @version    3.2.0
+ * @version    4.0.0
  */
 abstract class AbstractFont implements \ArrayAccess
 {
@@ -109,20 +111,23 @@ abstract class AbstractFont implements \ArrayAccess
     protected $mime = 'text/plain';
 
     /**
+     * Font stream
+     * @var string
+     */
+    protected $stream = null;
+
+    /**
      * Constructor
      *
      * Instantiate a font file object based on a pre-existing font file on disk.
      *
-     * @param  string $font
+     * @param  string $fontFile
+     * @param  string $fontStream
      * @throws Exception
      */
-    public function __construct($font)
+    public function __construct($fontFile = null, $fontStream = null)
     {
-        if (!file_exists($font)) {
-            throw new Exception('The font file does not exist.');
-        }
-
-        $this->properties['flags'] = new \ArrayObject([
+        $this->properties['flags'] = new Data([
             'isFixedPitch'  => false,
             'isSerif'       => false,
             'isSymbolic'    => false,
@@ -132,25 +137,35 @@ abstract class AbstractFont implements \ArrayAccess
             'isAllCap'      => false,
             'isSmallCap'    => false,
             'isForceBold'   => false
-        ], \ArrayObject::ARRAY_AS_PROPS);
+        ]);
 
-        $this->fullpath  = $font;
-        $parts           = pathinfo($font);
-        $this->size      = filesize($font);
-        $this->dir       = realpath($parts['dirname']);
-        $this->basename  = $parts['basename'];
-        $this->filename  = $parts['filename'];
-        $this->extension = (isset($parts['extension']) && ($parts['extension'] != '')) ? $parts['extension'] : null;
+        if (null !== $fontFile) {
+            if (!file_exists($fontFile)) {
+                throw new Exception('The font file does not exist.');
+            }
 
-        if (null === $this->extension) {
-            throw new Exception('Error: That font file does not have an extension.');
+            $this->fullpath  = $fontFile;
+            $parts           = pathinfo($fontFile);
+            $this->size      = filesize($fontFile);
+            $this->dir       = realpath($parts['dirname']);
+            $this->basename  = $parts['basename'];
+            $this->filename  = $parts['filename'];
+            $this->extension = (isset($parts['extension']) && ($parts['extension'] != '')) ? $parts['extension'] : null;
+
+            if (null === $this->extension) {
+                throw new Exception('Error: That font file does not have an extension.');
+            }
+
+            if ((null !== $this->extension) && !isset($this->allowedTypes[strtolower($this->extension)])) {
+                throw new Exception('Error: That font file type is not allowed.');
+            }
+
+            $this->mime = $this->allowedTypes[strtolower($this->extension)];
+        } else if (null !== $fontStream) {
+            $this->stream = $fontStream;
+        } else {
+            throw new Exception('Error: You must pass either a font file or font stream.');
         }
-
-        if ((null !== $this->extension) && !isset($this->allowedTypes[strtolower($this->extension)])) {
-            throw new Exception('Error: That font file type is not allowed.');
-        }
-
-        $this->mime = $this->allowedTypes[strtolower($this->extension)];
     }
 
     /**
@@ -163,11 +178,17 @@ abstract class AbstractFont implements \ArrayAccess
     public function read($offset = null, $length = null)
     {
         if (null !== $offset) {
-            $data = ((null !== $length) && ((int)$length >= 0)) ?
-                file_get_contents($this->fullpath, null, null, $offset, $length) :
-                file_get_contents($this->fullpath, null, null, $offset);
+            if (null !== $this->stream) {
+                $data = ((null !== $length) && ((int)$length >= 0)) ?
+                    substr($this->stream, $offset, $length) :
+                    substr($this->stream, $offset);
+            } else {
+                $data = ((null !== $length) && ((int)$length >= 0)) ?
+                    file_get_contents($this->fullpath, null, null, $offset, $length) :
+                    file_get_contents($this->fullpath, null, null, $offset);
+            }
         } else {
-            $data = file_get_contents($this->fullpath);
+            $data = (null !== $this->stream) ? $this->stream : file_get_contents($this->fullpath);
         }
 
         return $data;

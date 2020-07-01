@@ -21,7 +21,7 @@ namespace Pop\Router\Match;
  * @author     Nick Sagona, III <dev@nolainteractive.com>
  * @copyright  Copyright (c) 2009-2020 NOLA Interactive, LLC. (http://www.nolainteractive.com)
  * @license    http://www.popphp.org/license     New BSD License
- * @version    3.3.3
+ * @version    3.4.0
  */
 abstract class AbstractMatch implements MatchInterface
 {
@@ -294,6 +294,41 @@ abstract class AbstractMatch implements MatchInterface
     public function getPreparedRoutes()
     {
         return $this->preparedRoutes;
+    }
+
+    /**
+     * Has route config
+     *
+     * @param  string $key
+     * @return boolean
+     */
+    public function hasRouteConfig($key = null)
+    {
+        if ((null !== $this->route) && isset($this->preparedRoutes[$this->route])) {
+            return (null !== $key) ? (isset($this->preparedRoutes[$this->route][$key])) : true;
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * Get route config
+     *
+     * @param  string $key
+     * @return mixed
+     */
+    public function getRouteConfig($key = null)
+    {
+        if ((null !== $this->route) && isset($this->preparedRoutes[$this->route])) {
+            if (null === $key) {
+                return $this->preparedRoutes[$this->route];
+            } else {
+                return (isset($this->preparedRoutes[$this->route][$key])) ?
+                    $this->preparedRoutes[$this->route][$key] : null;
+            }
+        } else {
+            return null;
+        }
     }
 
     /**

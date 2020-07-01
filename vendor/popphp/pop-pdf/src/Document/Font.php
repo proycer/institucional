@@ -4,7 +4,7 @@
  *
  * @link       https://github.com/popphp/popphp-framework
  * @author     Nick Sagona, III <dev@nolainteractive.com>
- * @copyright  Copyright (c) 2009-2019 NOLA Interactive, LLC. (http://www.nolainteractive.com)
+ * @copyright  Copyright (c) 2009-2020 NOLA Interactive, LLC. (http://www.nolainteractive.com)
  * @license    http://www.popphp.org/license     New BSD License
  */
 
@@ -22,9 +22,9 @@ use Pop\Pdf\Build\Font\Parser;
  * @category   Pop
  * @package    Pop\Pdf
  * @author     Nick Sagona, III <dev@nolainteractive.com>
- * @copyright  Copyright (c) 2009-2019 NOLA Interactive, LLC. (http://www.nolainteractive.com)
+ * @copyright  Copyright (c) 2009-2020 NOLA Interactive, LLC. (http://www.nolainteractive.com)
  * @license    http://www.popphp.org/license     New BSD License
- * @version    3.2.0
+ * @version    4.0.0
  */
 class Font
 {
@@ -129,7 +129,7 @@ class Font
      * Set font
      *
      * @param  string $font
-     * @throws Exception
+     * @throws \InvalidArgumentException
      * @return Font
      */
     public function setFont($font)
@@ -143,7 +143,9 @@ class Font
             $this->parser     = new Parser($this->font);
             $this->name       = $this->parser->getFontName();
         } else {
-            throw new Exception('Error: The font is not valid. It must be a standard PDF font or a font file.');
+            throw new \InvalidArgumentException(
+                "Error: The font '" . $font . "' is not valid. It must be a standard PDF font or a font file."
+            );
         }
 
         return $this;

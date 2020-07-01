@@ -4,7 +4,7 @@
  *
  * @link       https://github.com/popphp/popphp-framework
  * @author     Nick Sagona, III <dev@nolainteractive.com>
- * @copyright  Copyright (c) 2009-2019 NOLA Interactive, LLC. (http://www.nolainteractive.com)
+ * @copyright  Copyright (c) 2009-2020 NOLA Interactive, LLC. (http://www.nolainteractive.com)
  * @license    http://www.popphp.org/license     New BSD License
  */
 
@@ -13,15 +13,17 @@
  */
 namespace Pop\Pdf\Build;
 
+use Pop\Pdf\Document\AbstractDocument;
+
 /**
  * Pdf parser class
  *
  * @category   Pop
  * @package    Pop\Pdf
  * @author     Nick Sagona, III <dev@nolainteractive.com>
- * @copyright  Copyright (c) 2009-2019 NOLA Interactive, LLC. (http://www.nolainteractive.com)
+ * @copyright  Copyright (c) 2009-2020 NOLA Interactive, LLC. (http://www.nolainteractive.com)
  * @license    http://www.popphp.org/license     New BSD License
- * @version    3.2.0
+ * @version    4.0.0
  */
 class Parser extends AbstractParser
 {
@@ -79,7 +81,7 @@ class Parser extends AbstractParser
      *
      * @param  string $file
      * @param  mixed  $pages
-     * @return \Pop\Pdf\AbstractDocument
+     * @return AbstractDocument
      */
     public function parseFile($file, $pages = null)
     {
@@ -92,7 +94,7 @@ class Parser extends AbstractParser
      *
      * @param  string $data
      * @param  mixed  $pages
-     * @return \Pop\Pdf\AbstractDocument
+     * @return AbstractDocument
      */
     public function parseData($data, $pages = null)
     {
@@ -104,7 +106,7 @@ class Parser extends AbstractParser
      * Parse the data stream
      *
      * @param  mixed  $pages
-     * @return \Pop\Pdf\AbstractDocument
+     * @return AbstractDocument
      */
     public function parse($pages = null)
     {
@@ -285,7 +287,12 @@ class Parser extends AbstractParser
             if (isset($page['fonts']) && (count($page['fonts']) > 0)) {
                 foreach ($page['fonts'] as $i => $font) {
                     if (strpos($this->objectMap['streams'][$i]['stream'], '/BaseFont') !== false) {
-                        $fontName = trim(substr($this->objectMap['streams'][$i]['stream'], (strpos($this->objectMap['streams'][$i]['stream'], '/BaseFont') + 9)));
+                        $fontName = trim(
+                            substr(
+                                $this->objectMap['streams'][$i]['stream'],
+                                (strpos($this->objectMap['streams'][$i]['stream'], '/BaseFont') + 9)
+                            )
+                        );
 
                         if (substr($fontName, 0, 1) == '/') {
                             $fontName = substr($fontName, 1);
@@ -304,6 +311,31 @@ class Parser extends AbstractParser
                             $this->fonts[] = $f;
                         }
                     }
+                }
+            }
+        }
+
+        $fontFileObjects = [];
+        foreach ($this->objectStreams as $stream) {
+            if (strpos($stream, '/FontFile') !== false) {
+                $fontFileObject = substr($stream, strpos($stream, '/FontFile'));
+                $fontFileObject = substr($fontFileObject, (strpos($fontFileObject, ' ') + 1));
+                $fontFileObject = trim(substr($fontFileObject, 0, strpos($fontFileObject, '0 R')));
+                $fontFileObjects[] = $fontFileObject;
+            }
+        }
+
+        if (!empty($fontFileObjects)) {
+            foreach ($fontFileObjects as $fontFileObject) {
+                if (($fontFileObject == 13) && isset($this->objectMap['streams'][$fontFileObject])) {
+                    $fontFile = $this->objectMap['streams'][$fontFileObject];
+                    $contents = ($fontFile['object']->getEncoding() == 'FlateDecode') ?
+                        gzuncompress(trim($fontFile['object']->getStream())) : $fontFile['object']->getStream();
+
+                    file_put_contents('/home/nick/Desktop/font.ttf', $contents);
+
+                    $fontParser = new \Pop\Pdf\Build\Font\TrueType(null, $contents);
+                    $var = 123;
                 }
             }
         }

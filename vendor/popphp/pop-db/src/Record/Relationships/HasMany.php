@@ -4,7 +4,7 @@
  *
  * @link       https://github.com/popphp/popphp-framework
  * @author     Nick Sagona, III <dev@nolainteractive.com>
- * @copyright  Copyright (c) 2009-2019 NOLA Interactive, LLC. (http://www.nolainteractive.com)
+ * @copyright  Copyright (c) 2009-2020 NOLA Interactive, LLC. (http://www.nolainteractive.com)
  * @license    http://www.popphp.org/license     New BSD License
  */
 
@@ -14,7 +14,6 @@
 namespace Pop\Db\Record\Relationships;
 
 use Pop\Db\Record;
-use Pop\Db\Record\Collection;
 
 /**
  * Relationship class for "has many" relationships
@@ -22,9 +21,9 @@ use Pop\Db\Record\Collection;
  * @category   Pop
  * @package    Pop\Db
  * @author     Nick Sagona, III <dev@nolainteractive.com>
- * @copyright  Copyright (c) 2009-2019 NOLA Interactive, LLC. (http://www.nolainteractive.com)
+ * @copyright  Copyright (c) 2009-2020 NOLA Interactive, LLC. (http://www.nolainteractive.com)
  * @license    http://www.popphp.org/license     New BSD License
- * @version    4.5.0
+ * @version    5.0.0
  */
 class HasMany extends AbstractRelationship
 {
@@ -81,11 +80,12 @@ class HasMany extends AbstractRelationship
     /**
      * Get eager relationships
      *
-     * @param  array $ids
+     * @param  array   $ids
+     * @param  boolean $asArray
      * @throws Exception
      * @return array
      */
-    public function getEagerRelationships(array $ids)
+    public function getEagerRelationships(array $ids, $asArray = false)
     {
         if ((null === $this->foreignTable) || (null === $this->foreignKey)) {
             throw new Exception('Error: The foreign table and key values have not been set.');
@@ -106,10 +106,19 @@ class HasMany extends AbstractRelationship
         $rows = $db->fetchAll();
 
         foreach ($rows as $row) {
-            if (!isset($results[$row[$this->foreignKey]])) {
-                $results[$row[$this->foreignKey]] = [];
+            if (!$asArray) {
+                if (!isset($results[$row[$this->foreignKey]])) {
+                    $results[$row[$this->foreignKey]] = new Record\Collection();
+                }
+                $record = new $table();
+                $record->setColumns($row);
+                $results[$row[$this->foreignKey]]->push($record);
+            } else {
+                if (!isset($results[$row[$this->foreignKey]])) {
+                    $results[$row[$this->foreignKey]] = [];
+                }
+                $results[$row[$this->foreignKey]][] = $row;
             }
-            $results[$row[$this->foreignKey]][] = $row;
         }
 
         return $results;

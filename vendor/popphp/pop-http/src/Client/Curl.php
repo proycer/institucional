@@ -13,6 +13,7 @@
  */
 namespace Pop\Http\Client;
 
+use Pop\Http\Parser;
 use Pop\Mime\Message;
 
 /**
@@ -23,7 +24,7 @@ use Pop\Mime\Message;
  * @author     Nick Sagona, III <dev@nolainteractive.com>
  * @copyright  Copyright (c) 2009-2020 NOLA Interactive, LLC. (http://www.nolainteractive.com)
  * @license    http://www.popphp.org/license     New BSD License
- * @version    3.5.0
+ * @version    4.0.0
  */
 class Curl extends AbstractClient
 {
@@ -44,15 +45,17 @@ class Curl extends AbstractClient
      * @param  array  $opts
      * @throws Exception
      */
-    public function __construct($url, $method = 'GET', array $opts = null)
+    public function __construct($url = null, $method = 'GET', array $opts = null)
     {
         if (!function_exists('curl_init')) {
             throw new Exception('Error: cURL is not available.');
         }
+
         $this->resource = curl_init();
 
-        $this->setUrl($url);
-        $this->setMethod($method);
+        parent::__construct($url, $method);
+
+
         $this->setOption(CURLOPT_HEADER, true);
         $this->setOption(CURLOPT_RETURNTRANSFER, true);
 
@@ -221,20 +224,19 @@ class Curl extends AbstractClient
             // Set query data if there is any
             if ($this->request->hasFields()) {
                 // Append GET query string to URL
-                if ($this->method == 'GET') {
+                if (($this->method == 'GET') && ((!$this->request->hasHeader('Content-Type')) ||
+                        ($this->request->getHeaderValue('Content-Type') == 'application/x-www-form-urlencoded'))) {
                     $url .= '?' . $this->request->getQuery();
                 // Else, prepare request data for transmission
                 } else {
                     // If request is JSON
-                    if ($this->request->isJson()) {
+                    if ($this->request->getHeaderValue('Content-Type') == 'application/json') {
                         $content = json_encode($this->request->getFields(), JSON_PRETTY_PRINT);
-                        $this->request->addHeader('Content-Type', 'application/json')
-                            ->addHeader('Content-Length', mb_strlen($content));
+                        $this->request->addHeader('Content-Length', strlen($content));
                         $this->setOption(CURLOPT_POSTFIELDS, $content);
                     // If request is a URL-encoded form
-                    } else if ($this->request->isUrlEncodedForm()) {
-                        $this->request->addHeader('Content-Type', 'application/x-www-form-urlencoded')
-                            ->addHeader('Content-Length', $this->request->getQueryLength());
+                    } else if ($this->request->getHeaderValue('Content-Type') == 'application/x-www-form-urlencoded') {
+                        $this->request->addHeader('Content-Length', $this->request->getQueryLength());
                         $this->setOption(CURLOPT_POSTFIELDS, $this->request->getQuery());
                     // Else, if request is a multipart form
                     } else if ($this->request->isMultipartForm()) {
@@ -243,13 +245,17 @@ class Curl extends AbstractClient
                         $content     = $formMessage->render(false);
                         $formMessage->removeHeader('Content-Type');
                         $this->request->addHeader($header)
-                            ->addHeader('Content-Length', mb_strlen($content));
+                            ->addHeader('Content-Length', strlen($content));
                         $this->setOption(CURLOPT_POSTFIELDS, $content);
                     // Else, basic request with data
                     } else {
                         $this->setOption(CURLOPT_POSTFIELDS, $this->request->getFields());
                     }
                 }
+            // Else, if there is raw body content
+            } else if ($this->request->hasBody()) {
+                $this->request->addHeader('Content-Length', strlen($this->request->getBodyContent()));
+                $this->setOption(CURLOPT_POSTFIELDS, $this->request->getBodyContent());
             }
 
             if ($this->request->hasHeaders()) {
@@ -289,16 +295,19 @@ class Curl extends AbstractClient
         if (isset($this->options[CURLOPT_RETURNTRANSFER]) && ($this->options[CURLOPT_RETURNTRANSFER] == true)) {
             $headerSize = $this->getInfo(CURLINFO_HEADER_SIZE);
             if ($this->options[CURLOPT_HEADER]) {
-                $this->response->parseResponseHeaders(substr($response, 0, $headerSize));
+                $parsedHeaders = Parser::parseHeaders(substr($response, 0, $headerSize));
+                $this->response->setVersion($parsedHeaders['version']);
+                $this->response->setCode($parsedHeaders['code']);
+                $this->response->setMessage($parsedHeaders['message']);
+                $this->response->addHeaders($parsedHeaders['headers']);
                 $this->response->setBody(substr($response, $headerSize));
             } else {
                 $this->response->setBody($response);
             }
-            $this->response->setResponse($response);
         }
 
         if ($this->response->hasHeader('Content-Encoding')) {
-            $this->response->decodeBody();
+            $this->response->decodeBodyContent();
         }
     }
 

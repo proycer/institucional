@@ -14,13 +14,13 @@
 namespace Pop\Code\Generator;
 
 /**
- * Code exception class
+ * Code generator exception class
  *
  * @category   Pop
  * @package    Pop\Code
  * @author     Nick Sagona, III <dev@nolainteractive.com>
  * @copyright  Copyright (c) 2009-2020 NOLA Interactive, LLC. (http://www.nolainteractive.com)
  * @license    http://www.popphp.org/license     New BSD License
- * @version    3.1.2
+ * @version    3.2.0
  */
 class Exception extends \Exception {}

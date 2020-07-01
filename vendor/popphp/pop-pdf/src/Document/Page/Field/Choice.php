@@ -4,7 +4,7 @@
  *
  * @link       https://github.com/popphp/popphp-framework
  * @author     Nick Sagona, III <dev@nolainteractive.com>
- * @copyright  Copyright (c) 2009-2019 NOLA Interactive, LLC. (http://www.nolainteractive.com)
+ * @copyright  Copyright (c) 2009-2020 NOLA Interactive, LLC. (http://www.nolainteractive.com)
  * @license    http://www.popphp.org/license     New BSD License
  */
 
@@ -21,9 +21,9 @@ use Pop\Pdf\Document\Page\Color;
  * @category   Pop
  * @package    Pop\Pdf
  * @author     Nick Sagona, III <dev@nolainteractive.com>
- * @copyright  Copyright (c) 2009-2019 NOLA Interactive, LLC. (http://www.nolainteractive.com)
+ * @copyright  Copyright (c) 2009-2020 NOLA Interactive, LLC. (http://www.nolainteractive.com)
  * @license    http://www.popphp.org/license     New BSD License
- * @version    3.2.0
+ * @version    4.0.0
  */
 class Choice extends AbstractField
 {
@@ -44,6 +44,16 @@ class Choice extends AbstractField
     {
         $this->options[] = $option;
         return $this;
+    }
+
+    /**
+     * Has options
+     *
+     * @return boolean
+     */
+    public function hasOptions()
+    {
+        return (count($this->options) > 0);
     }
 
     /**
@@ -86,7 +96,7 @@ class Choice extends AbstractField
     }
 
     /**
-     * Set multiselect
+     * Set multi-select
      *
      * @return Choice
      */
@@ -125,6 +135,26 @@ class Choice extends AbstractField
     }
 
     /**
+     * Is combo
+     *
+     * @return boolean
+     */
+    public function isCombo()
+    {
+        return in_array(18, $this->flagBits);
+    }
+
+    /**
+     * Is multi-select
+     *
+     * @return boolean
+     */
+    public function isMultiSelect()
+    {
+        return in_array(22, $this->flagBits);
+    }
+
+    /**
      * Get the field stream
      *
      * @param  int    $i
@@ -136,7 +166,10 @@ class Choice extends AbstractField
      */
     public function getStream($i, $pageIndex, $fontReference, $x, $y)
     {
-        $color = '0 g';
+        $text    = null;
+        $options = null;
+        $color   = '0 g';
+
         if (null !== $this->fontColor) {
             if ($this->fontColor instanceof Color\Rgb) {
                 $color = $this->fontColor . " rg";
@@ -150,12 +183,10 @@ class Choice extends AbstractField
         if (null !== $fontReference) {
             $fontReference = substr($fontReference, 0, strpos($fontReference, ' '));
             $text          = '    /DA(' . $fontReference . ' ' . $this->size . ' Tf ' . $color . ')';
-        } else {
-            $text = null;
         }
 
-        $name  = (null !== $this->name) ? '    /T(' . $this->name . ')/TU(' . $this->name . ')/TM(' . $this->name . ')' : '';
-        $flags = (count($this->flagBits) > 0) ? "\n    /Ff " . $this->getFlags() . "\n" : null;
+        $name    = (null !== $this->name) ? '    /T(' . $this->name . ')/TU(' . $this->name . ')/TM(' . $this->name . ')' : '';
+        $flags   = (count($this->flagBits) > 0) ? "\n    /Ff " . $this->getFlags() . "\n" : null;
         $value   = (null !== $this->value) ? "\n    /V " . $this->value . "\n" : null;
         $default = (null !== $this->defaultValue) ? "\n    /DV " . $this->defaultValue . "\n" : null;
 
@@ -164,9 +195,7 @@ class Choice extends AbstractField
             foreach ($this->options as $option) {
                 $options .= '(' . $option . ') ';
             }
-            $options .= " ]\n";
-        } else {
-            $options = null;
+            $options .= "]\n";
         }
 
         // Return the stream

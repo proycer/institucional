@@ -4,7 +4,7 @@
  *
  * @link       https://github.com/popphp/popphp-framework
  * @author     Nick Sagona, III <dev@nolainteractive.com>
- * @copyright  Copyright (c) 2009-2019 NOLA Interactive, LLC. (http://www.nolainteractive.com)
+ * @copyright  Copyright (c) 2009-2020 NOLA Interactive, LLC. (http://www.nolainteractive.com)
  * @license    http://www.popphp.org/license     New BSD License
  */
 
@@ -13,15 +13,18 @@
  */
 namespace Pop\Pdf\Build\Font\TrueType\Table;
 
+use Pop\Pdf\Build\Font;
+use Pop\Utils\ArrayObject as Data;
+
 /**
  * NAME table class
  *
  * @category   Pop
  * @package    Pop\Pdf
  * @author     Nick Sagona, III <dev@nolainteractive.com>
- * @copyright  Copyright (c) 2009-2019 NOLA Interactive, LLC. (http://www.nolainteractive.com)
+ * @copyright  Copyright (c) 2009-2020 NOLA Interactive, LLC. (http://www.nolainteractive.com)
  * @license    http://www.popphp.org/license     New BSD License
- * @version    3.2.0
+ * @version    4.0.0
  */
 class Name extends AbstractTable
 {
@@ -63,9 +66,9 @@ class Name extends AbstractTable
      *
      * Instantiate a TTF 'name' table object.
      *
-     * @param  \Pop\Pdf\Build\Font\TrueType $font
+     * @param  Font\TrueType $font
      */
-    public function __construct(\Pop\Pdf\Build\Font\TrueType $font)
+    public function __construct(Font\TrueType $font)
     {
         $tableInfo = $font->tableInfo;
 
@@ -73,12 +76,12 @@ class Name extends AbstractTable
             $tableInfo['name'] = [];
         }
 
-        $tableInfo['name']['header'] = new \ArrayObject(
+        $tableInfo['name']['header'] = new Data(
             unpack(
                 'nformatSelector/' .
                 'nnameRecordsCount/' .
                 'nstorageOffset', $font->read($font->tableInfo['name']->offset, 6)
-            ), \ArrayObject::ARRAY_AS_PROPS
+            )
         );
 
         $font->tableInfo = $tableInfo;

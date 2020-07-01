@@ -4,7 +4,7 @@
  *
  * @link       https://github.com/popphp/popphp-framework
  * @author     Nick Sagona, III <dev@nolainteractive.com>
- * @copyright  Copyright (c) 2009-2019 NOLA Interactive, LLC. (http://www.nolainteractive.com)
+ * @copyright  Copyright (c) 2009-2020 NOLA Interactive, LLC. (http://www.nolainteractive.com)
  * @license    http://www.popphp.org/license     New BSD License
  */
 
@@ -21,9 +21,9 @@ use Pop\Pdf\Document\Page\Color;
  * @category   Pop
  * @package    Pop\Pdf
  * @author     Nick Sagona, III <dev@nolainteractive.com>
- * @copyright  Copyright (c) 2009-2019 NOLA Interactive, LLC. (http://www.nolainteractive.com)
+ * @copyright  Copyright (c) 2009-2020 NOLA Interactive, LLC. (http://www.nolainteractive.com)
  * @license    http://www.popphp.org/license     New BSD License
- * @version    3.2.0
+ * @version    4.0.0
  */
 class Button extends AbstractField
 {
@@ -38,12 +38,29 @@ class Button extends AbstractField
      * Add an option
      *
      * @param  string $option
+     * @param  int    $xOffset
+     * @param  int    $yOffset
      * @return Button
      */
-    public function addOption($option)
+    public function addOption($option, $xOffset = 0, $yOffset = 0)
     {
-        $this->options[] = $option;
+        $this->options[] = [
+            'option'  => $option,
+            'xOffset' => $xOffset,
+            'yOffset' => $yOffset
+        ];
+
         return $this;
+    }
+
+    /**
+     * Has options
+     *
+     * @return boolean
+     */
+    public function hasOptions()
+    {
+        return (count($this->options) > 0);
     }
 
     /**
@@ -99,6 +116,26 @@ class Button extends AbstractField
     }
 
     /**
+     * Is radio
+     *
+     * @return boolean
+     */
+    public function isRadio()
+    {
+        return in_array(16, $this->flagBits);
+    }
+
+    /**
+     * Is push button
+     *
+     * @return Button
+     */
+    public function isPushButton()
+    {
+        return in_array(17, $this->flagBits);
+    }
+
+    /**
      * Get the field stream
      *
      * @param  int    $i
@@ -110,7 +147,10 @@ class Button extends AbstractField
      */
     public function getStream($i, $pageIndex, $fontReference, $x, $y)
     {
-        $color = '0 g';
+        $text    = null;
+        $options = null;
+        $color   = '0 g';
+
         if (null !== $this->fontColor) {
             if ($this->fontColor instanceof Color\Rgb) {
                 $color = $this->fontColor . " rg";
@@ -124,29 +164,25 @@ class Button extends AbstractField
         if (null !== $fontReference) {
             $fontReference = substr($fontReference, 0, strpos($fontReference, ' '));
             $text          = '    /DA(' . $fontReference . ' ' . $this->size . ' Tf ' . $color . ')';
-        } else {
-            $text = null;
         }
 
-        $name  = (null !== $this->name) ? '    /T(' . $this->name . ')/TU(' . $this->name . ')/TM(' . $this->name . ')' : '';
-        $flags = (count($this->flagBits) > 0) ? "\n    /Ff " . $this->getFlags() . "\n" : null;
+        $name    = (null !== $this->name) ? '    /T(' . $this->name . ')/TU(' . $this->name . ')/TM(' . $this->name . ')' : '';
+        $flags   = (count($this->flagBits) > 0) ? "\n    /Ff " . $this->getFlags() . "\n" : null;
         $value   = (null !== $this->value) ? "\n    /V " . $this->value . "\n" : null;
         $default = (null !== $this->defaultValue) ? "\n    /DV " . $this->defaultValue . "\n" : null;
 
         if (count($this->options) > 0) {
             $options = "    /Opt [ ";
             foreach ($this->options as $option) {
-                $options .= '(' . $option . ') ';
+                $options .= '(' . $option['option'] . ') ';
             }
-            $options .= " ]\n";
-        } else {
-            $options = null;
+            $options .= "]\n";
         }
 
         // Return the stream
         return "{$i} 0 obj\n<<\n    /Type /Annot\n    /Subtype /Widget\n    /FT /Btn\n    /Rect [{$x} {$y} " .
-        ($this->width + $x) . " " . ($this->height + $y) . "]{$value}{$default}\n    /P {$pageIndex} 0 R\n" .
-        "    \n{$text}\n{$name}\n{$flags}\n{$options}>>\nendobj\n\n";
+            ($this->width + $x) . " " . ($this->height + $y) . "]{$value}{$default}\n    /P {$pageIndex} 0 R\n" .
+            "    \n{$text}\n{$name}\n{$flags}\n{$options}>>\nendobj\n\n";
     }
 
 }

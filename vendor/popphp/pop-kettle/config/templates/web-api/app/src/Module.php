@@ -4,8 +4,8 @@ namespace MyApp;
 
 use Pop\Application;
 use Pop\Db;
-use Pop\Http\Request;
-use Pop\Http\Response;
+use Pop\Http\Server\Request;
+use Pop\Http\Server\Response;
 use Pop\View\View;
 
 class Module extends \Pop\Module\Module
@@ -55,19 +55,20 @@ class Module extends \Pop\Module\Module
      */
     protected function initDb($database)
     {
-        if (!empty($database['adapter'])) {
-            $adapter = $database['adapter'];
+        if (isset($database['default']) &&
+            !empty($database['default']['adapter']) && !empty($database['default']['database'])) {
+            $adapter = $database['default']['adapter'];
             $options = [
-                'database' => $database['database'],
-                'username' => $database['username'],
-                'password' => $database['password'],
-                'host'     => $database['host'],
-                'type'     => $database['type']
+                'database' => $database['default']['database'],
+                'username' => $database['default']['username'] ?? null,
+                'password' => $database['default']['password'] ?? null,
+                'host'     => $database['default']['host'] ?? null,
+                'type'     => $database['default']['type'] ?? null
             ];
 
             $check = Db\Db::check($adapter, $options);
 
-            if (null !== $check) {
+            if ($check !== true) {
                 throw new \Pop\Db\Adapter\Exception('Error: ' . $check);
             }
 
@@ -96,14 +97,14 @@ class Module extends \Pop\Module\Module
         $request  = new Request();
         $response = new Response();
         $message  = $exception->getMessage();
-        if (stripos($request->getHeader('Accept'), 'text/html') !== false) {
+        if (stripos($request->getHeader('Accept')->getValue(), 'text/html') !== false) {
             $view          = new View(__DIR__ . '/../view/exception.phtml');
             $view->title   = 'Exception';
             $view->message = $message;
-            $response->setHeader('Content-Type', 'text/html');
+            $response->addHeader('Content-Type', 'text/html');
             $response->setBody($view->render());
         } else {
-            $response->setHeaders($this->config['http_options_headers']);
+            $response->addHeaders($this->config['http_options_headers']);
             $response->setBody(json_encode(['error' => $exception->getMessage()], JSON_PRETTY_PRINT) . PHP_EOL);
         }
         $response->send(500);

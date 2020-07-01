@@ -13,6 +13,7 @@
  */
 namespace Pop\Http\Client;
 
+use Pop\Http\Parser;
 use Pop\Mime\Message;
 
 /**
@@ -23,7 +24,7 @@ use Pop\Mime\Message;
  * @author     Nick Sagona, III <dev@nolainteractive.com>
  * @copyright  Copyright (c) 2009-2020 NOLA Interactive, LLC. (http://www.nolainteractive.com)
  * @license    http://www.popphp.org/license     New BSD License
- * @version    3.5.0
+ * @version    4.0.0
  */
 class Stream extends AbstractClient
 {
@@ -69,11 +70,12 @@ class Stream extends AbstractClient
      * @param  array  $options
      * @param  array  $params
      */
-    public function __construct($url, $method = 'GET', $mode = 'r', array $options = [], array $params = [])
+    public function __construct($url = null, $method = 'GET', $mode = 'r', array $options = [], array $params = [])
     {
-        $this->setUrl($url);
-        $this->setMethod($method);
+        parent::__construct($url, $method);
+
         $this->setMode($mode);
+
         if (count($options) > 0) {
             $this->setContextOptions($options);
         }
@@ -304,20 +306,19 @@ class Stream extends AbstractClient
             // Set query data if there is any
             if ($this->request->hasFields()) {
                 // Append GET query string to URL
-                if ($this->method == 'GET') {
+                if (($this->method == 'GET') && ((!$this->request->hasHeader('Content-Type')) ||
+                        ($this->request->getHeaderValue('Content-Type') == 'application/x-www-form-urlencoded'))) {
                     $url .= '?' . $this->request->getQuery();
                 // Else, prepare request data for transmission
                 } else {
                     // If request is JSON
-                    if ($this->request->isJson()) {
+                    if ($this->request->getHeaderValue('Content-Type') == 'application/json') {
                         $content = json_encode($this->request->getFields(), JSON_PRETTY_PRINT);
-                        $this->request->addHeader('Content-Type', 'application/json')
-                            ->addHeader('Content-Length', mb_strlen($content));
+                        $this->request->addHeader('Content-Length', strlen($content));
                         $this->contextOptions['http']['content'] = $content;
                     // If request is a URL-encoded form
-                    } else if ($this->request->isUrlEncodedForm()) {
-                        $this->request->addHeader('Content-Type', 'application/x-www-form-urlencoded')
-                            ->addHeader('Content-Length', $this->request->getQueryLength());
+                    } else if ($this->request->getHeaderValue('Content-Type') == 'application/x-www-form-urlencoded') {
+                        $this->request->addHeader('Content-Length', $this->request->getQueryLength());
                         $this->contextOptions['http']['content'] = $this->request->getQuery();
                     // Else, if request is a multipart form
                     } else if ($this->request->isMultipartForm()) {
@@ -326,13 +327,17 @@ class Stream extends AbstractClient
                         $content     = $formMessage->render(false);
                         $formMessage->removeHeader('Content-Type');
                         $this->request->addHeader($header)
-                            ->addHeader('Content-Length', mb_strlen($content));
+                            ->addHeader('Content-Length', strlen($content));
                         $this->contextOptions['http']['content'] = $content;
                     // Else, basic request with data
                     } else {
                         $this->contextOptions['http']['content'] = $this->request->getQuery();
                     }
                 }
+            // Else, if there is raw body content
+            } else if ($this->request->hasBody()) {
+                $this->request->addHeader('Content-Length', strlen($this->request->getBodyContent()));
+                $this->contextOptions['http']['content'] = $this->request->getBodyContent();
             }
 
             if ($this->request->hasHeaders()) {
@@ -387,21 +392,22 @@ class Stream extends AbstractClient
 
         if ($this->resource !== false) {
             $meta      = stream_get_meta_data($this->resource);
-            $rawHeader = implode("\r\n", $meta['wrapper_data']) . "\r\n\r\n";
             $headers   = $meta['wrapper_data'];
             $body      = stream_get_contents($this->resource);
         } else if (null !== $this->httpResponseHeaders) {
-            $rawHeader = implode("\r\n", $this->httpResponseHeaders) . "\r\n\r\n";
             $headers   = $this->httpResponseHeaders;
         }
 
         // Parse response headers
-        $this->response->parseResponseHeaders($headers);
+        $parsedHeaders = Parser::parseHeaders($headers);
+        $this->response->setVersion($parsedHeaders['version']);
+        $this->response->setCode($parsedHeaders['code']);
+        $this->response->setMessage($parsedHeaders['message']);
+        $this->response->addHeaders($parsedHeaders['headers']);
         $this->response->setBody($body);
-        $this->response->setResponse($rawHeader . $body);
 
         if ($this->response->hasHeader('Content-Encoding')) {
-            $this->response->decodeBody();
+            $this->response->decodeBodyContent();
         }
     }
 

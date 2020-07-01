@@ -4,7 +4,7 @@
  *
  * @link       https://github.com/popphp/popphp-framework
  * @author     Nick Sagona, III <dev@nolainteractive.com>
- * @copyright  Copyright (c) 2009-2019 NOLA Interactive, LLC. (http://www.nolainteractive.com)
+ * @copyright  Copyright (c) 2009-2020 NOLA Interactive, LLC. (http://www.nolainteractive.com)
  * @license    http://www.popphp.org/license     New BSD License
  */
 
@@ -13,15 +13,18 @@
  */
 namespace Pop\Pdf\Build\Font\TrueType\Table;
 
+use Pop\Pdf\Build\Font;
+use Pop\Utils\ArrayObject as Data;
+
 /**
  * OS/2 table class
  *
  * @category   Pop
  * @package    Pop\Pdf
  * @author     Nick Sagona, III <dev@nolainteractive.com>
- * @copyright  Copyright (c) 2009-2019 NOLA Interactive, LLC. (http://www.nolainteractive.com)
+ * @copyright  Copyright (c) 2009-2020 NOLA Interactive, LLC. (http://www.nolainteractive.com)
  * @license    http://www.popphp.org/license     New BSD License
- * @version    3.2.0
+ * @version    4.0.0
  */
 class Os2 extends AbstractTable
 {
@@ -41,11 +44,11 @@ class Os2 extends AbstractTable
      *
      * Instantiate a OTF 'OS/2' table object.
      *
-     * @param  \Pop\Pdf\Build\Font\TrueType $font
+     * @param  Font\TrueType $font
      */
-    public function __construct(\Pop\Pdf\Build\Font\TrueType $font)
+    public function __construct(Font\TrueType $font)
     {
-        $this->properties['flags'] = new \ArrayObject([
+        $this->properties['flags'] = new Data([
             'isFixedPitch'  => false,
             'isSerif'       => false,
             'isSymbolic'    => false,
@@ -55,7 +58,7 @@ class Os2 extends AbstractTable
             'isAllCap'      => false,
             'isSmallCap'    => false,
             'isForceBold'   => false
-        ], \ArrayObject::ARRAY_AS_PROPS);
+        ]);
 
         $bytePos = $font->tableInfo['OS/2']->offset + 8;
         $ary     = unpack("nfsType", $font->read($bytePos, 2));

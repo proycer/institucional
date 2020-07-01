@@ -4,7 +4,7 @@
  *
  * @link       https://github.com/popphp/popphp-framework
  * @author     Nick Sagona, III <dev@nolainteractive.com>
- * @copyright  Copyright (c) 2009-2019 NOLA Interactive, LLC. (http://www.nolainteractive.com)
+ * @copyright  Copyright (c) 2009-2020 NOLA Interactive, LLC. (http://www.nolainteractive.com)
  * @license    http://www.popphp.org/license     New BSD License
  */
 
@@ -13,15 +13,16 @@
  */
 namespace Pop\Auth;
 
+use Pop\Http\Client;
 /**
  * Http auth class
  *
  * @category   Pop
  * @package    Pop\Auth
  * @author     Nick Sagona, III <dev@nolainteractive.com>
- * @copyright  Copyright (c) 2009-2019 NOLA Interactive, LLC. (http://www.nolainteractive.com)
+ * @copyright  Copyright (c) 2009-2020 NOLA Interactive, LLC. (http://www.nolainteractive.com)
  * @license    http://www.popphp.org/license     New BSD License
- * @version    3.1.0
+ * @version    3.2.0
  */
 class Http extends AbstractAuth
 {
@@ -29,17 +30,24 @@ class Http extends AbstractAuth
     /**
      * HTTP auth type constants
      */
-    const AUTH_BASIC   = 'Basic';
-    const AUTH_DIGEST  = 'Digest';
-    const AUTH_BEARER  = 'Bearer';
-    const AUTH_DATA    = 'Data';
-    const AUTH_REFRESH = 'Refresh';
+    const AUTH_BASIC     = 'BASIC';
+    const AUTH_DIGEST    = 'DIGEST';
+    const AUTH_BEARER    = 'BEARER';
+    const AUTH_URL_DATA  = 'URL_DATA';
+    const AUTH_FORM_DATA = 'FORM_DATA';
+    const AUTH_REFRESH   = 'REFRESH';
 
     /**
-     * Auth URI
+     * Auth client stream
+     * @var Client\Stream
+     */
+    protected $stream = null;
+
+    /**
+     * Auth content type
      * @var string
      */
-    protected $uri = null;
+    protected $contentType = null;
 
     /**
      * Auth bearer token
@@ -60,18 +68,6 @@ class Http extends AbstractAuth
     protected $refreshTokenName = 'refresh';
 
     /**
-     * Auth relative URI
-     * @var string
-     */
-    protected $relativeUri = null;
-
-    /**
-     * Auth method
-     * @var string
-     */
-    protected $method = 'GET';
-
-    /**
      * Auth type
      * @var string
      */
@@ -84,64 +80,70 @@ class Http extends AbstractAuth
     protected $scheme = [];
 
     /**
-     * Auth response
-     * @var Http\Response
-     */
-    protected $response = null;
-
-    /**
      * Constructor
      *
      * Instantiate the Http auth adapter object
      *
-     * @param string $uri
-     * @param string $method
+     * @param mixed  $stream
      * @param string $type
+     * @param string $method
      */
-    public function __construct($uri, $method = 'POST', $type = null)
+    public function __construct($stream = null, $type = null, $method = 'POST')
     {
-        $this->setUri($uri);
-
-        $this->relativeUri = substr($uri, (strpos($uri, '://') + 3));
-        $this->relativeUri = substr($this->relativeUri, strpos($this->relativeUri, '/'));
-
-        $method = strtoupper($method);
-
-        if (($method == 'GET') || ($method == 'POST') || ($method == 'PUT') || ($method == 'PATCH')) {
-            $this->setMethod($method);
+        if (null !== $stream) {
+            if (is_string($stream)) {
+                $stream = new Client\Stream($stream, $method);
+            }
+            $this->setStream($stream);
         }
-
         if (null !== $type) {
             $this->setType($type);
         }
     }
 
     /**
-     * Set the URI
+     * Set stream
      *
-     * @param  string $uri
-     * @throws Exception
+     * @param  Client\Stream $stream
      * @return Http
      */
-    public function setUri($uri)
+    public function setStream(Client\Stream $stream)
     {
-        if (substr($uri, 0, 4) != 'http') {
-            throw new Exception('Error: The URI parameter must be a full URI with the HTTP scheme.');
-        }
-
-        $this->uri = $uri;
+        $this->stream = $stream;
         return $this;
     }
 
     /**
-     * Set the relative URI
+     * Set content type
      *
-     * @param  string $relativeUri
+     * @param  string $contentType
      * @return Http
      */
-    public function setRelativeUri($relativeUri)
+    public function setContentType($contentType)
     {
-        $this->relativeUri = $relativeUri;
+        $this->contentType = $contentType;
+        return $this;
+    }
+
+    /**
+     * Set content type as URL form
+     *
+     * @return Http
+     */
+    public function setContentTypeAsUrlForm()
+    {
+        $this->contentType = 'application/x-www-form-urlencoded';
+        return $this;
+    }
+
+    /**
+     * Set content type as multipart form
+     *
+     * @return Http
+     */
+    public function setContentTypeAsMultipartForm()
+    {
+        $this->contentType = 'multipart/form-data';
         return $this;
     }
 
@@ -182,18 +184,6 @@ class Http extends AbstractAuth
     }
 
     /**
-     * Set method
-     *
-     * @param  string $method
-     * @return Http
-     */
-    public function setMethod($method)
-    {
-        $this->method = $method;
-        return $this;
-    }
-
-    /**
      * Set type
      *
      * @param  string $type
@@ -206,35 +196,54 @@ class Http extends AbstractAuth
     }
 
     /**
-     * Set auth response
+     * Get stream
      *
-     * @param  Http\Response $response
-     * @return Http
+     * @return Client\Stream
      */
-    public function setResponse(Http\Response $response)
+    public function getStream()
     {
-        $this->response = $response;
-        return $this;
+        return $this->stream;
     }
 
     /**
-     * Get the URI
+     * Get stream (alias method)
      *
-     * @return string
+     * @return Client\Stream
      */
-    public function getUri()
+    public function stream()
     {
-        return $this->uri;
+        return $this->stream;
     }
 
     /**
-     * Get the relative URI
+     * Get result response
+     *
+     * @return array
+     */
+    public function getResultResponse()
+    {
+        $resultResponse = null;
+        if (($this->stream->hasResponse()) && ($this->stream->getResponse()->hasBody())) {
+            $resultResponse = $this->stream->getResponse()->getBody()->getContent();
+            if ($this->stream->getResponse()->hasHeader('Content-Type')) {
+                if ($this->stream->getResponse()->getHeader('Content-Type')->getValue() == 'application/json') {
+                    $resultResponse = json_decode($resultResponse, true);
+                } else if ($this->stream->getResponse()->getHeader('Content-Type')->getValue() == 'application/x-www-form-urlencoded') {
+                    parse_str($resultResponse, $resultResponse);
+                }
+            }
+        }
+        return $resultResponse;
+    }
+
+    /**
+     * Get content type
      *
      * @return string
      */
-    public function getRelativeUri()
+    public function getContentType()
     {
-        return $this->relativeUri;
+        return $this->contentType;
     }
 
     /**
@@ -278,16 +287,6 @@ class Http extends AbstractAuth
     }
 
     /**
-     * Get method
-     *
-     * @return string
-     */
-    public function getMethod()
-    {
-        return $this->method;
-    }
-
-    /**
      * Get the auth scheme
      *
      * @return array
@@ -298,35 +297,97 @@ class Http extends AbstractAuth
     }
 
     /**
-     * Get auth response
+     * Has stream
      *
-     * @return Http\Response
+     * @return boolean
      */
-    public function getResponse()
+    public function hasStream()
     {
-        return $this->response;
+        return (null !== $this->stream);
+    }
+
+    /**
+     * Has content type
+     *
+     * @return boolean
+     */
+    public function hasContentType()
+    {
+        return (null !== $this->contentType);
+    }
+
+    /**
+     * Has bearer token
+     *
+     * @return boolean
+     */
+    public function hasBearerToken()
+    {
+        return (null !== $this->bearerToken);
+    }
+
+    /**
+     * Has refresh token
+     *
+     * @return boolean
+     */
+    public function hasRefreshToken()
+    {
+        return (null !== $this->refreshToken);
+    }
+
+    /**
+     * Has refresh token name
+     *
+     * @return boolean
+     */
+    public function hasRefreshTokenName()
+    {
+        return (null !== $this->refreshTokenName);
+    }
+
+    /**
+     * Has auth type
+     *
+     * @return boolean
+     */
+    public function hasType()
+    {
+        return (null !== $this->type);
+    }
+
+    /**
+     * Has an auth scheme
+     *
+     * @return boolean
+     */
+    public function hasScheme()
+    {
+        return (!empty($this->scheme));
     }
 
     /**
      * Initialize the auth request
      *
-     * @param  string $method
+     * @throws Exception
      * @return void
      */
-    public function initRequest($method)
+    public function initRequest()
     {
-        $response = new Http\Response();
-        $response->sendRequest($this->uri, ['http' => ['method' => $method]]);
+        if (null === $this->stream) {
+            throw new Exception('Error: The stream has not been set.');
+        }
 
-        // Check for the WWW Auth header and parse it
-        if (null !== $response->getHeader('WWW-Authenticate')) {
-            $this->type = $this->parseScheme($response->getHeader('WWW-Authenticate'));
-        } else if (null !== $response->getHeader('WWW-authenticate')) {
-            $this->type = $this->parseScheme($response->getHeader('WWW-authenticate'));
-        } else if (null !== $response->getHeader('Www-Authenticate')) {
-            $this->type = $this->parseScheme($response->getHeader('Www-Authenticate'));
-        } else if (null !== $response->getHeader('www-authenticate')) {
-            $this->type = $this->parseScheme($response->getHeader('www-authenticate'));
+        $this->stream->send();
+
+        if (($this->stream->hasResponse()) && ($this->stream->response()->hasHeaders())) {
+            $wwwHeaders = ['WWW-Authenticate','WWW-authenticate','Www-Authenticate','www-authenticate'];
+            foreach ($wwwHeaders as $wwwHeader) {
+                if ($this->stream->response()->hasHeader($wwwHeader)) {
+                    $this->type = $this->parseScheme($this->stream->response()->getHeader($wwwHeader)->getValue());
+                    break;
+                }
+            }
         }
     }
 
@@ -340,13 +401,13 @@ class Http extends AbstractAuth
      * @param  array  $contextParams
      * @return int
      */
-    public function authenticate($username, $password, array $headers = null, array $contextOptions = [], array $contextParams = null)
+    public function authenticate($username, $password, array $headers = [], array $contextOptions = [], array $contextParams = [])
     {
         $this->setUsername($username);
         $this->setPassword($password);
 
         if ((null === $this->type) || (empty($this->scheme) && ($this->type == self::AUTH_DIGEST))) {
-            $this->initRequest($this->method);
+            $this->initRequest();
         }
 
         return $this->validate($headers, $contextOptions, $contextParams);
@@ -360,52 +421,57 @@ class Http extends AbstractAuth
      * @param  array $contextParams
      * @return int
      */
-    public function validate(array $headers = null, array $contextOptions = [], array $contextParams = null)
+    public function validate(array $headers = [], array $contextOptions = [], array $contextParams = [])
     {
-        $context = [
-            'http' => [
-                'method' => $this->method,
-                'header' => null
-            ]
-        ];
-
-        $context = array_merge_recursive($context, $contextOptions);
-
-        if (null !== $headers) {
-            foreach ($headers as $header => $value) {
-                $context['http']['header'] .= $header . ": " . $value . "\r\n";
-            }
-        }
-
         switch ($this->type) {
             case self::AUTH_DIGEST:
-                $context['http']['header'] .= Http\AuthHeader::createDigest($this);
+                $headers['Authorization'] = $this->createDigest();
                 break;
             case self::AUTH_BASIC:
-                $context['http']['header'] .= Http\AuthHeader::createBasic($this);
+                $headers['Authorization'] = 'Basic ' . base64_encode($this->username . ':' . $this->password);
                 break;
             case self::AUTH_BEARER:
-                $context['http']['header'] .= Http\AuthHeader::createBearer($this);
+                $headers['Authorization'] = 'Bearer ' . $this->bearerToken;
                 break;
-            case self::AUTH_DATA:
-                $dataHeader = Http\AuthHeader::createData($this);
-                $context['http']['header'] .= $dataHeader['header'];
-                $context['http']['content'] = $dataHeader['data'];
+            case self::AUTH_URL_DATA:
+                $this->stream->setFields([
+                    'username' => $this->username,
+                    'password' => $this->password
+                ]);
+                $this->stream->request()->createUrlEncodedForm();
+                break;
+            case self::AUTH_FORM_DATA:
+                $this->stream->setFields([
+                    'username' => $this->username,
+                    'password' => $this->password
+                ]);
+                $this->stream->request()->createMultipartForm();
                 break;
             case self::AUTH_REFRESH:
-                $refreshHeader = Http\AuthHeader::createRefresh($this, $headers);
-                $context['http']['header'] .= $refreshHeader['header'];
-                $context['http']['content'] = $refreshHeader['data'];
+                $headers['Authorization'] = 'Bearer ' . $this->bearerToken;
+                $this->stream->setFields([$this->refreshTokenName => $this->refreshToken]);
+                if ($this->contentType == 'application/json') {
+                    $this->stream->request()->createAsJson();
+                } else if ($this->contentType == 'application/x-www-form-urlencoded') {
+                    $this->stream->request()->createUrlEncodedForm();
+                } else if ($this->contentType == 'multipart/form-data') {
+                    $this->stream->request()->createMultipartForm();
+                }
                 break;
         }
 
-        if (null === $this->response) {
-            $this->response = new Http\Response();
+        if (!empty($headers)) {
+            $this->stream->addRequestHeaders($headers);
+        }
+        if (!empty($contextOptions)) {
+            $this->stream->setContextOptions($contextOptions);
+        }
+        if (!empty($contextParams)) {
+            $this->stream->setContextParams($contextParams);
         }
 
-        $this->response->sendRequest($this->uri, $context, $contextParams);
-        $this->result = (int)($this->response->getCode() == 200);
-
+        $this->stream->send();
+        $this->result = (int)(($this->stream->hasResponse()) && ($this->stream->response()->getCode() == 200));
         return $this->result;
     }
 
@@ -437,6 +503,35 @@ class Http extends AbstractAuth
         }
 
         return $type;
+    }
+
+    /**
+     * Create auth digest header string
+     *
+     * @throws Exception
+     * @return string
+     */
+    public function createDigest()
+    {
+        $relativeUri = $this->stream->getUrl();
+        if (strpos($relativeUri, '://') !== false) {
+            $relativeUri = substr($relativeUri, (strpos($relativeUri, '://') + 3));
+        }
+        $relativeUri = substr($relativeUri, strpos($relativeUri, '/'));
+
+        $scheme = $this->getScheme();
+
+        if (!isset($scheme['realm']) || !isset($scheme['nonce'])) {
+            throw new Exception('Error: The realm and/or the nonce was not successfully parsed.');
+        }
+
+        $a1 = md5($this->username . ':' . $scheme['realm'] . ':' . $this->password);
+        $a2 = md5($this->stream->getMethod() . ':' . $relativeUri);
+        $r  = md5($a1 . ':' . $scheme['nonce'] . ':' . $a2);
+
+        return 'Digest username="' . $this->username .
+            '", realm="' . $scheme['realm'] . '", nonce="' . $scheme['nonce'] .
+            '", uri="' . $relativeUri . '", response="' . $r . '"';
     }
 
 }

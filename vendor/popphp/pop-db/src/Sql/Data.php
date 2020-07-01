@@ -4,7 +4,7 @@
  *
  * @link       https://github.com/popphp/popphp-framework
  * @author     Nick Sagona, III <dev@nolainteractive.com>
- * @copyright  Copyright (c) 2009-2019 NOLA Interactive, LLC. (http://www.nolainteractive.com)
+ * @copyright  Copyright (c) 2009-2020 NOLA Interactive, LLC. (http://www.nolainteractive.com)
  * @license    http://www.popphp.org/license     New BSD License
  */
 
@@ -21,9 +21,9 @@ use Pop\Db\Adapter\AbstractAdapter;
  * @category   Pop
  * @package    Pop\Db
  * @author     Nick Sagona, III <dev@nolainteractive.com>
- * @copyright  Copyright (c) 2009-2019 NOLA Interactive, LLC. (http://www.nolainteractive.com)
+ * @copyright  Copyright (c) 2009-2020 NOLA Interactive, LLC. (http://www.nolainteractive.com)
  * @license    http://www.popphp.org/license     New BSD License
- * @version    4.5.0
+ * @version    5.0.0
  */
 class Data extends AbstractSql
 {
@@ -39,6 +39,18 @@ class Data extends AbstractSql
      * @var int
      */
     protected $divide = 1;
+
+    /**
+     * Conflict key for UPSERT
+     * @var string
+     */
+    protected $conflictKey = null;
+
+    /**
+     * Conflict columns for UPSERT
+     * @var array
+     */
+    protected $conflictColumns = [];
 
     /**
      * SQL string
@@ -117,6 +129,32 @@ class Data extends AbstractSql
     }
 
     /**
+     * Set what to do on a insert conflict (UPSERT - PostgreSQL & SQLite)
+     *
+     * @param  array  $columns
+     * @param  string $key
+     * @return Data
+     */
+    public function onConflict(array $columns, $key = null)
+    {
+        $this->conflictColumns = $columns;
+        $this->conflictKey     = $key;
+        return $this;
+    }
+
+    /**
+     * Set columns to handle duplicates/conflicts (UPSERT - MySQL-ism)
+     *
+     * @param  array $columns
+     * @return Data
+     */
+    public function onDuplicateKeyUpdate(array $columns)
+    {
+        $this->onConflict($columns);
+        return $this;
+    }
+
+    /**
      * Check if data was serialized into SQL
      *
      * @return boolean
@@ -132,10 +170,9 @@ class Data extends AbstractSql
      * @param  array   $data
      * @param  mixed   $omit
      * @param  boolean $nullEmpty
-     * @param  array   $updateColumns
      * @return string
      */
-    public function serialize(array $data, $omit = null, $nullEmpty = false, array $updateColumns = [])
+    public function serialize(array $data, $omit = null, $nullEmpty = false)
     {
         if (null !== $omit) {
             $omit = (!is_array($omit)) ? [$omit] : $omit;
@@ -155,16 +192,7 @@ class Data extends AbstractSql
 
         $columns  = array_map([$this, 'quoteId'], $columns);
         $insert   = "INSERT INTO " . $table . " (" . implode(', ', $columns) . ") VALUES" . PHP_EOL;
-        $onUpdate = null;
-
-        if (!empty($updateColumns)) {
-            $updates = [];
-            foreach ($updateColumns as $updateColumn) {
-                $updates[] = $this->quoteId($updateColumn) . ' = VALUES(' . $updateColumn .')';
-            }
-
-            $onUpdate = PHP_EOL . 'ON DUPLICATE KEY UPDATE ' . implode(', ', $updates);
-        }
+        $onUpdate = $this->formatConflicts();
 
         foreach ($data as $i => $row) {
             if (!empty($omit)) {
@@ -215,10 +243,6 @@ class Data extends AbstractSql
      */
     public function writeToFile($to, $header = null, $footer = null)
     {
-        if (!$this->isSerialized()) {
-            throw new Exception('Error: The SQL data has not been serialized yet.');
-        }
-
         file_put_contents($to, $header . $this->sql . $footer);
     }
 
@@ -229,12 +253,11 @@ class Data extends AbstractSql
      * @param  string  $to
      * @param  mixed   $omit
      * @param  boolean $nullEmpty
-     * @param  array   $updateColumns
      * @param  string  $header
      * @param  string  $footer
      * @return void
      */
-    public function streamToFile(array $data, $to, $omit = null, $nullEmpty = false, array $updateColumns = [], $header = null, $footer = null)
+    public function streamToFile(array $data, $to, $omit = null, $nullEmpty = false, $header = null, $footer = null)
     {
         if (!file_exists($to)) {
             touch($to);
@@ -250,8 +273,8 @@ class Data extends AbstractSql
             $omit = (!is_array($omit)) ? [$omit] : $omit;
         }
 
-        $table     = $this->quoteId($this->table);
-        $columns   = array_keys(reset($data));
+        $table    = $this->quoteId($this->table);
+        $columns  = array_keys(reset($data));
 
         if (!empty($omit)) {
             foreach ($omit as $o) {
@@ -263,16 +286,7 @@ class Data extends AbstractSql
 
         $columns  = array_map([$this, 'quoteId'], $columns);
         $insert   = "INSERT INTO " . $table . " (" . implode(', ', $columns) . ") VALUES" . PHP_EOL;
-        $onUpdate = null;
-
-        if (!empty($updateColumns)) {
-            $updates = [];
-            foreach ($updateColumns as $updateColumn) {
-                $updates[] = $this->quoteId($updateColumn) . ' = VALUES(' . $updateColumn .')';
-            }
-
-            $onUpdate = PHP_EOL . 'ON DUPLICATE KEY UPDATE ' . implode(', ', $updates);
-        }
+        $onUpdate = $this->formatConflicts();
 
         foreach ($data as $i => $row) {
             if (!empty($omit)) {
@@ -326,6 +340,38 @@ class Data extends AbstractSql
     public function __toString()
     {
         return $this->sql;
+    }
+
+    /**
+     * Method to format conflicts (UPSERT)
+     *
+     * @return string
+     */
+    protected function formatConflicts()
+    {
+        $onUpdate = null;
+
+        if (!empty($this->conflictColumns)) {
+            $updates = [];
+            switch ($this->dbType) {
+                case self::MYSQL:
+                    foreach ($this->conflictColumns as $conflictColumn) {
+                        $updates[] = $this->quoteId($conflictColumn) . ' = VALUES(' . $conflictColumn .')';
+                    }
+                    $onUpdate = PHP_EOL . ' ON DUPLICATE KEY UPDATE ' . implode(', ', $updates);
+                    break;
+                case self::SQLITE:
+                case self::PGSQL:
+                    foreach ($this->conflictColumns as $conflictColumn) {
+                        $updates[] = $this->quoteId($conflictColumn) . ' = excluded.' . $conflictColumn;
+                    }
+                    $onUpdate = PHP_EOL . ' ON CONFLICT (' . $this->quoteId($this->conflictKey) . ') DO UPDATE SET '
+                        . implode(', ', $updates);
+                    break;
+            }
+        }
+
+        return $onUpdate;
     }
 
 }

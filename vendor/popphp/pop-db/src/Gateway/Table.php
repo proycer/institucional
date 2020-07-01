@@ -4,7 +4,7 @@
  *
  * @link       https://github.com/popphp/popphp-framework
  * @author     Nick Sagona, III <dev@nolainteractive.com>
- * @copyright  Copyright (c) 2009-2019 NOLA Interactive, LLC. (http://www.nolainteractive.com)
+ * @copyright  Copyright (c) 2009-2020 NOLA Interactive, LLC. (http://www.nolainteractive.com)
  * @license    http://www.popphp.org/license     New BSD License
  */
 
@@ -14,7 +14,7 @@
 namespace Pop\Db\Gateway;
 
 use Pop\Db\Db;
-use Pop\Db\Parser;
+use Pop\Db\Sql\Parser;
 
 /**
  * Table gateway class
@@ -22,9 +22,9 @@ use Pop\Db\Parser;
  * @category   Pop
  * @package    Pop\Db
  * @author     Nick Sagona, III <dev@nolainteractive.com>
- * @copyright  Copyright (c) 2009-2019 NOLA Interactive, LLC. (http://www.nolainteractive.com)
+ * @copyright  Copyright (c) 2009-2020 NOLA Interactive, LLC. (http://www.nolainteractive.com)
  * @license    http://www.popphp.org/license     New BSD License
- * @version    4.5.0
+ * @version    5.0.0
  */
 class Table extends AbstractGateway implements \Countable, \IteratorAggregate
 {
@@ -56,11 +56,31 @@ class Table extends AbstractGateway implements \Countable, \IteratorAggregate
     }
 
     /**
+     * Has rows
+     *
+     * @return boolean
+     */
+    public function hasRows()
+    {
+        return (count($this->rows) > 0);
+    }
+
+    /**
      * Get the result rows (alias method)
      *
      * @return array
      */
     public function rows()
+    {
+        return $this->rows;
+    }
+
+    /**
+     * Method to convert table gateway to an array (alias method)
+     *
+     * @return array
+     */
+    public function toArray()
     {
         return $this->rows;
     }
@@ -78,17 +98,17 @@ class Table extends AbstractGateway implements \Countable, \IteratorAggregate
     {
         $this->rows = [];
 
+        $db  = Db::getDb($this->table);
+        $sql = $db->createSql();
+
         if (null === $columns) {
             $columns = [$this->table . '.*'];
         }
 
-        $db  = Db::getDb($this->table);
-        $sql = $db->createSql();
-
         $sql->select($columns)->from($this->table);
 
         if (null !== $where) {
-            $sql->select()->where->add($where);
+            $sql->select()->where($where);
         }
 
         if (isset($options['limit'])) {
@@ -100,11 +120,16 @@ class Table extends AbstractGateway implements \Countable, \IteratorAggregate
         }
 
         if (isset($options['join'])) {
-            if (isset($options['join']['type']) && method_exists($sql->select(), $options['join']['type'])) {
-                $joinMethod = $options['join']['type'];
-                $sql->select()->{$joinMethod}($options['join']['table'], $options['join']['columns']);
-            } else {
-                $sql->select()->leftJoin($options['join']['table'], $options['join']['columns']);
+            $joins = (is_array($options['join']) && isset($options['join']['table'])) ?
+                [$options['join']] : $options['join'];
+
+            foreach ($joins as $join) {
+                if (isset($join['type']) && method_exists($sql->select(), $join['type'])) {
+                    $joinMethod = $join['type'];
+                    $sql->select()->{$joinMethod}($join['table'], $join['columns']);
+                } else {
+                    $sql->select()->leftJoin($join['table'], $join['columns']);
+                }
             }
         }
 
@@ -122,6 +147,7 @@ class Table extends AbstractGateway implements \Countable, \IteratorAggregate
         }
 
         $db->prepare((string)$sql);
+
         if ((null !== $parameters) && (count($parameters) > 0)) {
             $db->bindParams($parameters);
         }
@@ -134,7 +160,7 @@ class Table extends AbstractGateway implements \Countable, \IteratorAggregate
     }
 
     /**
-     * Insert values into the table
+     * Insert a row of values into the table
      *
      * @param  array $columns
      * @return Table
@@ -147,8 +173,8 @@ class Table extends AbstractGateway implements \Countable, \IteratorAggregate
         $sql    = $db->createSql();
         $values = [];
         $params = [];
+        $i      = 1;
 
-        $i = 1;
         foreach ($columns as $column => $value) {
             $placeholder = $sql->getPlaceholder();
 
@@ -158,7 +184,7 @@ class Table extends AbstractGateway implements \Countable, \IteratorAggregate
                 $placeholder .= $i;
             }
             $values[$column] = $placeholder;
-            $params[]        = $value;
+            $params[$column] = $value;
             $i++;
         }
 
@@ -167,6 +193,41 @@ class Table extends AbstractGateway implements \Countable, \IteratorAggregate
         $db->prepare((string)$sql)
            ->bindParams($params)
            ->execute();
+
+        return $this;
+    }
+
+    /**
+     * Insert rows of values into the table
+     *
+     * @param  array $values
+     * @return Table
+     */
+    public function insertRows($values)
+    {
+        $this->rows   = [];
+        $db           = Db::getDb($this->table);
+        $sql          = $db->createSql();
+        $placeholders = [];
+        $columns      = array_keys($values[0]);
+
+        foreach ($columns as $i => $column) {
+            $placeholder = $sql->getPlaceholder();
+
+            if ($placeholder == ':') {
+                $placeholder .= $column;
+            } else if ($placeholder == '$') {
+                $placeholder .= ($i + 1);
+            }
+            $placeholders[$column] = $placeholder;
+        }
+
+        $sql->insert($this->table)->values($placeholders);
+        $db->prepare((string)$sql);
+
+        foreach ($values as $rowValues) {
+            $db->bindParams($rowValues)->execute();
+        }
 
         return $this;
     }
@@ -187,15 +248,15 @@ class Table extends AbstractGateway implements \Countable, \IteratorAggregate
         $sql    = $db->createSql();
         $values = [];
         $params = [];
+        $i      = 1;
 
-        $i = 1;
         foreach ($columns as $column => $value) {
             $placeholder = $sql->getPlaceholder();
 
             if ($placeholder == ':') {
                 $placeholder .= $column;
             } else if ($placeholder == '$') {
-                $placeholder .= ($i + 1);
+                $placeholder .= $i;
             }
             $values[$column] = $placeholder;
             $params[$column] = $value;
@@ -205,11 +266,11 @@ class Table extends AbstractGateway implements \Countable, \IteratorAggregate
         $sql->update($this->table)->values($values);
 
         if (null !== $where) {
-            $sql->update()->where->add($where);
+            $sql->update()->where($where);
         }
 
         $db->prepare((string)$sql)
-           ->bindParams(array_merge($params, $parameters))
+           ->bindParams($params + $parameters)
            ->execute();
 
         return $this;
@@ -232,7 +293,7 @@ class Table extends AbstractGateway implements \Countable, \IteratorAggregate
         $sql->delete($this->table);
 
         if (null !== $where) {
-            $sql->delete()->where->add($where);
+            $sql->delete()->where($where);
         }
 
         $db->prepare((string)$sql);

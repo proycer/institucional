@@ -4,7 +4,7 @@
  *
  * @link       https://github.com/popphp/popphp-framework
  * @author     Nick Sagona, III <dev@nolainteractive.com>
- * @copyright  Copyright (c) 2009-2019 NOLA Interactive, LLC. (http://www.nolainteractive.com)
+ * @copyright  Copyright (c) 2009-2020 NOLA Interactive, LLC. (http://www.nolainteractive.com)
  * @license    http://www.popphp.org/license     New BSD License
  */
 
@@ -21,9 +21,9 @@ use Pop\Db\Db;
  * @category   Pop
  * @package    Pop\Db
  * @author     Nick Sagona, III <dev@nolainteractive.com>
- * @copyright  Copyright (c) 2009-2019 NOLA Interactive, LLC. (http://www.nolainteractive.com)
+ * @copyright  Copyright (c) 2009-2020 NOLA Interactive, LLC. (http://www.nolainteractive.com)
  * @license    http://www.popphp.org/license     New BSD License
- * @version    4.5.0
+ * @version    5.0.0
  */
 class Row extends AbstractGateway implements \ArrayAccess, \Countable, \IteratorAggregate
 {
@@ -119,12 +119,14 @@ class Row extends AbstractGateway implements \ArrayAccess, \Countable, \Iterator
      * Determine if number of primary keys and primary values match
      *
      * @throws Exception
-     * @return void
+     * @return boolean
      */
     public function doesPrimaryCountMatch()
     {
         if (count($this->primaryKeys) != count($this->primaryValues)) {
             throw new Exception('Error: The number of primary keys and primary values do not match.');
+        } else {
+            return true;
         }
     }
 
@@ -138,9 +140,9 @@ class Row extends AbstractGateway implements \ArrayAccess, \Countable, \Iterator
     {
         $this->columns = $columns;
         if (count($this->primaryValues) == 0) {
-            foreach ($this->primaryKeys as $key) {
-                if (isset($this->columns[$key])) {
-                    $this->primaryValues[] = $this->columns[$key];
+            foreach ($this->primaryKeys as $primaryKey) {
+                if (isset($this->columns[$primaryKey])) {
+                    $this->primaryValues[] = $this->columns[$primaryKey];
                 }
             }
         }
@@ -194,10 +196,11 @@ class Row extends AbstractGateway implements \ArrayAccess, \Countable, \Iterator
      * Find row by primary key values
      *
      * @param  mixed $values
+     * @param  array $selectColumns
      * @throws Exception
      * @return array
      */
-    public function find($values)
+    public function find($values, array $selectColumns = [])
     {
         if (count($this->primaryKeys) == 0) {
             throw new Exception('Error: The primary key(s) have not been set.');
@@ -209,7 +212,16 @@ class Row extends AbstractGateway implements \ArrayAccess, \Countable, \Iterator
         $this->setPrimaryValues($values);
         $this->doesPrimaryCountMatch();
 
-        $sql->select([$this->table . '.*'])->from($this->table);
+        if (!empty($selectColumns)) {
+            $select = [];
+            foreach ($selectColumns as $selectColumn) {
+                $select[] = $this->table . '.' . $selectColumn;
+            }
+        } else {
+            $select = [$this->table . '.*'];
+        }
+
+        $sql->select($select)->from($this->table);
 
         $params = [];
 
@@ -232,9 +244,11 @@ class Row extends AbstractGateway implements \ArrayAccess, \Countable, \Iterator
 
         $sql->select()->limit(1);
 
-        $db->prepare((string)$sql)
-             ->bindParams($params)
-             ->execute();
+        $db->prepare((string)$sql);
+        if (!empty($params)) {
+            $db->bindParams($params);
+        }
+        $db->execute();
 
         $row = $db->fetch();
 
@@ -248,14 +262,19 @@ class Row extends AbstractGateway implements \ArrayAccess, \Countable, \Iterator
     /**
      * Save a new row in the table
      *
+     * @param  array $columns
      * @return Row
      */
-    public function save()
+    public function save(array $columns = [])
     {
         $db     = Db::getDb($this->table);
         $sql    = $db->createSql();
         $values = [];
         $params = [];
+
+        if (!empty($columns)) {
+            $this->setColumns($columns);
+        }
 
         $i = 1;
         foreach ($this->columns as $column => $value) {
@@ -273,10 +292,13 @@ class Row extends AbstractGateway implements \ArrayAccess, \Countable, \Iterator
 
         $sql->insert($this->table)->values($values);
 
-        $db->prepare((string)$sql)
-           ->bindParams($params)
-           ->execute();
+        $db->prepare((string)$sql);
+        if (!empty($params)) {
+            $db->bindParams($params);
+        }
+        $db->execute();
 
+        // Set the new ID created by the insert
         if ((count($this->primaryKeys) == 1) && !isset($this->columns[$this->primaryKeys[0]])) {
             $this->columns[$this->primaryKeys[0]] = $db->getLastId();
             $this->primaryValues[] = $this->columns[$this->primaryKeys[0]];
@@ -307,7 +329,8 @@ class Row extends AbstractGateway implements \ArrayAccess, \Countable, \Iterator
 
         $i = 1;
         foreach ($this->columns as $column => $value) {
-            if (!in_array($column, $this->primaryKeys) && ((empty($columnNames)) || (!empty($columnNames) && in_array($column, $columnNames)))) {
+            if (!in_array($column, $this->primaryKeys) &&
+                ((empty($columnNames)) || (!empty($columnNames) && in_array($column, $columnNames)))) {
                 $placeholder = $sql->getPlaceholder();
 
                 if ($placeholder == ':') {
@@ -343,24 +366,29 @@ class Row extends AbstractGateway implements \ArrayAccess, \Countable, \Iterator
             if (array_key_exists($key, $this->primaryValues)) {
                 if (null !== $this->primaryValues[$key]) {
                     $params[$this->primaryKeys[$key]] = $this->primaryValues[$key];
+                    $values[$this->primaryKeys[$key]] = $placeholder;
                 }
             } else if (array_key_exists($this->primaryKeys[$key], $this->columns)) {
                 if (null !== $this->primaryValues[$key]) {
                     if (substr($placeholder, 0, 1) == ':') {
                         $params[$this->primaryKeys[$key]] = $this->columns[$this->primaryKeys[$key]];
+                        $values[$this->primaryKeys[$key]] = $placeholder;
                     } else {
                         $params[$key] = $this->columns[$this->primaryKeys[$key]];
+                        $values[$key] = $placeholder;
                     }
                 }
             } else {
-                throw new Exception('Error: The value of \'' . $key . '\' is not set');
+                throw new Exception("Error: The value of '" . $key . "' is not set");
             }
             $i++;
         }
 
-        $db->prepare((string)$sql)
-           ->bindParams($params)
-           ->execute();
+        $db->prepare((string)$sql);
+        if (!empty($params)) {
+            $db->bindParams($params);
+        }
+        $db->execute();
 
         return $this;
     }
@@ -401,9 +429,11 @@ class Row extends AbstractGateway implements \ArrayAccess, \Countable, \Iterator
             }
         }
 
-        $db->prepare((string)$sql)
-           ->bindParams($params)
-           ->execute();
+        $db->prepare((string)$sql);
+        if (!empty($params)) {
+            $db->bindParams($params);
+        }
+        $db->execute();
 
         $this->dirty['old'] = $this->columns;
         $this->dirty['new'] = [];
@@ -432,6 +462,16 @@ class Row extends AbstractGateway implements \ArrayAccess, \Countable, \Iterator
     public function getIterator()
     {
         return new \ArrayIterator($this->columns);
+    }
+
+    /**
+     * Method to convert row gateway to an array
+     *
+     * @return array
+     */
+    public function toArray()
+    {
+        return $this->columns;
     }
 
     /**
@@ -521,7 +561,6 @@ class Row extends AbstractGateway implements \ArrayAccess, \Countable, \Iterator
      *
      * @param  mixed $offset
      * @param  mixed $value
-     * @throws Exception
      * @return void
      */
     public function offsetSet($offset, $value)
@@ -533,7 +572,6 @@ class Row extends AbstractGateway implements \ArrayAccess, \Countable, \Iterator
      * ArrayAccess offsetUnset
      *
      * @param  mixed $offset
-     * @throws Exception
      * @return void
      */
     public function offsetUnset($offset)

@@ -4,7 +4,7 @@
  *
  * @link       https://github.com/popphp/popphp-framework
  * @author     Nick Sagona, III <dev@nolainteractive.com>
- * @copyright  Copyright (c) 2009-2019 NOLA Interactive, LLC. (http://www.nolainteractive.com)
+ * @copyright  Copyright (c) 2009-2020 NOLA Interactive, LLC. (http://www.nolainteractive.com)
  * @license    http://www.popphp.org/license     New BSD License
  */
 
@@ -19,9 +19,9 @@ namespace Pop\Db\Sql\Schema;
  * @category   Pop
  * @package    Pop\Db
  * @author     Nick Sagona, III <dev@nolainteractive.com>
- * @copyright  Copyright (c) 2009-2019 NOLA Interactive, LLC. (http://www.nolainteractive.com)
+ * @copyright  Copyright (c) 2009-2020 NOLA Interactive, LLC. (http://www.nolainteractive.com)
  * @license    http://www.popphp.org/license     New BSD License
- * @version    4.5.0
+ * @version    5.0.0
  */
 class Create extends AbstractStructure
 {
@@ -56,7 +56,7 @@ class Create extends AbstractStructure
     }
 
     /**
-     * Set the IF NOT EXISTS flag
+     * Set the table engine (MySQL only)
      *
      * @param  string $engine
      * @return Create
@@ -68,61 +68,74 @@ class Create extends AbstractStructure
     }
 
     /**
+     * Get the table engine (MySQL only)
+     *
+     * @return string
+     */
+    public function getEngine()
+    {
+        return $this->engine;
+    }
+
+    /**
+     * Set the table charset (MySQL only)
+     *
+     * @param  string $charset
+     * @return Create
+     */
+    public function setCharset($charset)
+    {
+        $this->charset = $charset;
+        return $this;
+    }
+
+    /**
+     * Get the table charset (MySQL only)
+     *
+     * @return string
+     */
+    public function getCharset()
+    {
+        return $this->charset;
+    }
+
+    /**
      * Render the table schema
      *
      * @return string
      */
     public function render()
     {
-        $sql = '';
+        $schema = '';
 
         // Create PGSQL sequence
-        if ($this->hasIncrement()) {
-            if ($this->isPgsql()) {
-                $increment = $this->getIncrement();
-                foreach ($increment as $name) {
-                    $sql .= 'CREATE SEQUENCE ' . $this->table . '_' . $name . '_seq START ' .
-                        (int)$this->columns[$name]['increment'] . ';';
-                }
-                $sql .= PHP_EOL . PHP_EOL;
-            }
+        if (($this->hasIncrement()) && ($this->isPgsql())) {
+            $schema .= Formatter\Table::createPgsqlSequences($this->getIncrement(), $this->table, $this->columns);
         }
 
         /*
          * START CREATE TABLE
          */
-        $sql .= 'CREATE TABLE ' . ((($this->ifNotExists) && ($this->dbType != self::SQLSRV)) ? 'IF NOT EXISTS ' : null) .
+        $schema .= 'CREATE TABLE ' . ((($this->ifNotExists) && ($this->dbType != self::SQLSRV)) ? 'IF NOT EXISTS ' : null) .
             $this->quoteId($this->table) . ' (' . PHP_EOL;
 
-        $i   = 0;
-        $inc = null;
+        // Iterate over the columns
+        $i         = 0;
+        $increment = null;
         foreach ($this->columns as $name => $column) {
             if ($column['increment'] !== false) {
-                $inc = $column['increment'];
+                $increment = $column['increment'];
             }
-            $sql .= (($i != 0) ? ',' . PHP_EOL : null) . '  ' . $this->quoteId($name) . ' ' .
-                $this->getColumnType($name, $column);
+            $schema .= (($i != 0) ? ',' . PHP_EOL : null) . '  ' . $this->getColumnSchema($name, $column);
             $i++;
         }
 
-        if (($this->hasPrimary()) && ($this->dbType !== self::SQLSRV)) {
-            $sql .= ($this->isSqlite()) ?
-               ',' . PHP_EOL . '  UNIQUE (' . implode(', ', $this->getPrimary(true)) . ')' :
-               ',' . PHP_EOL . '  PRIMARY KEY (' . implode(', ', $this->getPrimary(true)) . ')';
+        // Format primary key schema
+        if ($this->hasPrimary()) {
+            $schema .= Formatter\Table::formatPrimarySchema($this->dbType, $this->getPrimary(true));
         }
 
-        $sql .= PHP_EOL . ')';
-
-        if ($this->isMysql()) {
-            $sql .= ' ENGINE=' . $this->engine;
-            $sql .= ' DEFAULT CHARSET=' . $this->charset;
-            if (null !== $inc) {
-                $sql .= ' AUTO_INCREMENT=' . (int)$inc;
-            }
-            $sql .= ';' . PHP_EOL . PHP_EOL;
-        } else {
-            $sql .= ';' . PHP_EOL . PHP_EOL;
-        }
+        $schema .= Formatter\Table::formatEndOfTable($this->dbType, $this->engine, $this->charset, $increment);
 
         /*
          * END CREATE TABLE
@@ -130,51 +143,22 @@ class Create extends AbstractStructure
 
         // Assign PGSQL or SQLITE sequences
         if ($this->hasIncrement()) {
-            $increment = $this->getIncrement();
-            if ($this->isPgsql()) {
-                foreach ($increment as $name) {
-                    $sql .= 'ALTER SEQUENCE ' . $this->table . '_' . $name . '_seq OWNED BY ' .
-                        $this->quoteId($this->table . '.' . $name) . ';' . PHP_EOL;
-                }
-                $sql .= PHP_EOL;
-            } else if ($this->isSqlite()) {
-                foreach ($increment as $name) {
-                    $start = (int)$this->columns[$name]['increment'];
-                    if (substr((string)$start, -1) == '1') {
-                        $start -= 1;
-                    }
-                    $sql .= 'INSERT INTO "sqlite_sequence" ("name", "seq") ' .
-                        'VALUES (' . $this->quoteId($this->table) . ', ' . $start . ');' . PHP_EOL;
-                }
-                $sql .= PHP_EOL;
-            }
+            $schema .= Formatter\Table::createSequences(
+                $this->dbType, $this->getIncrement(), $this->quoteId($this->table), $this->columns
+            );
         }
 
         // Add indices
-        foreach ($this->indices as $name => $index) {
-            foreach ($index['column'] as $i => $column) {
-                $index['column'][$i] = $this->quoteId($column);
-            }
-
-            if ($index['type'] != 'primary') {
-                $sql .= 'CREATE ' . (($index['type'] == 'unique') ? 'UNIQUE ' : null) . 'INDEX ' . $this->quoteId($name) .
-                    ' ON ' . $this->quoteId($this->table) . ' (' . implode(', ', $index['column']) . ');' . PHP_EOL;
-            }
+        if (count($this->indices) > 0) {
+            $schema .= Formatter\Table::createIndices($this->indices, $this->table, $this);
         }
 
         // Add constraints
         if (count($this->constraints) > 0) {
-            $sql .= PHP_EOL;
-            foreach ($this->constraints as $name => $constraint) {
-                $sql .= 'ALTER TABLE ' . $this->quoteId($this->table) .
-                    ' ADD CONSTRAINT ' . $this->quoteId($name) .
-                    ' FOREIGN KEY (' . $this->quoteId($constraint['column']) . ')' .
-                    ' REFERENCES ' . $this->quoteId($constraint['references']) . ' (' . $this->quoteId($constraint['on']) . ')' .
-                    ' ON DELETE ' . $constraint['delete'] . ' ON UPDATE CASCADE;' . PHP_EOL;
-            }
+            $schema .= Formatter\Table::createConstraints($this->constraints, $this->table, $this);
         }
 
-        return $sql . PHP_EOL;
+        return $schema . PHP_EOL;
     }
 
     /**

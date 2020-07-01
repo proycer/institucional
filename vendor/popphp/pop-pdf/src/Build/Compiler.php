@@ -4,7 +4,7 @@
  *
  * @link       https://github.com/popphp/popphp-framework
  * @author     Nick Sagona, III <dev@nolainteractive.com>
- * @copyright  Copyright (c) 2009-2019 NOLA Interactive, LLC. (http://www.nolainteractive.com)
+ * @copyright  Copyright (c) 2009-2020 NOLA Interactive, LLC. (http://www.nolainteractive.com)
  * @license    http://www.popphp.org/license     New BSD License
  */
 
@@ -15,6 +15,7 @@ namespace Pop\Pdf\Build;
 
 use Pop\Pdf\Build\Image;
 use Pop\Pdf\Build\PdfObject;
+use Pop\Pdf\Document;
 use Pop\Pdf\Document\Page\Text;
 
 /**
@@ -23,9 +24,9 @@ use Pop\Pdf\Document\Page\Text;
  * @category   Pop
  * @package    Pop\Pdf
  * @author     Nick Sagona, III <dev@nolainteractive.com>
- * @copyright  Copyright (c) 2009-2019 NOLA Interactive, LLC. (http://www.nolainteractive.com)
+ * @copyright  Copyright (c) 2009-2020 NOLA Interactive, LLC. (http://www.nolainteractive.com)
  * @license    http://www.popphp.org/license     New BSD License
- * @version    3.2.0
+ * @version    4.0.0
  */
 class Compiler extends AbstractCompiler
 {
@@ -33,10 +34,10 @@ class Compiler extends AbstractCompiler
     /**
      * Set the document object
      *
-     * @param  \Pop\Pdf\Document $document
+     * @param  Document\AbstractDocument $document
      * @return Compiler
      */
-    public function setDocument(\Pop\Pdf\Document $document)
+    public function setDocument(Document\AbstractDocument $document)
     {
         $this->document = $document;
 
@@ -87,12 +88,14 @@ class Compiler extends AbstractCompiler
     /**
      * Compile and finalize the PDF document
      *
-     * @param  \Pop\Pdf\AbstractDocument $document
+     * @param  Document\AbstractDocument $document
      * @return void
      */
-    public function finalize(\Pop\Pdf\AbstractDocument $document)
+    public function finalize(Document\AbstractDocument $document = null)
     {
-        $this->setDocument($document);
+        if (null !== $document) {
+            $this->setDocument($document);
+        }
         $this->prepareFonts();
 
         $pageObjects = [];
@@ -125,6 +128,10 @@ class Compiler extends AbstractCompiler
             // Prepare text objects
             if ($page->hasText()) {
                 $this->prepareText($page->getText(), $pageObject);
+            }
+            // Prepare text objects
+            if ($page->hasTextStreams()) {
+                $this->prepareTextStreams($page->getTextStreams(), $pageObject);
             }
             // Prepare field objects
             if ($page->hasFields()) {
@@ -181,7 +188,7 @@ class Compiler extends AbstractCompiler
      *
      * @return void
      */
-    protected function prepareFonts()
+    public function prepareFonts()
     {
         foreach ($this->fonts as $font) {
             if ($font instanceof \Pop\Pdf\Document\Font) {
@@ -195,11 +202,12 @@ class Compiler extends AbstractCompiler
                         $font->getName() . "\n    /Encoding /WinAnsiEncoding\n>>\nendobj\n\n"
                     );
                 } else {
-                    $font->parser()->setCompression($this->compression)
-                                   ->setFontIndex($f)
-                                   ->setFontObjectIndex($i)
-                                   ->setFontDescIndex($i + 1)
-                                   ->setFontFileIndex($i + 2);
+                    $font->parser()
+                        ->setCompression($this->compression)
+                        ->setFontIndex($f)
+                        ->setFontObjectIndex($i)
+                        ->setFontDescIndex($i + 1)
+                        ->setFontFileIndex($i + 2);
 
                     $font->parser()->parse();
 
@@ -224,13 +232,11 @@ class Compiler extends AbstractCompiler
     protected function prepareImages(array $images, PdfObject\PageObject $pageObject)
     {
         $imgs = [];
-        if (null === $pageObject->getCurrentContentIndex()) {
-            $contentObject = new PdfObject\StreamObject($this->lastIndex() + 1);
-            $this->objects[$contentObject->getIndex()] = $contentObject;
-            $pageObject->addContentIndex($contentObject->getIndex());
-        } else {
-            $contentObject = $this->objects[$pageObject->getCurrentContentIndex()];
-        }
+
+        $contentObject = new PdfObject\StreamObject($this->lastIndex() + 1);
+        $this->objects[$contentObject->getIndex()] = $contentObject;
+        $pageObject->addContentIndex($contentObject->getIndex());
+
         foreach ($images as $key => $image) {
             $coordinates = $this->getCoordinates($image['x'], $image['y'], $pageObject);
             if (!array_key_exists($key, $imgs)) {
@@ -263,6 +269,40 @@ class Compiler extends AbstractCompiler
     }
 
     /**
+     * Prepare the path objects
+     *
+     * @param  array $paths
+     * @param  PdfObject\PageObject $pageObject
+     * @return void
+     */
+    protected function preparePaths(array $paths, PdfObject\PageObject $pageObject)
+    {
+        $contentObject = new PdfObject\StreamObject($this->lastIndex() + 1);
+        $this->objects[$contentObject->getIndex()] = $contentObject;
+        $pageObject->addContentIndex($contentObject->getIndex());
+
+        foreach ($paths as $path) {
+            $stream  = null;
+            $streams = $path->getStreams();
+            foreach ($streams as $str) {
+                $s = $str['stream'];
+                if (isset($str['points'])) {
+                    foreach ($str['points'] as $points) {
+                        $keys = array_keys($points);
+                        $coordinates = $this->getCoordinates($points[$keys[0]], $points[$keys[1]], $pageObject);
+                        $s = str_replace(
+                            ['[{' . $keys[0] . '}]', '[{' . $keys[1] . '}]'], [$coordinates['x'], $coordinates['y']], $s
+                        );
+                    }
+                }
+                $stream .= $s;
+            }
+
+            $contentObject->appendStream($stream);
+        }
+    }
+
+    /**
      * Prepare the text objects
      *
      * @param  array $text
@@ -272,13 +312,9 @@ class Compiler extends AbstractCompiler
      */
     protected function prepareText(array $text, PdfObject\PageObject $pageObject)
     {
-        if (null === $pageObject->getCurrentContentIndex()) {
-            $contentObject = new PdfObject\StreamObject($this->lastIndex() + 1);
-            $this->objects[$contentObject->getIndex()] = $contentObject;
-            $pageObject->addContentIndex($contentObject->getIndex());
-        } else {
-            $contentObject = $this->objects[$pageObject->getCurrentContentIndex()];
-        }
+        $contentObject = new PdfObject\StreamObject($this->lastIndex() + 1);
+        $this->objects[$contentObject->getIndex()] = $contentObject;
+        $pageObject->addContentIndex($contentObject->getIndex());
 
         foreach ($text as $txt) {
             if (!isset($this->fontReferences[$txt['font']])) {
@@ -307,6 +343,10 @@ class Compiler extends AbstractCompiler
             } else if ($txt['text']->hasWrap()) {
                 $fontObject = $this->fonts[$txt['font']];
                 $strings    = $txt['text']->getWrap()->getStrings($txt['text'], $fontObject, $coordinates['y']);
+                $stream     = $txt['text']->getColorStream();
+                if (!empty($stream)) {
+                    $contentObject->appendStream($stream);
+                }
                 foreach ($strings as $string) {
                     $textString = new Text($string['string'], $txt['text']->getSize());
                     $contentObject->appendStream(
@@ -323,39 +363,21 @@ class Compiler extends AbstractCompiler
     }
 
     /**
-     * Prepare the path objects
+     * Prepare the text streams objects
      *
-     * @param  array $paths
+     * @param  array $textStreams
      * @param  PdfObject\PageObject $pageObject
+     * @throws Exception
      * @return void
      */
-    protected function preparePaths(array $paths, PdfObject\PageObject $pageObject)
+    protected function prepareTextStreams(array $textStreams, PdfObject\PageObject $pageObject)
     {
-        if (null === $pageObject->getCurrentContentIndex()) {
-            $contentObject = new PdfObject\StreamObject($this->lastIndex() + 1);
-            $this->objects[$contentObject->getIndex()] = $contentObject;
-            $pageObject->addContentIndex($contentObject->getIndex());
-        } else {
-            $contentObject = $this->objects[$pageObject->getCurrentContentIndex()];
-        }
-        foreach ($paths as $path) {
-            $stream  = null;
-            $streams = $path->getStreams();
-            foreach ($streams as $str) {
-                $s = $str['stream'];
-                if (isset($str['points'])) {
-                    foreach ($str['points'] as $points) {
-                        $keys = array_keys($points);
-                        $coordinates = $this->getCoordinates($points[$keys[0]], $points[$keys[1]], $pageObject);
-                        $s = str_replace(
-                            ['[{' . $keys[0] . '}]', '[{' . $keys[1] . '}]'], [$coordinates['x'], $coordinates['y']], $s
-                        );
-                    }
-                }
-                $stream .= $s;
-            }
+        $contentObject = new PdfObject\StreamObject($this->lastIndex() + 1);
+        $this->objects[$contentObject->getIndex()] = $contentObject;
+        $pageObject->addContentIndex($contentObject->getIndex());
 
-            $contentObject->appendStream($stream);
+        foreach ($textStreams as $txt) {
+            $contentObject->appendStream($txt->getStream($this->fonts, $this->fontReferences));
         }
     }
 

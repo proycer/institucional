@@ -14,23 +14,19 @@
 namespace Pop\Code\Generator;
 
 /**
- * Property generator code class
+ * Property generator class
  *
  * @category   Pop
  * @package    Pop\Code
  * @author     Nick Sagona, III <dev@nolainteractive.com>
  * @copyright  Copyright (c) 2009-2020 NOLA Interactive, LLC. (http://www.nolainteractive.com)
  * @license    http://www.popphp.org/license     New BSD License
- * @version    3.1.2
+ * @version    4.0.0
  */
-class PropertyGenerator implements GeneratorInterface
+class PropertyGenerator extends AbstractClassElementGenerator
 {
 
-    /**
-     * Docblock generator object
-     * @var DocblockGenerator
-     */
-    protected $docblock = null;
+    use Traits\NameTrait, Traits\DocblockTrait;
 
     /**
      * Property type
@@ -39,132 +35,29 @@ class PropertyGenerator implements GeneratorInterface
     protected $type = null;
 
     /**
-     * Property name
-     * @var string
-     */
-    protected $name = null;
-
-    /**
-     * Property visibility
-     * @var string
-     */
-    protected $visibility = 'public';
-
-    /**
-     * Property static flag
-     * @var boolean
-     */
-    protected $static = false;
-
-    /**
      * Property value
      * @var mixed
      */
     protected $value = null;
 
     /**
-     * Property indent
-     * @var string
-     */
-    protected $indent = '    ';
-
-    /**
-     * Property output
-     * @var string
-     */
-    protected $output = null;
-
-    /**
      * Constructor
      *
      * Instantiate the property generator object
      *
-     * @param  string $name
-     * @param  string $type
-     * @param  mixed  $value
-     * @param  string $visibility
-     * @return PropertyGenerator
+     * @param  string  $name
+     * @param  string  $type
+     * @param  mixed   $value
+     * @param  string  $visibility
+     * @param  boolean $static
      */
-    public function __construct($name, $type, $value = null, $visibility = 'public')
+    public function __construct($name, $type = null, $value = null, $visibility = 'public', $static = false)
     {
         $this->setName($name);
         $this->setType($type);
         $this->setValue($value);
         $this->setVisibility($visibility);
-    }
-
-    /**
-     * Set the property static flag
-     *
-     * @param  boolean $static
-     * @return PropertyGenerator
-     */
-    public function setStatic($static = false)
-    {
-        $this->static = (boolean)$static;
-        return $this;
-    }
-
-    /**
-     * Get the property static flag
-     *
-     * @return boolean
-     */
-    public function isStatic()
-    {
-        return $this->static;
-    }
-
-    /**
-     * Set the property description
-     *
-     * @param  string $desc
-     * @return PropertyGenerator
-     */
-    public function setDesc($desc = null)
-    {
-        if (null !== $this->docblock) {
-            $this->docblock->setDesc($desc);
-        } else {
-            $this->docblock = new DocblockGenerator($desc, $this->indent);
-        }
-        return $this;
-    }
-
-    /**
-     * Get the property description
-     *
-     * @return string
-     */
-    public function getDesc()
-    {
-        $desc = null;
-        if (null !== $this->docblock) {
-            $desc = $this->docblock->getDesc();
-        }
-        return $desc;
-    }
-
-    /**
-     * Set the property indent
-     *
-     * @param  string $indent
-     * @return PropertyGenerator
-     */
-    public function setIndent($indent = null)
-    {
-        $this->indent = $indent;
-        return $this;
-    }
-
-    /**
-     * Get the property indent
-     *
-     * @return string
-     */
-    public function getIndent()
-    {
-        return $this->indent;
+        $this->setAsStatic($static);
     }
 
     /**
@@ -190,25 +83,13 @@ class PropertyGenerator implements GeneratorInterface
     }
 
     /**
-     * Set the property name
+     * Has property type
      *
-     * @param  string $name
-     * @return PropertyGenerator
+     * @return boolean
      */
-    public function setName($name)
+    public function hasType()
     {
-        $this->name = $name;
-        return $this;
-    }
-
-    /**
-     * Get the property name
-     *
-     * @return string
-     */
-    public function getName()
-    {
-        return $this->name;
+        return (null !== $this->type);
     }
 
     /**
@@ -234,73 +115,29 @@ class PropertyGenerator implements GeneratorInterface
     }
 
     /**
-     * Set the property visibility
+     * Has property value
      *
-     * @param  string $visibility
-     * @return PropertyGenerator
+     * @return boolean
      */
-    public function setVisibility($visibility = 'public')
+    public function hasValue()
     {
-        $this->visibility = $visibility;
-        return $this;
-    }
-
-    /**
-     * Get the property visibility
-     *
-     * @return string
-     */
-    public function getVisibility()
-    {
-        return $this->visibility;
-    }
-
-    /**
-     * Set the docblock generator object
-     *
-     * @param  DocblockGenerator $docblock
-     * @return PropertyGenerator
-     */
-    public function setDocblock(DocblockGenerator $docblock)
-    {
-        $this->docblock = $docblock;
-        return $this;
-    }
-
-    /**
-     * Access the docblock generator object
-     *
-     * @return DocblockGenerator
-     */
-    public function getDocblock()
-    {
-        return $this->docblock;
+        return (null !== $this->value);
     }
 
     /**
      * Render property
      *
-     * @param  boolean $ret
      * @return mixed
      */
-    public function render($ret = false)
+    public function render()
     {
-        $static = null;
-        if ($this->visibility != 'const') {
-            $varDeclaration = ' $';
-            if ($this->static) {
-                $static = ' static';
-            }
-        } else {
-            $varDeclaration = ' ';
-        }
-
         if (null === $this->docblock) {
             $this->docblock = new DocblockGenerator(null, $this->indent);
         }
-        $this->docblock->setTag('var', $this->type);
-        $this->output = PHP_EOL . $this->docblock->render(true);
-        $this->output .= $this->indent . $this->visibility . $static . $varDeclaration . $this->name;
+
+        $this->docblock->addTag('var', $this->type);
+        $this->output = PHP_EOL . $this->docblock->render();
+        $this->output .= $this->printIndent() . $this->visibility . (($this->static) ? ' static' : '') . ' $' . $this->name;
 
         if (null !== $this->value) {
             if ($this->type == 'array') {
@@ -319,11 +156,7 @@ class PropertyGenerator implements GeneratorInterface
             $this->output .= ' = ' . $val . ';';
         }
 
-        if ($ret) {
-            return $this->output;
-        } else {
-            echo $this->output;
-        }
+        return $this->output;
     }
 
     /**
@@ -333,7 +166,7 @@ class PropertyGenerator implements GeneratorInterface
      */
     protected function formatArrayValues()
     {
-        $ary = str_replace(PHP_EOL, PHP_EOL . $this->indent . '  ', var_export($this->value, true));
+        $ary = str_replace(PHP_EOL, PHP_EOL . $this->printIndent() . '  ', var_export($this->value, true));
         $ary .= ';';
         $ary = str_replace('array (', '[', $ary);
         $ary = str_replace('  );', '];', $ary);
@@ -365,7 +198,7 @@ class PropertyGenerator implements GeneratorInterface
      */
     public function __toString()
     {
-        return $this->render(true);
+        return $this->render();
     }
 
 }

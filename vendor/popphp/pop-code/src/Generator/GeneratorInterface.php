@@ -21,17 +21,66 @@ namespace Pop\Code\Generator;
  * @author     Nick Sagona, III <dev@nolainteractive.com>
  * @copyright  Copyright (c) 2009-2020 NOLA Interactive, LLC. (http://www.nolainteractive.com)
  * @license    http://www.popphp.org/license     New BSD License
- * @version    3.1.2
+ * @version    4.0.0
  */
 interface GeneratorInterface
 {
 
     /**
+     * Set the indent
+     *
+     * @param  int $indent
+     * @return GeneratorInterface
+     */
+    public function setIndent($indent);
+
+    /**
+     * Get the indent
+     *
+     * @return int
+     */
+    public function getIndent();
+
+    /**
+     * Has indent
+     *
+     * @return boolean
+     */
+    public function hasIndent();
+
+    /**
+     * Print the indent
+     *
+     * @return string
+     */
+    public function printIndent();
+
+    /**
+     * Get the output
+     *
+     * @return string
+     */
+    public function getOutput();
+
+    /**
+     * Has output
+     *
+     * @return boolean
+     */
+    public function hasOutput();
+
+    /**
+     * Is rendered (alias to hasOutput())
+     *
+     * @return boolean
+     */
+    public function isRendered();
+
+    /**
      * Render method
      *
-     * @param  boolean $ret
-     * @return mixed
+     * @return string
      */
-    public function render($ret = false);
+    public function render();
 
 }

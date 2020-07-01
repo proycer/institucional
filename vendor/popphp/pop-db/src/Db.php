@@ -4,7 +4,7 @@
  *
  * @link       https://github.com/popphp/popphp-framework
  * @author     Nick Sagona, III <dev@nolainteractive.com>
- * @copyright  Copyright (c) 2009-2019 NOLA Interactive, LLC. (http://www.nolainteractive.com)
+ * @copyright  Copyright (c) 2009-2020 NOLA Interactive, LLC. (http://www.nolainteractive.com)
  * @license    http://www.popphp.org/license     New BSD License
  */
 
@@ -19,9 +19,9 @@ namespace Pop\Db;
  * @category   Pop
  * @package    Pop\Db
  * @author     Nick Sagona, III <dev@nolainteractive.com>
- * @copyright  Copyright (c) 2009-2019 NOLA Interactive, LLC. (http://www.nolainteractive.com)
+ * @copyright  Copyright (c) 2009-2020 NOLA Interactive, LLC. (http://www.nolainteractive.com)
  * @license    http://www.popphp.org/license     New BSD License
- * @version    4.5.0
+ * @version    5.0.0
  */
 class Db
 {
@@ -133,7 +133,7 @@ class Db
      */
     public static function check($adapter, array $options, $prefix = '\Pop\Db\Adapter\\')
     {
-        $result = null;
+        $result = true;
         $class  = $prefix . ucfirst(strtolower($adapter));
         $error  = ini_get('error_reporting');
 
@@ -141,7 +141,7 @@ class Db
 
         try {
             if (!class_exists($class)) {
-                $result = 'Error: The database adapter ' . $class . ' does not exist.';
+                $result = "Error: The database adapter '" . $class . "' does not exist.";
             } else {
                 $db = new $class($options);
             }
@@ -154,16 +154,16 @@ class Db
     }
 
     /**
-     * Install a database schema
+     * Execute SQL
      *
      * @param  string $sql
-     * @param  mixed $adapter
+     * @param  mixed  $adapter
      * @param  array  $options
      * @param  string $prefix
      * @throws Exception
      * @return void
      */
-    public static function install($sql, $adapter, array $options = [], $prefix = '\Pop\Db\Adapter\\')
+    public static function executeSql($sql, $adapter, array $options = [], $prefix = '\Pop\Db\Adapter\\')
     {
         if (is_string($adapter)) {
             $adapter = ucfirst(strtolower($adapter));
@@ -174,7 +174,8 @@ class Db
             }
 
             // If Sqlite
-            if (($adapter == 'Sqlite') || (($adapter == 'Pdo') && isset($options['type'])) && (strtolower($options['type']) == 'sqlite')) {
+            if (($adapter == 'Sqlite') ||
+                (($adapter == 'Pdo') && isset($options['type'])) && (strtolower($options['type']) == 'sqlite')) {
                 if (!file_exists($options['database'])) {
                     touch($options['database']);
                     chmod($options['database'], 0777);
@@ -189,44 +190,81 @@ class Db
             $db = $adapter;
         }
 
-        $lines = (file_exists($sql)) ? file($sql) : explode("\n", $sql);
+        $lines      = explode("\n", $sql);
+        $statements = [];
 
-        // Remove comments, execute queries
         if (count($lines) > 0) {
+            // Remove any comments, parse prefix if available
             $insideComment = false;
             foreach ($lines as $i => $line) {
-                if ($insideComment) {
-                    if (substr($line, 0, 2) == '*/') {
-                        $insideComment = false;
-                    }
+                if (empty($line)) {
                     unset($lines[$i]);
                 } else {
-                    if ((substr($line, 0, 1) == '-') || (substr($line, 0, 1) == '#')) {
+                    if (isset($options['prefix'])) {
+                        $lines[$i] = str_replace('[{prefix}]', $options['prefix'], trim($line));
+                    }
+                    if ($insideComment) {
+                        if (substr($line, -2) == '*/') {
+                            $insideComment = false;
+                        }
                         unset($lines[$i]);
-                    } else if (substr($line, 0, 2) == '/*') {
-                        $insideComment = true;
-                        unset($lines[$i]);
+                    } else {
+                        if ((substr($line, 0, 1) == '-') || (substr($line, 0, 1) == '#')) {
+                            unset($lines[$i]);
+                        } else if (substr($line, 0, 2) == '/*') {
+                            $line = trim($line);
+                            if ((substr($line, -2) != '*/') && (substr($line, -3) != '*/;')) {
+                                $insideComment = true;
+                            }
+                            unset($lines[$i]);
+                        } else if (strrpos($line, '--') !== false) {
+                            $lines[$i] = substr($line, 0, strrpos($line, '--'));
+                        } else if (strrpos($line, '/*') !== false) {
+                            $lines[$i] = substr($line, 0, strrpos($line, '/*'));
+                        }
                     }
                 }
             }
 
-            $sqlString  = trim(implode('', $lines));
-            $newLine    = (strpos($sqlString, ";\r\n") !== false) ? ";\r\n" : ";\n";
-            if (stripos($sqlString, ';INSERT INTO') !== false) {
-                $sqlString = str_ireplace(';INSERT INTO', ";" . $newLine . "INSERT INTO", $sqlString);
-            }
-            $statements = explode($newLine, $sqlString);
+            $lines            = array_values(array_filter($lines));
+            $currentStatement = null;
 
-            foreach ($statements as $statement) {
-                if (!empty($statement)) {
-                    if (isset($options['prefix'])) {
-                        $statement = str_replace('[{prefix}]', $options['prefix'], trim($statement));
+            // Assemble statements based on ; delimiter
+            foreach ($lines as $i => $line) {
+                $currentStatement .= (null !== $currentStatement) ? ' ' . $line : $line;
+                if (substr($line, -1) == ';') {
+                    $statements[]     = $currentStatement;
+                    $currentStatement = null;
+                }
+            }
+
+            if (!empty($statements)) {
+                foreach ($statements as $statement) {
+                    if (!empty($statement)) {
+                        $db->query($statement);
                     }
-                    //echo $statement . PHP_EOL . PHP_EOL;
-                    $db->query($statement);
                 }
             }
         }
+    }
+
+    /**
+     * Execute SQL
+     *
+     * @param  string $sqlFile
+     * @param  mixed  $adapter
+     * @param  array  $options
+     * @param  string $prefix
+     * @throws Exception
+     * @return void
+     */
+    public static function executeSqlFile($sqlFile, $adapter, array $options = [], $prefix = '\Pop\Db\Adapter\\')
+    {
+        if (!file_exists($sqlFile)) {
+            throw new Exception("Error: The SQL file '" . $sqlFile . "' does not exist.");
+        }
+
+        self::executeSql(file_get_contents($sqlFile), $adapter, $options, $prefix);
     }
 
     /**
@@ -293,40 +331,6 @@ class Db
     }
 
     /**
-     * Check for a DB adapter
-     *
-     * @param  string $class
-     * @return boolean
-     */
-    public static function hasDb($class = null)
-    {
-        $result = false;
-
-        if ((null !== $class) && isset(self::$db[$class])) {
-            $result = true;
-        } else if (null !== $class) {
-            foreach (self::$db as $prefix => $adapter) {
-                if (substr($class, 0, strlen($prefix)) == $prefix) {
-                    $result = true;
-                }
-            }
-        }
-
-        if ((!$result) && (null !== $class) && in_array($class, self::$classToTable)) {
-            $table = array_search($class, self::$classToTable);
-            if (isset(self::$db[$table])) {
-                $result = true;
-            }
-        }
-
-        if ((!$result) && isset(self::$db['default'])) {
-            $result = true;
-        }
-
-        return $result;
-    }
-
-    /**
      * Set DB adapter
      *
      * @param  Adapter\AbstractAdapter $db
@@ -352,42 +356,6 @@ class Db
         if ($isDefault) {
             self::$db['default'] = $db;
         }
-    }
-
-    /**
-     * Add class-to-table relationship
-     *
-     * @param  string $class
-     * @param  string $table
-     * @return void
-     */
-    public static function addClassToTable($class, $table)
-    {
-        self::$classToTable[$class] = $table;
-    }
-
-    /**
-     * Check if class-to-table relationship exists
-     *
-     * @param  string $class
-     * @return boolean
-     */
-    public static function hasClassToTable($class)
-    {
-        return isset(self::$classToTable[$class]);
-    }
-
-    /**
-     * Set DB adapter
-     *
-     * @param  Adapter\AbstractAdapter $db
-     * @param  string                  $class
-     * @param  string                  $prefix
-     * @return void
-     */
-    public static function setDefaultDb(Adapter\AbstractAdapter $db, $class = null, $prefix = null)
-    {
-        self::setDb($db, $class, $prefix, true);
     }
 
     /**
@@ -438,6 +406,76 @@ class Db
         }
 
         return $dbAdapter;
+    }
+
+    /**
+     * Check for a DB adapter
+     *
+     * @param  string $class
+     * @return boolean
+     */
+    public static function hasDb($class = null)
+    {
+        $result = false;
+
+        if ((null !== $class) && isset(self::$db[$class])) {
+            $result = true;
+        } else if (null !== $class) {
+            foreach (self::$db as $prefix => $adapter) {
+                if (substr($class, 0, strlen($prefix)) == $prefix) {
+                    $result = true;
+                }
+            }
+        }
+
+        if ((!$result) && (null !== $class) && in_array($class, self::$classToTable)) {
+            $table = array_search($class, self::$classToTable);
+            if (isset(self::$db[$table])) {
+                $result = true;
+            }
+        }
+
+        if ((!$result) && isset(self::$db['default'])) {
+            $result = true;
+        }
+
+        return $result;
+    }
+
+    /**
+     * Add class-to-table relationship
+     *
+     * @param  string $class
+     * @param  string $table
+     * @return void
+     */
+    public static function addClassToTable($class, $table)
+    {
+        self::$classToTable[$class] = $table;
+    }
+
+    /**
+     * Check if class-to-table relationship exists
+     *
+     * @param  string $class
+     * @return boolean
+     */
+    public static function hasClassToTable($class)
+    {
+        return isset(self::$classToTable[$class]);
+    }
+
+    /**
+     * Set DB adapter
+     *
+     * @param  Adapter\AbstractAdapter $db
+     * @param  string                  $class
+     * @param  string                  $prefix
+     * @return void
+     */
+    public static function setDefaultDb(Adapter\AbstractAdapter $db, $class = null, $prefix = null)
+    {
+        self::setDb($db, $class, $prefix, true);
     }
 
     /**

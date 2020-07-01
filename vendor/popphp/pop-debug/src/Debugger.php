@@ -4,7 +4,7 @@
  *
  * @link       https://github.com/popphp/popphp-framework
  * @author     Nick Sagona, III <dev@nolainteractive.com>
- * @copyright  Copyright (c) 2009-2019 NOLA Interactive, LLC. (http://www.nolainteractive.com)
+ * @copyright  Copyright (c) 2009-2020 NOLA Interactive, LLC. (http://www.nolainteractive.com)
  * @license    http://www.popphp.org/license     New BSD License
  */
 
@@ -22,11 +22,11 @@ use Pop\Debug\Storage;
  * @category   Pop
  * @package    Pop\Debug
  * @author     Nick Sagona, III <dev@nolainteractive.com>
- * @copyright  Copyright (c) 2009-2019 NOLA Interactive, LLC. (http://www.nolainteractive.com)
+ * @copyright  Copyright (c) 2009-2020 NOLA Interactive, LLC. (http://www.nolainteractive.com)
  * @license    http://www.popphp.org/license     New BSD License
- * @version    1.1.0
+ * @version    1.2.0
  */
-class Debugger implements \ArrayAccess
+class Debugger implements \ArrayAccess, \Countable, \IteratorAggregate
 {
 
     /**
@@ -167,7 +167,7 @@ class Debugger implements \ArrayAccess
     {
         $data = [];
         foreach ($this->handlers as $name => $handler) {
-            $data[$name] = ($this->storage->getFormat() == 'text') ? $handler->prepareAsString() : $handler->prepare();
+            $data[$name] = (null === $this->storage->getFormat()) ? $handler->prepareAsString() : $handler->prepare();
         }
         return $data;
     }
@@ -180,7 +180,7 @@ class Debugger implements \ArrayAccess
     public function save()
     {
         foreach ($this->handlers as $name => $handler) {
-            $data = ($this->storage->getFormat() == 'text') ? $handler->prepareAsString() : $handler->prepare();
+            $data = (null === $this->storage->getFormat()) ? $handler->prepareAsString() : $handler->prepare();
             $this->storage->save($this->getRequestId() . '-' . $name, $data);
         }
     }
@@ -246,16 +246,86 @@ class Debugger implements \ArrayAccess
             return md5(uniqid());
         }
     }
+    /**
+     * Method to get the count of the handlers
+     *
+     * @return int
+     */
+    public function count()
+    {
+        return count($this->handlers);
+    }
 
     /**
-     * ArrayAccess offsetExists
+     * Method to iterate over the handlers
      *
-     * @param  mixed $offset
+     * @return \ArrayIterator
+     */
+    public function getIterator()
+    {
+        return new \ArrayIterator($this->handlers);
+    }
+
+    /**
+     * Set a handler
+     *
+     * @param  string $name
+     * @param  mixed $value
+     * @return Debugger
+     */
+    public function __set($name, $value)
+    {
+        return $this->offsetSet($name, $value);
+    }
+
+    /**
+     * Get a handler
+     *
+     * @param  string $name
+     * @return Handler\HandlerInterface
+     */
+    public function __get($name)
+    {
+        return $this->offsetGet($name);
+    }
+
+    /**
+     * Is handler set
+     *
+     * @param  string $name
      * @return boolean
      */
-    public function offsetExists($offset)
+    public function __isset($name)
     {
-        return isset($this->handlers[$offset]);
+        return $this->offsetExists($name);
+    }
+
+    /**
+     * Unset a handler
+     *
+     * @param  string $name
+     * @return void
+     */
+    public function __unset($name)
+    {
+        $this->offsetUnset($name);
+    }
+
+    /**
+     * ArrayAccess offsetSet
+     *
+     * @param  mixed $offset
+     * @param  mixed $value
+     * @throws Exception
+     * @return Debugger
+     */
+    public function offsetSet($offset, $value)
+    {
+        if (!($value instanceof Handler\HandlerInterface)) {
+            throw new Exception('Error: The value passed must be an instance of HandlerInterface');
+        }
+        $this->handlers[$offset] = $value;
+        return $this;
     }
 
     /**
@@ -270,19 +340,14 @@ class Debugger implements \ArrayAccess
     }
 
     /**
-     * ArrayAccess offsetSet
+     * ArrayAccess offsetExists
      *
      * @param  mixed $offset
-     * @param  mixed $value
-     * @throws Exception
-     * @return void
+     * @return boolean
      */
-    public function offsetSet($offset, $value)
+    public function offsetExists($offset)
     {
-        if (!($value instanceof Handler\HandlerInterface)) {
-            throw new Exception('Error: The value passed must be an instance of HandlerInterface');
-        }
-        $this->handlers[$offset] = $value;
+        return isset($this->handlers[$offset]);
     }
 
     /**

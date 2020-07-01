@@ -4,7 +4,7 @@
  *
  * @link       https://github.com/popphp/popphp-framework
  * @author     Nick Sagona, III <dev@nolainteractive.com>
- * @copyright  Copyright (c) 2009-2019 NOLA Interactive, LLC. (http://www.nolainteractive.com)
+ * @copyright  Copyright (c) 2009-2020 NOLA Interactive, LLC. (http://www.nolainteractive.com)
  * @license    http://www.popphp.org/license     New BSD License
  */
 
@@ -19,9 +19,9 @@ namespace Pop\Pdf\Build\PdfObject;
  * @category   Pop
  * @package    Pop\Pdf
  * @author     Nick Sagona, III <dev@nolainteractive.com>
- * @copyright  Copyright (c) 2009-2019 NOLA Interactive, LLC. (http://www.nolainteractive.com)
+ * @copyright  Copyright (c) 2009-2020 NOLA Interactive, LLC. (http://www.nolainteractive.com)
  * @license    http://www.popphp.org/license     New BSD License
- * @version    3.2.0
+ * @version    4.0.0
  */
 class StreamObject extends AbstractObject
 {
@@ -202,6 +202,20 @@ class StreamObject extends AbstractObject
     }
 
     /**
+     * Method to decode the PDF stream contents with FlateDecode (gzuncompress)
+     *
+     * @return boolean|string
+     */
+    public function decode()
+    {
+        $decoded = false;
+        if (($this->stream != '') && function_exists('gzuncompress')) {
+            $decoded = @gzuncompress(trim($this->stream));
+        }
+        return $decoded;
+    }
+
+    /**
      * Determine whether or not the PDF stream object is encoded
      *
      * @return boolean
@@ -270,7 +284,7 @@ class StreamObject extends AbstractObject
      */
     protected function calculateByteLength($string)
     {
-        return strlen(str_replace("\n", "", $string));
+        return strlen($string);
     }
 
     /**

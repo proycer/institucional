@@ -4,7 +4,7 @@
  *
  * @link       https://github.com/popphp/popphp-framework
  * @author     Nick Sagona, III <dev@nolainteractive.com>
- * @copyright  Copyright (c) 2009-2019 NOLA Interactive, LLC. (http://www.nolainteractive.com)
+ * @copyright  Copyright (c) 2009-2020 NOLA Interactive, LLC. (http://www.nolainteractive.com)
  * @license    http://www.popphp.org/license     New BSD License
  */
 
@@ -13,15 +13,17 @@
  */
 namespace Pop\Pdf\Build;
 
+use Pop\Pdf\Document;
+
 /**
  * Compiler interface
  *
  * @category   Pop
  * @package    Pop\Pdf
  * @author     Nick Sagona, III <dev@nolainteractive.com>
- * @copyright  Copyright (c) 2009-2019 NOLA Interactive, LLC. (http://www.nolainteractive.com)
+ * @copyright  Copyright (c) 2009-2020 NOLA Interactive, LLC. (http://www.nolainteractive.com)
  * @license    http://www.popphp.org/license     New BSD License
- * @version    3.2.0
+ * @version    4.0.0
  */
 interface CompilerInterface
 {
@@ -29,7 +31,7 @@ interface CompilerInterface
     /**
      * Get the document object
      *
-     * @return \Pop\Pdf\Document
+     * @return Document
      */
     public function getDocument();
 
@@ -71,17 +73,17 @@ interface CompilerInterface
     /**
      * Set the document object
      *
-     * @param  \Pop\Pdf\Document $document
+     * @param  Document\AbstractDocument $document
      * @return Compiler
      */
-    public function setDocument(\Pop\Pdf\Document $document);
+    public function setDocument(Document\AbstractDocument $document);
 
     /**
      * Compile and finalize the PDF document
      *
-     * @param  \Pop\Pdf\AbstractDocument $document
+     * @param  Document\AbstractDocument $document
      * @return void
      */
-    public function finalize(\Pop\Pdf\AbstractDocument $document);
+    public function finalize(Document\AbstractDocument $document);
 
 }

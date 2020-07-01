@@ -13,8 +13,6 @@
  */
 namespace Pop\Code;
 
-use Pop\Code\Generator;
-
 /**
  * Reflection code class
  *
@@ -23,349 +21,106 @@ use Pop\Code\Generator;
  * @author     Nick Sagona, III <dev@nolainteractive.com>
  * @copyright  Copyright (c) 2009-2020 NOLA Interactive, LLC. (http://www.nolainteractive.com)
  * @license    http://www.popphp.org/license     New BSD License
- * @version    3.1.2
+ * @version    4.0.0
  */
-class Reflection extends \ReflectionClass
+class Reflection
 {
 
     /**
-     * Class string to reflect
-     * @var string
-     */
-    protected $classString = null;
-
-    /**
-     * Object instance to reflect
-     * @var Object
-     */
-    protected $objectInstance = null;
-
-    /**
-     * Code generator object
-     * @var Generator
-     */
-    protected $generator = null;
-
-    /**
-     * Constructor
+     * Create class
      *
-     * Instantiate the code reflection object
-     *
-     * @param  mixed $class
+     * @param  mixed  $class
+     * @param  string $name
+     * @return Generator\ClassGenerator
      */
-    public function __construct($class)
+    public static function createClass($class, $name = null)
     {
-        if (is_string($class)) {
-            $this->classString = $class;
-        } else {
-            $this->objectInstance = $class;
-            $this->classString    = get_class($class);
-        }
-        parent::__construct($class);
-        $this->buildGenerator();
+        return Reflection\ClassReflection::parse($class, $name);
     }
 
     /**
-     * Get the class string
+     * Create trait
      *
-     * @return string
+     * @param  mixed  $trait
+     * @param  string $name
+     * @return Generator\TraitGenerator
      */
-    public function getClassString()
+    public static function createTrait($trait, $name = null)
     {
-        return $this->classString;
+        return Reflection\TraitReflection::parse($trait, $name);
     }
 
     /**
-     * Get the object instance
+     * Create interface
      *
-     * @return string
+     * @param  mixed  $interface
+     * @param  string $name
+     * @return Generator\InterfaceGenerator
      */
-    public function getObjectInstance()
+    public static function createInterface($interface, $name = null)
     {
-        return $this->objectInstance;
+        return Reflection\InterfaceReflection::parse($interface, $name);
     }
 
     /**
-     * Determine if the argument passed was a class string
+     * Create namespace
      *
-     * @return boolean
+     * @param  mixed  $namespace
+     * @param  string $name
+     * @return Generator\NamespaceGenerator
      */
-    public function isClassString()
+    public static function createNamespace($namespace, $name = null)
     {
-        return (null === $this->objectInstance);
+        return Reflection\NamespaceReflection::parse($namespace, $name);
     }
 
     /**
-     * Determine if the argument passed was an object instance
+     * Create docblock
      *
-     * @return boolean
+     * @param  mixed  $docblock
+     * @param  int    $forceIndent
+     * @return Generator\DocblockGenerator
      */
-    public function isObjectInstance()
+    public static function createDocblock($docblock, $forceIndent = null)
     {
-        return (null !== $this->objectInstance);
+        return Reflection\DocblockReflection::parse($docblock, $forceIndent);
     }
 
     /**
-     * Get the generator
+     * Create function
      *
-     * @return Generator
+     * @param  mixed  $function
+     * @param  string $name
+     * @return Generator\FunctionGenerator
      */
-    public function generator()
+    public static function createFunction($function, $name = null)
     {
-        return $this->generator;
+        return Reflection\FunctionReflection::parse($function, $name);
     }
 
     /**
-     * Build the code generator based the reflection class
+     * Create method
      *
-     * @return void
+     * @param  mixed  $method
+     * @param  string $name
+     * @return Generator\MethodGenerator
      */
-    protected function buildGenerator()
+    public static function createMethod($method, $name = null)
     {
-
-        // Create generator object
-        $type = ($this->isInterface()) ? Generator::CREATE_INTERFACE : Generator::CREATE_CLASS;
-        $this->generator = new Generator($this->getShortName() . '.php', $type);
-
-        // Get the namespace
-        $this->getClassNamespace();
-
-        // Detect and set the class doc block
-        $classDocBlock = $this->getDocComment();
-        if (!empty($classDocBlock) && (strpos($classDocBlock, '/*') !== false)) {
-            $this->generator->code()->setDocblock(Generator\DocblockGenerator::parse($classDocBlock));
-        }
-
-        // Detect and set if the class is abstract
-        if (!$this->isInterface() && $this->isAbstract()) {
-            $this->generator->code()->setAbstract(true);
-        }
-
-        // Detect and set if the class is a child class
-        $parent = $this->getParentClass();
-        if ($parent !== false) {
-            if ($parent->inNamespace()) {
-                $this->generator->getNamespace()->setUse($parent->getNamespaceName() . '\\' . $parent->getShortName());
-            }
-            $this->generator->code()->setParent($parent->getShortName());
-        }
-
-        // Detect and set if the class implements any interfaces
-        if (!$this->isInterface()) {
-            $interfaces = $this->getInterfaces();
-            if ($interfaces !== false) {
-                $interfacesAry = [];
-                foreach ($interfaces as $interface) {
-                    if ($interface->inNamespace()) {
-                        $this->generator->getNamespace()->setUse($interface->getNamespaceName() . '\\' . $interface->getShortName());
-                    }
-                    $interfacesAry[] = $interface->getShortName();
-                }
-                $this->generator->code()->setInterface(implode(', ', $interfacesAry));
-            }
-        }
-
-        // Detect and set constants
-        $constants = $this->getConstants();
-        if (count($constants) > 0) {
-            foreach ($constants as $key => $value) {
-                $this->generator->code()->addProperty(new Generator\PropertyGenerator($key, gettype($value), $value, 'const'));
-            }
-        }
-
-        // Get properties
-        $this->getClassProperties();
-
-        // Get Methods
-        $this->getClassMethods();
+        return Reflection\MethodReflection::parse($method, $name);
     }
 
     /**
-     * Get the namespace and uses, if any
+     * Create property
      *
-     * @return void
+     * @param  mixed  $property
+     * @param  string $name
+     * @param  mixed  $value
+     * @return Generator\PropertyGenerator
      */
-    protected function getClassNamespace()
+    public static function createProperty($property, $name = null, $value = null)
     {
-        $fileContents = (file_exists($this->getFilename())) ? file_get_contents($this->getFilename()) : null;
-
-        // Detect and set namespace
-        if ($this->inNamespace()) {
-            $this->generator->setNamespace(new Generator\NamespaceGenerator($this->getNamespaceName()));
-            if (null !== $fileContents) {
-                $matches = [];
-                preg_match('/^use(.*)/m', $fileContents, $matches, PREG_OFFSET_CAPTURE);
-                if (isset($matches[0][0])) {
-                    $uses = substr($fileContents, $matches[0][1] + 4);
-                    $uses = substr($uses, 0, strpos($uses, ';'));
-                    $usesAry = explode(',', $uses);
-                    foreach ($usesAry as $use) {
-                        $use = trim($use);
-                        $as = null;
-                        if (stripos($use, 'as') !== false) {
-                            $as = trim(substr($use, (strpos($use, 'as') + 2)));
-                            $use = trim(substr($use, 0, strpos($use, 'as')));
-                        }
-                        $this->generator->getNamespace()->setUse($use, $as);
-                    }
-                }
-            }
-        }
-    }
-
-    /**
-     * Get properties
-     *
-     * @return void
-     */
-    protected function getClassProperties()
-    {
-        // Detect and set properties
-        $properties = $this->getDefaultProperties();
-
-        if (count($properties) > 0) {
-            foreach ($properties as $name => $value) {
-                $property = $this->getProperty($name);
-                $visibility = 'public';
-                if ($property->isPublic()) {
-                    $visibility = 'public';
-                } else if ($property->isProtected()) {
-                    $visibility = 'protected';
-                } else if ($property->isPrivate()) {
-                    $visibility = 'private';
-                }
-
-                $doc = $property->getDocComment();
-                if ((null !== $doc) && (strpos($doc, '/*') !== false)) {
-                    $docblock = Generator\DocblockGenerator::parse($doc);
-                    $desc = $docblock->getDesc();
-                    $type = $docblock->getTag('var');
-                } else {
-                    $type = strtolower(gettype($value));
-                    $desc = null;
-                }
-
-                if (is_array($value)) {
-                    $formattedValue = (count($value) == 0) ? null : $value;
-                } else {
-                    $formattedValue = $value;
-                }
-
-                $prop = new Generator\PropertyGenerator($property->getName(), $type, $formattedValue, $visibility);
-                $prop->setStatic($property->isStatic());
-                $prop->setDesc($desc);
-                $this->generator->code()->addProperty($prop);
-            }
-        }
-    }
-
-    /**
-     * Get methods
-     *
-     * @return void
-     */
-    protected function getClassMethods()
-    {
-        // Detect and set methods
-        $methods = $this->getMethods();
-
-        if (count($methods) > 0) {
-            foreach ($methods as $value) {
-                $methodExport = \ReflectionMethod::export($value->class, $value->name, true);
-
-                // Get the method docblock
-                if ((strpos($methodExport, '/*') !== false) && (strpos($methodExport, '*/') !== false)) {
-                    $docBlock = substr($methodExport, strpos($methodExport, '/*'));
-                    $docBlock = substr($docBlock, 0, (strpos($methodExport, '*/') + 2));
-                } else {
-                    $docBlock = null;
-                }
-
-                $method = $this->getMethod($value->name);
-                $visibility = 'public';
-
-                if ($method->isPublic()) {
-                    $visibility = 'public';
-                } else if ($method->isProtected()) {
-                    $visibility = 'protected';
-                } else if ($method->isPrivate()) {
-                    $visibility = 'private';
-                }
-
-                $mthd = new Generator\MethodGenerator($value->name, $visibility, $method->isStatic());
-                if ((null !== $docBlock) && (strpos($docBlock, '/*') !== false)) {
-                    $mthd->setDocblock(Generator\DocblockGenerator::parse($docBlock, $mthd->getIndent()));
-                }
-                $mthd->setFinal($method->isFinal())
-                     ->setAbstract($method->isAbstract());
-
-                // Get the method parameters
-                if (stripos($methodExport, 'Parameter') !== false) {
-                    $matches = [];
-                    preg_match_all('/Parameter \#(.*)\]/m', $methodExport, $matches);
-                    if (isset($matches[0][0])) {
-                        foreach ($matches[0] as $param) {
-                            $name = null;
-                            $value = null;
-                            $type = null;
-
-                            // Get name
-                            $name = substr($param, strpos($param, '$'));
-                            $name = trim(substr($name, 0, strpos($name, ' ')));
-
-                            // Get value
-                            if (strpos($param, '=') !== false) {
-                                $value = trim(substr($param, (strpos($param, '=') + 1)));
-                                $value = trim(substr($value, 0, strpos($value, ' ')));
-                                $value = str_replace('NULL', 'null', $value);
-                            }
-
-                            // Get type
-                            $type = substr($param, (strpos($param, '>') + 1));
-                            $type = trim(substr($type, 0, strpos($type, '$')));
-                            if ($type == '') {
-                                $type = null;
-                            }
-
-                            $mthd->addArgument($name, $value, $type);
-                        }
-                    }
-                }
-
-                // Get method body
-                if ((strpos($methodExport, '@@') !== false) && (file_exists($this->getFilename()))) {
-                    $lineNums = substr($methodExport, (strpos($methodExport, '@@ ') + 3));
-                    $start = trim(substr($lineNums, strpos($lineNums, ' ')));
-                    $end = substr($start, (strpos($start, ' - ') + 3));
-                    $start = substr($start, 0, strpos($start, ' '));
-                    $end = (int)$end;
-                    if (is_numeric($start) && is_numeric($end)) {
-                        $classLines = file($this->getFilename());
-                        $body = null;
-                        $start = $start + 1;
-                        $end = $end - 1;
-                        for ($i = $start; $i < $end; $i++) {
-                            if (isset($classLines[$i])) {
-                                if (substr($classLines[$i], 0, 8) == '        ') {
-                                    $body .= substr($classLines[$i], 8);
-                                } else if (substr($classLines[$i], 0, 4) == '    ') {
-                                    $body .= substr($classLines[$i], 4);
-                                } else if (substr($classLines[$i], 0, 2) == "\t\t") {
-                                    $body .= substr($classLines[$i], 2);
-                                } else if (substr($classLines[$i], 0, 1) == "\t") {
-                                    $body .= substr($classLines[$i], 1);
-                                } else {
-                                    $body .= $classLines[$i];
-                                }
-                            }
-                        }
-                        $mthd->setBody(rtrim($body), false);
-                    }
-                }
-
-                $this->generator->code()->addMethod($mthd);
-            }
-        }
+        return Reflection\PropertyReflection::parse($property, $name, $value);
     }
 
 }

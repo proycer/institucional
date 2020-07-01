@@ -6,11 +6,15 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
+    'Symfony\\Polyfill\\Util\\' => array($vendorDir . '/symfony/polyfill-util'),
+    'Symfony\\Polyfill\\Php56\\' => array($vendorDir . '/symfony/polyfill-php56'),
+    'SuperClosure\\' => array($vendorDir . '/jeremeamia/superclosure/src'),
     'Popcorn\\' => array($vendorDir . '/popphp/popcorn/src'),
     'Pop\\View\\' => array($vendorDir . '/popphp/pop-view/src'),
     'Pop\\Validator\\' => array($vendorDir . '/popphp/pop-validator/src'),
     'Pop\\Utils\\' => array($vendorDir . '/popphp/pop-utils/src'),
     'Pop\\Session\\' => array($vendorDir . '/popphp/pop-session/src'),
+    'Pop\\Queue\\' => array($vendorDir . '/popphp/pop-queue/src'),
     'Pop\\Pdf\\' => array($vendorDir . '/popphp/pop-pdf/src'),
     'Pop\\Paginator\\' => array($vendorDir . '/popphp/pop-paginator/src'),
     'Pop\\Nav\\' => array($vendorDir . '/popphp/pop-nav/src'),
@@ -40,4 +44,5 @@ return array(
     'Pop\\Audit\\' => array($vendorDir . '/popphp/pop-audit/src'),
     'Pop\\Acl\\' => array($vendorDir . '/popphp/pop-acl/src'),
     'Pop\\' => array($vendorDir . '/popphp/popphp/src'),
+    'PhpParser\\' => array($vendorDir . '/nikic/php-parser/lib/PhpParser'),
 );

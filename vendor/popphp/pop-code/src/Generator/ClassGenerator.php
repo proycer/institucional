@@ -14,35 +14,19 @@
 namespace Pop\Code\Generator;
 
 /**
- * Class generator code class
+ * Class generator class
  *
  * @category   Pop
  * @package    Pop\Code
  * @author     Nick Sagona, III <dev@nolainteractive.com>
  * @copyright  Copyright (c) 2009-2020 NOLA Interactive, LLC. (http://www.nolainteractive.com)
  * @license    http://www.popphp.org/license     New BSD License
- * @version    3.1.2
+ * @version    4.0.0
  */
-class ClassGenerator implements GeneratorInterface
+class ClassGenerator extends AbstractClassGenerator
 {
 
-    /**
-     * Docblock generator object
-     * @var DocblockGenerator
-     */
-    protected $docblock = null;
-
-    /**
-     * Namespace generator object
-     * @var NamespaceGenerator
-     */
-    protected $namespace = null;
-
-    /**
-     * Class name
-     * @var string
-     */
-    protected $name = null;
+    use Traits\UseTrait, Traits\PropertiesTrait, Traits\AbstractFinalTrait;
 
     /**
      * Parent class that is extended
@@ -51,40 +35,10 @@ class ClassGenerator implements GeneratorInterface
     protected $parent = null;
 
     /**
-     * Interface that is implemented
-     * @var string
-     */
-    protected $interface = null;
-
-    /**
-     * Class abstract flag
-     * @var boolean
-     */
-    protected $abstract = false;
-
-    /**
-     * Array of property generator objects
+     * Interfaces that are implemented
      * @var array
      */
-    protected $properties = [];
-
-    /**
-     * Array of method generator objects
-     * @var array
-     */
-    protected $methods = [];
-
-    /**
-     * Class indent
-     * @var string
-     */
-    protected $indent = null;
-
-    /**
-     * Class output
-     * @var string
-     */
-    protected $output = null;
+    protected $interfaces = [];
 
     /**
      * Constructor
@@ -93,85 +47,28 @@ class ClassGenerator implements GeneratorInterface
      *
      * @param  string  $name
      * @param  string  $parent
-     * @param  string  $interface
+     * @param  mixed   $interface
      * @param  boolean $abstract
      */
     public function __construct($name, $parent = null, $interface = null, $abstract = false)
     {
         $this->setName($name);
+
         if (null !== $parent) {
             $this->setParent($parent);
         }
+
         if (null !== $interface) {
-            $this->setInterface($interface);
+            if (is_array($interface)) {
+                $this->addInterfaces($interface);
+            } else if (strpos($interface, ',') !== false) {
+                $this->addInterfaces(array_map('trim', explode(',', $interface)));
+            } else {
+                $this->addInterface($interface);
+            }
         }
-        $this->setAbstract($abstract);
-    }
 
-    /**
-     * Set the class abstract flag
-     *
-     * @param  boolean $abstract
-     * @return ClassGenerator
-     */
-    public function setAbstract($abstract = false)
-    {
-        $this->abstract = (boolean)$abstract;
-        return $this;
-    }
-
-    /**
-     * Get the class abstract flag
-     *
-     * @return boolean
-     */
-    public function isAbstract()
-    {
-        return $this->abstract;
-    }
-
-    /**
-     * Set the class indent
-     *
-     * @param  string $indent
-     * @return ClassGenerator
-     */
-    public function setIndent($indent = null)
-    {
-        $this->indent = $indent;
-        return $this;
-    }
-
-    /**
-     * Get the class indent
-     *
-     * @return string
-     */
-    public function getIndent()
-    {
-        return $this->indent;
-    }
-
-    /**
-     * Set the class name
-     *
-     * @param  string $name
-     * @return ClassGenerator
-     */
-    public function setName($name)
-    {
-        $this->name = $name;
-        return $this;
-    }
-
-    /**
-     * Get the class name
-     *
-     * @return string
-     */
-    public function getName()
-    {
-        return $this->name;
+        $this->setAsAbstract($abstract);
     }
 
     /**
@@ -197,199 +94,161 @@ class ClassGenerator implements GeneratorInterface
     }
 
     /**
-     * Set the class interface
+     * Has parent
+     *
+     * @return boolean
+     */
+    public function hasParent()
+    {
+        return (null !== $this->parent);
+    }
+
+    /**
+     * Add a class interface
      *
      * @param  string $interface
      * @return ClassGenerator
      */
-    public function setInterface($interface = null)
+    public function addInterface($interface)
     {
-        $this->interface = $interface;
+        if (!in_array($interface, $this->interfaces)) {
+            $this->interfaces[] = $interface;
+        }
+
         return $this;
     }
 
     /**
-     * Get the class interface
+     * Add a class interface
      *
-     * @return string
-     */
-    public function getInterface()
-    {
-        return $this->interface;
-    }
-
-    /**
-     * Set the namespace generator object
-     *
-     * @param  NamespaceGenerator $namespace
+     * @param  array $interfaces
      * @return ClassGenerator
      */
-    public function setNamespace(NamespaceGenerator $namespace)
+    public function addInterfaces(array $interfaces)
     {
-        $this->namespace = $namespace;
+        foreach ($interfaces as $interface) {
+            $this->addInterface($interface);
+        }
+
         return $this;
     }
 
     /**
-     * Access the namespace generator object
-     *
-     * @return NamespaceGenerator
-     */
-    public function getNamespace()
-    {
-        return $this->namespace;
-    }
-
-    /**
-     * Set the docblock generator object
-     *
-     * @param  DocblockGenerator $docblock
-     * @return ClassGenerator
-     */
-    public function setDocblock(DocblockGenerator $docblock)
-    {
-        $this->docblock = $docblock;
-        return $this;
-    }
-
-    /**
-     * Access the docblock generator object
-     *
-     * @return DocblockGenerator
-     */
-    public function getDocblock()
-    {
-        return $this->docblock;
-    }
-
-    /**
-     * Add a class property
-     *
-     * @param  PropertyGenerator $property
-     * @return ClassGenerator
-     */
-    public function addProperty(PropertyGenerator $property)
-    {
-        $this->properties[$property->getName()] = $property;
-        return $this;
-    }
-
-    /**
-     * Get a class property
-     *
-     * @param  mixed $property
-     * @return PropertyGenerator
-     */
-    public function getProperty($property)
-    {
-        $p = ($property instanceof PropertyGenerator) ? $property->getName() : $property;
-        return (isset($this->properties[$p])) ? $this->properties[$p] : null;
-    }
-
-    /**
-     * Get all properties
+     * Get the class interfaces
      *
      * @return array
      */
-    public function getProperties()
+    public function getInterfaces()
     {
-        return $this->properties;
+        return $this->interfaces;
     }
 
     /**
-     * Remove a class property
+     * Has class interfaces
      *
-     * @param  mixed $property
+     * @return boolean
+     */
+    public function hasInterfaces()
+    {
+        return (!empty($this->interfaces));
+    }
+
+    /**
+     * Has class interface
+     *
+     * @param  string $interface
+     * @return boolean
+     */
+    public function hasInterface($interface)
+    {
+        return (in_array($interface, $this->interfaces));
+    }
+
+    /**
+     * Remove class interface
+     *
+     * @param  string $interface
      * @return ClassGenerator
      */
-    public function removeProperty($property)
+    public function removeInterface($interface)
     {
-        $p = ($property instanceof PropertyGenerator) ? $property->getName() : $property;
-        if (isset($this->properties[$p])) {
-            unset($this->properties[$p]);
+        if (in_array($interface, $this->interfaces)) {
+            $key = array_search($interface, $this->interfaces);
+            unset($this->interfaces[$key]);
         }
-        return $this;
-    }
 
-    /**
-     * Add a class method
-     *
-     * @param  MethodGenerator $method
-     * @return ClassGenerator
-     */
-    public function addMethod(MethodGenerator $method)
-    {
-        $this->methods[$method->getName()] = $method;
-        return $this;
-    }
-
-    /**
-     * Get a method property
-     *
-     * @param  mixed $method
-     * @return MethodGenerator
-     */
-    public function getMethod($method)
-    {
-        $m = ($method instanceof MethodGenerator) ? $method->getName() : $method;
-        return (isset($this->methods[$m])) ? $this->methods[$m] : null;
-    }
-
-    /**
-     * Get all methods
-     *
-     * @return array
-     */
-    public function getMethods()
-    {
-        return $this->methods;
-    }
-
-    /**
-     * Remove a method property
-     *
-     * @param  mixed $method
-     * @return ClassGenerator
-     */
-    public function removeMethod($method)
-    {
-        $m = ($method instanceof MethodGenerator) ? $method->getName() : $method;
-        if (isset($this->methods[$m])) {
-            unset($this->methods[$m]);
-        }
         return $this;
     }
 
     /**
      * Render class
      *
-     * @param  boolean $ret
-     * @return mixed
+     * @return string
      */
-    public function render($ret = false)
+    public function render()
     {
-        $abstract = ($this->abstract) ? 'abstract ' : null;
-        $this->output = (null !== $this->namespace) ? $this->namespace->render(true) . PHP_EOL : null;
-        $this->output .= (null !== $this->docblock) ? $this->docblock->render(true) : null;
-        $this->output .= $abstract . 'class ' . $this->name;
+        $classKeyword = null;
+
+        if ($this->isAbstract()) {
+            $classKeyword = 'abstract ';
+        } else if ($this->isFinal()) {
+            $classKeyword = 'final ';
+        }
+
+        $this->output  = (null !== $this->namespace) ? $this->namespace->render() . PHP_EOL : null;
+        $this->output .= (null !== $this->docblock) ? $this->docblock->render() : null;
+        $this->output .= $classKeyword . 'class ' . $this->name;
 
         if (null !== $this->parent) {
             $this->output .= ' extends ' . $this->parent;
         }
-        if (null !== $this->interface) {
-            $this->output .= ' implements ' . $this->interface;
+        if (!empty($this->interfaces)) {
+            $this->output .= ' implements ' . implode(', ', $this->interfaces);
         }
 
-        $this->output .= PHP_EOL . '{';
-        $this->output .= $this->formatProperties() . PHP_EOL;
-        $this->output .= $this->formatMethods() . PHP_EOL;
-        $this->output .= '}' . PHP_EOL;
+        $this->output .= PHP_EOL . '{' . PHP_EOL;
 
-        if ($ret) {
-            return $this->output;
-        } else {
-            echo $this->output;
+        if ($this->hasUses()) {
+            $this->output .= PHP_EOL;
+            foreach ($this->uses as $ns => $as) {
+                $this->output .= $this->printIndent() . 'use ';
+                $this->output .= $ns;
+                if (null !== $as) {
+                    $this->output .= ' as ' . $as;
+                }
+                $this->output .= ';' . PHP_EOL;
+            }
         }
+
+        if ($this->hasConstants()) {
+            $this->output .= $this->formatConstants();
+        }
+        if ($this->hasProperties()) {
+            $this->output .= $this->formatProperties();
+        }
+        if ($this->hasMethods()) {
+            $this->output .= $this->formatMethods();
+        }
+
+        $this->output .= PHP_EOL . '}' . PHP_EOL;
+
+        return $this->output;
+    }
+
+    /**
+     * Format the constants
+     *
+     * @return string
+     */
+    protected function formatConstants()
+    {
+        $constants = null;
+
+        foreach ($this->constants as $constant) {
+            $constants .= $constant->render() . PHP_EOL;
+        }
+
+        return $constants;
     }
 
     /**
@@ -402,7 +261,7 @@ class ClassGenerator implements GeneratorInterface
         $props = null;
 
         foreach ($this->properties as $prop) {
-            $props .= PHP_EOL . $prop->render(true);
+            $props .= $prop->render() . PHP_EOL;
         }
 
         return $props;
@@ -418,7 +277,7 @@ class ClassGenerator implements GeneratorInterface
         $methods = null;
 
         foreach ($this->methods as $method) {
-            $methods .= PHP_EOL . $method->render(true);
+            $methods .= $method->render() . PHP_EOL;
         }
 
         return $methods;
@@ -431,7 +290,7 @@ class ClassGenerator implements GeneratorInterface
      */
     public function __toString()
     {
-        return $this->render(true);
+        return $this->render();
     }
 
 }

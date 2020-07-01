@@ -4,7 +4,7 @@
  *
  * @link       https://github.com/popphp/popphp-framework
  * @author     Nick Sagona, III <dev@nolainteractive.com>
- * @copyright  Copyright (c) 2009-2019 NOLA Interactive, LLC. (http://www.nolainteractive.com)
+ * @copyright  Copyright (c) 2009-2020 NOLA Interactive, LLC. (http://www.nolainteractive.com)
  * @license    http://www.popphp.org/license     New BSD License
  */
 
@@ -13,15 +13,17 @@
  */
 namespace Pop\Pdf\Build\Font;
 
+use Pop\Utils\ArrayObject as Data;
+
 /**
  * TrueType font class
  *
  * @category   Pop
  * @package    Pop\Pdf
  * @author     Nick Sagona, III <dev@nolainteractive.com>
- * @copyright  Copyright (c) 2009-2019 NOLA Interactive, LLC. (http://www.nolainteractive.com)
+ * @copyright  Copyright (c) 2009-2020 NOLA Interactive, LLC. (http://www.nolainteractive.com)
  * @license    http://www.popphp.org/license     New BSD License
- * @version    3.2.0
+ * @version    4.0.0
  */
 class TrueType extends AbstractFont
 {
@@ -60,11 +62,12 @@ class TrueType extends AbstractFont
      *
      * Instantiate a TrueType font file object based on a pre-existing font file on disk.
      *
-     * @param  string $font
+     * @param  string $fontFile
+     * @param  string $fontStream
      */
-    public function __construct($font)
+    public function __construct($fontFile = null, $fontStream = null)
     {
-        parent::__construct($font);
+        parent::__construct($fontFile, $fontStream);
 
         $this->parseTtfTable();
         $this->parseName();
@@ -98,21 +101,21 @@ class TrueType extends AbstractFont
 
         $ttfTable['name'] = $tableName;
 
-        $this->properties['ttfHeader'] = new \ArrayObject($ttfHeader, \ArrayObject::ARRAY_AS_PROPS);
-        $this->properties['ttfTable']  = new \ArrayObject($ttfTable, \ArrayObject::ARRAY_AS_PROPS);
+        $this->properties['ttfHeader'] = new Data($ttfHeader);
+        $this->properties['ttfTable']  = new Data($ttfTable);
 
-        $nameByteOffset = 28;
+        $nameByteOffset  = 28;
         $tableByteOffset = 32;
 
         for ($i = 0; $i < $this->properties['ttfHeader']['numberOfTables']; $i++) {
             $ttfTableName = $this->read($nameByteOffset, 4);
-            $ttfTable = unpack(
+            $ttfTable     = unpack(
                 'Nchecksum/' .
                 'Noffset/' .
                 'Nlength', $this->read($tableByteOffset, 12)
             );
 
-            $this->properties['tableInfo'][trim($ttfTableName)] = new \ArrayObject($ttfTable, \ArrayObject::ARRAY_AS_PROPS);
+            $this->properties['tableInfo'][trim($ttfTableName)] = new Data($ttfTable);
 
             $nameByteOffset = $tableByteOffset + 12;
             $tableByteOffset = $nameByteOffset + 4;
@@ -157,12 +160,12 @@ class TrueType extends AbstractFont
             $this->properties['tables']['head']['xMax'] = $this->toEmSpace($this->properties['tables']['head']['xMax']);
             $this->properties['tables']['head']['yMax'] = $this->toEmSpace($this->properties['tables']['head']['yMax']);
 
-            $this->properties['bBox'] = new \ArrayObject([
+            $this->properties['bBox'] = new Data([
                 'xMin' => $this->properties['tables']['head']['xMin'],
                 'yMin' => $this->properties['tables']['head']['yMin'],
                 'xMax' => $this->properties['tables']['head']['xMax'],
                 'yMax' => $this->properties['tables']['head']['yMax']
-            ], \ArrayObject::ARRAY_AS_PROPS);
+            ]);
 
             $this->properties['header'] = $this->properties['tables']['head'];
         }

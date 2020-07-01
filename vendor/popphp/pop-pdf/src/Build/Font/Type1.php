@@ -4,7 +4,7 @@
  *
  * @link       https://github.com/popphp/popphp-framework
  * @author     Nick Sagona, III <dev@nolainteractive.com>
- * @copyright  Copyright (c) 2009-2019 NOLA Interactive, LLC. (http://www.nolainteractive.com)
+ * @copyright  Copyright (c) 2009-2020 NOLA Interactive, LLC. (http://www.nolainteractive.com)
  * @license    http://www.popphp.org/license     New BSD License
  */
 
@@ -13,15 +13,17 @@
  */
 namespace Pop\Pdf\Build\Font;
 
+use Pop\Utils\ArrayObject as Data;
+
 /**
  * Type1 font class
  *
  * @category   Pop
  * @package    Pop\Pdf
  * @author     Nick Sagona, III <dev@nolainteractive.com>
- * @copyright  Copyright (c) 2009-2019 NOLA Interactive, LLC. (http://www.nolainteractive.com)
+ * @copyright  Copyright (c) 2009-2020 NOLA Interactive, LLC. (http://www.nolainteractive.com)
  * @license    http://www.popphp.org/license     New BSD License
- * @version    3.2.0
+ * @version    4.0.0
  */
 class Type1 extends AbstractFont
 {
@@ -62,11 +64,12 @@ class Type1 extends AbstractFont
      *
      * Instantiate a Type1 font file object based on a pre-existing font file on disk.
      *
-     * @param  string $font
+     * @param  string $fontFile
+     * @param  string $fontStream
      */
-    public function __construct($font)
+    public function __construct($fontFile = null, $fontStream = null)
     {
-        parent::__construct($font);
+        parent::__construct($fontFile, $fontStream);
 
         $dir = realpath($this->dir);
 
@@ -166,19 +169,19 @@ class Type1 extends AbstractFont
             $info['copyright'] = $this->strip($copyright);
         }
 
-        $this->properties['info'] = new \ArrayObject($info, \ArrayObject::ARRAY_AS_PROPS);
+        $this->properties['info'] = new Data($info);
 
         if (stripos($this->properties['dict'], '/FontBBox') !== false) {
             $bBox = substr($this->properties['dict'], (stripos($this->properties['dict'], '/FontBBox') + 9));
             $bBox = substr($bBox, 0, stripos($bBox, 'readonly def'));
             $bBox = trim($this->strip($bBox));
             $bBoxAry = explode(' ', $bBox);
-            $this->properties['bBox'] = new \ArrayObject([
+            $this->properties['bBox'] = new Data([
                 'xMin' => str_replace('{', '', $bBoxAry[0]),
                 'yMin' => $bBoxAry[1],
                 'xMax' => $bBoxAry[2],
                 'yMax' => str_replace('}', '', $bBoxAry[3])
-            ], \ArrayObject::ARRAY_AS_PROPS);
+            ]);
         }
 
         if (stripos($this->properties['dict'], '/Ascent') !== false) {
@@ -237,12 +240,12 @@ class Type1 extends AbstractFont
             $bBox = substr($bBox, 0, stripos($bBox, "\n"));
             $bBox = trim($bBox);
             $bBoxAry = explode(' ', $bBox);
-            $this->properties['bBox'] = new \ArrayObject([
+            $this->properties['bBox'] = new Data([
                 'xMin' => $bBoxAry[0],
                 'yMin' => $bBoxAry[1],
                 'xMax' => $bBoxAry[2],
                 'yMax' => $bBoxAry[3]
-            ], \ArrayObject::ARRAY_AS_PROPS);
+            ]);
         }
 
         if (stripos($data, 'ItalicAngle') !== false) {

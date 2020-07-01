@@ -53,19 +53,20 @@ class Module extends \Pop\Module\Module
      */
     protected function initDb($database)
     {
-        if (!empty($database['adapter'])) {
-            $adapter = $database['adapter'];
+        if (isset($database['default']) &&
+            !empty($database['default']['adapter']) && !empty($database['default']['database'])) {
+            $adapter = $database['default']['adapter'];
             $options = [
-                'database' => $database['database'],
-                'username' => $database['username'],
-                'password' => $database['password'],
-                'host'     => $database['host'],
-                'type'     => $database['type']
+                'database' => $database['default']['database'],
+                'username' => $database['default']['username'] ?? null,
+                'password' => $database['default']['password'] ?? null,
+                'host'     => $database['default']['host'] ?? null,
+                'type'     => $database['default']['type'] ?? null
             ];
 
             $check = Db\Db::check($adapter, $options);
 
-            if (null !== $check) {
+            if ($check !== true) {
                 throw new \Pop\Db\Adapter\Exception('Error: ' . $check);
             }
 

@@ -4,7 +4,7 @@
  *
  * @link       https://github.com/popphp/popphp-framework
  * @author     Nick Sagona, III <dev@nolainteractive.com>
- * @copyright  Copyright (c) 2009-2019 NOLA Interactive, LLC. (http://www.nolainteractive.com)
+ * @copyright  Copyright (c) 2009-2020 NOLA Interactive, LLC. (http://www.nolainteractive.com)
  * @license    http://www.popphp.org/license     New BSD License
  */
 
@@ -23,9 +23,9 @@ use Pop\Db\Adapter\AbstractAdapter;
  * @category   Pop
  * @package    Pop\Db
  * @author     Nick Sagona, III <dev@nolainteractive.com>
- * @copyright  Copyright (c) 2009-2019 NOLA Interactive, LLC. (http://www.nolainteractive.com)
+ * @copyright  Copyright (c) 2009-2020 NOLA Interactive, LLC. (http://www.nolainteractive.com)
  * @license    http://www.popphp.org/license     New BSD License
- * @version    4.5.0
+ * @version    5.0.0
  */
 abstract class AbstractGateway implements GatewayInterface
 {
@@ -89,8 +89,8 @@ abstract class AbstractGateway implements GatewayInterface
                 case Sql::SQLSRV:
                     $sqlString = 'SELECT * FROM information_schema.columns ' .
                         'LEFT JOIN information_schema.table_constraints ' .
-                        'ON information_schema.columns.table_name = information_schema.table_constraints.table_name ' .
-                        'WHERE table_name = \'' . $this->table . '\' ORDER BY information_schema.ordinal_position ASC';
+                        'ON information_schema.table_constraints.table_name = information_schema.columns.table_name ' .
+                        'WHERE information_schema.columns.table_name = \'' . $this->table . '\'';
                     break;
                 case Sql::SQLITE:
                     $sqlString = 'PRAGMA table_info(\'' . $this->table . '\')';

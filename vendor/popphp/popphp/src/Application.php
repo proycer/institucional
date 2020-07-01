@@ -21,7 +21,7 @@ namespace Pop;
  * @author     Nick Sagona, III <dev@nolainteractive.com>
  * @copyright  Copyright (c) 2009-2020 NOLA Interactive, LLC. (http://www.nolainteractive.com)
  * @license    http://www.popphp.org/license     New BSD License
- * @version    3.3.3
+ * @version    3.4.0
  * @property   $config mixed
  */
 class Application extends AbstractApplication implements \ArrayAccess
@@ -394,7 +394,6 @@ class Application extends AbstractApplication implements \ArrayAccess
      *
      * @param  string $name
      * @throws Service\Exception
-     * @throws \ReflectionException
      * @return mixed
      */
     public function getService($name)
@@ -458,8 +457,6 @@ class Application extends AbstractApplication implements \ArrayAccess
      *
      * @param  string $name
      * @param  array $args
-     * @throws Event\Exception
-     * @throws \ReflectionException
      * @return Application
      */
     public function trigger($name, array $args = [])

@@ -4,7 +4,7 @@
  *
  * @link       https://github.com/popphp/popphp-framework
  * @author     Nick Sagona, III <dev@nolainteractive.com>
- * @copyright  Copyright (c) 2009-2019 NOLA Interactive, LLC. (http://www.nolainteractive.com)
+ * @copyright  Copyright (c) 2009-2020 NOLA Interactive, LLC. (http://www.nolainteractive.com)
  * @license    http://www.popphp.org/license     New BSD License
  */
 
@@ -19,12 +19,42 @@ namespace Pop\Db\Adapter;
  * @category   Pop
  * @package    Pop\Db
  * @author     Nick Sagona, III <dev@nolainteractive.com>
- * @copyright  Copyright (c) 2009-2019 NOLA Interactive, LLC. (http://www.nolainteractive.com)
+ * @copyright  Copyright (c) 2009-2020 NOLA Interactive, LLC. (http://www.nolainteractive.com)
  * @license    http://www.popphp.org/license     New BSD License
- * @version    4.5.0
+ * @version    5.0.0
  */
 interface AdapterInterface
 {
+
+    /**
+     * Connect to the database
+     *
+     * @param  array $options
+     * @return AdapterInterface
+     */
+    public function connect(array $options = []);
+
+    /**
+     * Set database connection options
+     *
+     * @param  array $options
+     * @return AdapterInterface
+     */
+    public function setOptions(array $options);
+
+    /**
+     * Get database connection options
+     *
+     * @return array
+     */
+    public function getOptions();
+
+    /**
+     * Has database connection options
+     *
+     * @return boolean
+     */
+    public function hasOptions();
 
     /**
      * Begin a transaction

@@ -14,16 +14,16 @@
 namespace Pop\Code\Generator;
 
 /**
- * Docblock generator code class
+ * Abstract generator class
  *
  * @category   Pop
  * @package    Pop\Code
  * @author     Nick Sagona, III <dev@nolainteractive.com>
  * @copyright  Copyright (c) 2009-2020 NOLA Interactive, LLC. (http://www.nolainteractive.com)
  * @license    http://www.popphp.org/license     New BSD License
- * @version    3.1.2
+ * @version    4.0.0
  */
-class DocblockGenerator implements GeneratorInterface
+class DocblockGenerator extends AbstractGenerator
 {
 
     /**
@@ -39,121 +39,17 @@ class DocblockGenerator implements GeneratorInterface
     protected $tags = ['param' => []];
 
     /**
-     * Docblock indent
-     * @var string
-     */
-    protected $indent = null;
-
-    /**
-     * Docblock output
-     * @var string
-     */
-    protected $output = null;
-
-    /**
      * Constructor
      *
      * Instantiate the docblock generator object
      *
-     * @param  string $desc
-     * @param  string $indent
+     * @param string $desc
+     * @param int    $indent
      */
-    public function __construct($desc = null, $indent = null)
+    public function __construct($desc = null, $indent = 4)
     {
         $this->setDesc($desc);
         $this->setIndent($indent);
-    }
-
-    /**
-     * Static method to parse a docblock string and return a new
-     * docblock generator object.
-     *
-     * @param  string $docblock
-     * @param  string $forceIndent
-     * @throws Exception
-     * @return DocblockGenerator
-     */
-    public static function parse($docblock, $forceIndent = null)
-    {
-        if ((strpos($docblock, '/*') === false) || (strpos($docblock, '*/') === false)) {
-            throw new Exception('The docblock is not in the correct format.');
-        }
-
-        $desc          = null;
-        $formattedDesc = null;
-        $indent        = null;
-        $tags          = null;
-
-        // Parse the description, if any
-        if (strpos($docblock, '@') !== false) {
-            $desc    = substr($docblock, 0, strpos($docblock, '@'));
-            $desc    = str_replace('/*', '', $desc);
-            $desc    = str_replace('*/', '', $desc);
-            $desc    = str_replace(PHP_EOL . ' * ', ' ', $desc);
-            $desc    = trim(str_replace('*', '', $desc));
-            $descAry = explode("\n", $desc);
-
-            $formattedDesc = null;
-            foreach ($descAry as $line) {
-                $formattedDesc .= ' ' . trim($line);
-            }
-
-            $formattedDesc = trim($formattedDesc);
-        }
-
-        // Get the indentation, if any, and create docblock object
-        $indent      = (null === $forceIndent) ? substr($docblock, 0, strpos($docblock, '/')) : $forceIndent;
-        $newDocblock = new self($formattedDesc, $indent);
-
-        // Get the tags, if any
-        if (strpos($docblock, '@') !== false) {
-            $tags    = substr($docblock, strpos($docblock, '@'));
-            $tags    = substr($tags, 0, strpos($tags, '*/'));
-            $tags    = str_replace('*', '', $tags);
-            $tagsAry = explode("\n", $tags);
-
-            foreach ($tagsAry as $key => $value) {
-                $value = trim(str_replace('@', '', $value));
-                // Param tags
-                if (stripos($value, 'param') !== false) {
-                    $paramtag  = trim(str_replace('param', '', $value));
-                    $paramtype = trim(substr($paramtag, 0, strpos($paramtag, ' ')));
-                    $varname   = null;
-                    $paramdesc = null;
-                    if (strpos($paramtag, ' ') !== false) {
-                        $varname = trim(substr($paramtag, strpos($paramtag, ' ')));
-                        if (strpos($varname, ' ') !== false) {
-                            $paramdesc = trim(substr($varname, strpos($varname, ' ')));
-                        }
-                    } else {
-                        $paramtype = $paramtag;
-                    }
-                    $newDocblock->setParam($paramtype, $varname, $paramdesc);
-                // Else, return tags
-                } else if (stripos($value, 'return') !== false) {
-                    $returntag = trim(str_replace('return', '', $value));
-                    if (strpos($returntag, ' ') !== false) {
-                        $returntype = substr($returntag, 0, strpos($returntag, ' '));
-                        $returndesc = trim(str_replace($returntype, '', $returntag));
-                    } else {
-                        $returntype = $returntag;
-                        $returndesc = null;
-                    }
-                    $newDocblock->setReturn($returntype, $returndesc);
-                // Else, all other tags
-                } else {
-                    $tagname = trim(substr($value, 0, strpos($value, ' ')));
-                    $tagdesc = trim(str_replace($tagname, '', $value));
-                    if (!empty($tagname) && !empty($tagdesc)) {
-                        $newDocblock->setTag($tagname, $tagdesc);
-                    } else {
-                        unset($tagsAry[$key]);
-                    }
-                }
-            }
-        }
-
-        return $newDocblock;
     }
 
     /**
@@ -179,25 +75,13 @@ class DocblockGenerator implements GeneratorInterface
     }
 
     /**
-     * Set the docblock indent
+     * Has a docblock description
      *
-     * @param  string $indent
-     * @return DocblockGenerator
+     * @return boolean
      */
-    public function setIndent($indent = null)
+    public function hasDesc()
     {
-        $this->indent = $indent;
-        return $this;
-    }
-
-    /**
-     * Get the docblock indent
-     *
-     * @return string
-     */
-    public function getIndent()
-    {
-        return $this->indent;
+        return (null !== $this->desc);
     }
 
     /**
@@ -207,7 +91,7 @@ class DocblockGenerator implements GeneratorInterface
      * @param  string $desc
      * @return DocblockGenerator
      */
-    public function setTag($name, $desc = null)
+    public function addTag($name, $desc = null)
     {
         $this->tags[$name] = $desc;
         return $this;
@@ -219,7 +103,7 @@ class DocblockGenerator implements GeneratorInterface
      * @param  array $tags
      * @return DocblockGenerator
      */
-    public function setTags(array $tags)
+    public function addTags(array $tags)
     {
         foreach ($tags as $name => $desc) {
             $this->tags[$name] = $desc;
@@ -239,6 +123,17 @@ class DocblockGenerator implements GeneratorInterface
     }
 
     /**
+     * Has a tag
+     *
+     * @param  string $name
+     * @return boolean
+     */
+    public function hasTag($name)
+    {
+        return (isset($this->tags[$name]));
+    }
+
+    /**
      * Add a param tag
      *
      * @param  string $type
@@ -246,7 +141,7 @@ class DocblockGenerator implements GeneratorInterface
      * @param  string $desc
      * @return DocblockGenerator
      */
-    public function setParam($type, $var = null, $desc = null)
+    public function addParam($type = null, $var = null, $desc = null)
     {
         $this->tags['param'][] = ['type' => $type, 'var' => $var, 'desc' => $desc];
         return $this;
@@ -258,7 +153,7 @@ class DocblockGenerator implements GeneratorInterface
      * @param  array $params
      * @return DocblockGenerator
      */
-    public function setParams(array $params)
+    public function addParams(array $params)
     {
         $params = (isset($params[0]) && is_array($params[0])) ? $params : [$params];
         foreach ($params as $param) {
@@ -275,7 +170,18 @@ class DocblockGenerator implements GeneratorInterface
      */
     public function getParam($index)
     {
-        return (isset($this->tags['param'][$index])) ? $this->tags['param'][$index] : null;
+        return (isset($this->tags['param']) && isset($this->tags['param'][$index])) ? $this->tags['param'][$index] : null;
+    }
+
+    /**
+     * Has a param
+     *
+     * @param  int $index
+     * @return boolean
+     */
+    public function hasParam($index)
+    {
+        return (isset($this->tags['param']) && isset($this->tags['param'][$index]));
     }
 
     /**
@@ -302,36 +208,74 @@ class DocblockGenerator implements GeneratorInterface
     }
 
     /**
+     * Has a return
+     *
+     * @return boolean
+     */
+    public function hasReturn()
+    {
+        return (isset($this->tags['return']));
+    }
+
+    /**
+     * Add a throws tag
+     *
+     * @param  string $type
+     * @param  string $desc
+     * @return DocblockGenerator
+     */
+    public function setThrows($type, $desc = null)
+    {
+        $this->tags['throws'] = ['type' => $type, 'desc' => $desc];
+        return $this;
+    }
+
+    /**
+     * Get the throws
+     *
+     * @return array
+     */
+    public function getThrows()
+    {
+        return (isset($this->tags['throws'])) ? $this->tags['throws'] : null;
+    }
+
+    /**
+     * Has a throws
+     *
+     * @return boolean
+     */
+    public function hasThrows()
+    {
+        return (isset($this->tags['throws']));
+    }
+
+    /**
      * Render docblock
      *
-     * @param  boolean $ret
-     * @return mixed
+     * @return string
      */
-    public function render($ret = false)
+    public function render()
     {
-        $this->output = $this->indent . '/**' . PHP_EOL;
+        $this->output = $this->printIndent() . '/**' . PHP_EOL;
 
         if (!empty($this->desc)) {
-            $desc = trim($this->desc);
+            $desc    = trim($this->desc);
             $descAry = explode("\n", $desc);
             $i = 0;
             foreach ($descAry as $d) {
                 $i++;
-                $this->output .= $this->indent . ' * ' . wordwrap($d, 70, PHP_EOL . $this->indent . " * ") . PHP_EOL;
+                $this->output .= $this->printIndent() . ' * ' . wordwrap($d, 70, PHP_EOL . $this->printIndent() . " * ") . PHP_EOL;
                 if ($i < count($descAry)) {
-                     $this->output .= $this->indent . ' * ' . PHP_EOL;
+                    $this->output .= $this->printIndent() . ' * ' . PHP_EOL;
                 }
             }
         }
 
         $this->output .= $this->formatTags();
-        $this->output .= $this->indent . ' */' . PHP_EOL;
+        $this->output .= $this->printIndent() . ' */' . PHP_EOL;
 
-        if ($ret) {
-            return $this->output;
-        } else {
-            echo $this->output;
-        }
+        return $this->output;
     }
 
     /**
@@ -347,7 +291,7 @@ class DocblockGenerator implements GeneratorInterface
         // Format basic tags
         foreach ($this->tags as $tag => $desc) {
             if (($tag != 'param') && ($tag != 'return') && ($tag != 'throws')) {
-                $tags .= $this->indent . ' * @' . $tag .
+                $tags .= $this->printIndent() . ' * @' . $tag .
                     str_repeat(' ', $tagLength - strlen($tag) + 1) .
                     $desc . PHP_EOL;
             }
@@ -356,29 +300,34 @@ class DocblockGenerator implements GeneratorInterface
         // Format param tags
         foreach ($this->tags['param'] as $param) {
             $paramLength = $this->getParamLength();
-            $tags .= $this->indent . ' * @param' .
-                str_repeat(' ', $tagLength - 4) . $param['type'] .
-                str_repeat(' ', $paramLength - strlen($param['type']) + 1) .
-                $param['var'];
-            if (null !== $param['desc']) {
-                $tags .= ' ' . $param['desc'] . PHP_EOL;
-            } else {
-                $tags .= PHP_EOL;
+            $tags .= $this->printIndent() . ' * @param';
+
+            if (!empty($param['type'])) {
+                $tags .= str_repeat(' ', $tagLength - 4) . $param['type'] .
+                    str_repeat(' ', $paramLength - strlen($param['type']) + 1);
             }
+            if (!empty($param['var'])) {
+                $tags .= ' ' . $param['var'];
+            }
+            $tags .= (null !== $param['desc']) ? $param['desc'] . PHP_EOL : PHP_EOL;
         }
 
         // Format throw tag
         if (array_key_exists('throws', $this->tags)) {
-            $tags .= $this->indent . ' * @throws' .
-                 str_repeat(' ', $tagLength - 5) .
-                 $this->tags['throws'] . PHP_EOL;
+            $throws = $this->tags['throws']['type'];
+            if (!empty($this->tags['throws']['desc'])) {
+                $throws .= ' ' . $this->tags['throws']['desc'];
+            }
+            $tags .= $this->printIndent() . ' * @throws' .
+                str_repeat(' ', $tagLength - 5) .
+                $throws . PHP_EOL;
         }
 
         // Format return tag
         if (array_key_exists('return', $this->tags)) {
-            $tags .= $this->indent . ' * @return' .
-                 str_repeat(' ', $tagLength - 5) .
-                 $this->tags['return']['type'];
+            $tags .= $this->printIndent() . ' * @return' .
+                str_repeat(' ', $tagLength - 5) .
+                $this->tags['return']['type'];
             if (null !== $this->tags['return']['desc']) {
                 $tags .= ' ' . $this->tags['return']['desc'] . PHP_EOL;
             } else {
@@ -386,7 +335,7 @@ class DocblockGenerator implements GeneratorInterface
             }
         }
 
-        return ((null !== $tags) && (null !== $this->desc)) ? $this->indent . ' * ' . PHP_EOL . $tags : $tags;
+        return ((null !== $tags) && (null !== $this->desc)) ? $this->printIndent() . ' * ' . PHP_EOL . $tags : $tags;
     }
 
     /**
@@ -432,7 +381,7 @@ class DocblockGenerator implements GeneratorInterface
      */
     public function __toString()
     {
-        return $this->render(true);
+        return $this->render();
     }
 
 }

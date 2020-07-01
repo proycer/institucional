@@ -4,7 +4,7 @@
  *
  * @link       https://github.com/popphp/popphp-framework
  * @author     Nick Sagona, III <dev@nolainteractive.com>
- * @copyright  Copyright (c) 2009-2019 NOLA Interactive, LLC. (http://www.nolainteractive.com)
+ * @copyright  Copyright (c) 2009-2020 NOLA Interactive, LLC. (http://www.nolainteractive.com)
  * @license    http://www.popphp.org/license     New BSD License
  */
 
@@ -21,18 +21,12 @@ use Pop\Db\Sql\AbstractSql;
  * @category   Pop
  * @package    Pop\Db
  * @author     Nick Sagona, III <dev@nolainteractive.com>
- * @copyright  Copyright (c) 2009-2019 NOLA Interactive, LLC. (http://www.nolainteractive.com)
+ * @copyright  Copyright (c) 2009-2020 NOLA Interactive, LLC. (http://www.nolainteractive.com)
  * @license    http://www.popphp.org/license     New BSD License
- * @version    4.5.0
+ * @version    5.0.0
  */
 class Sql extends AbstractSql
 {
-
-    /**
-     * Database object
-     * @var Adapter\AbstractAdapter
-     */
-    protected $db = null;
 
     /**
      * Select object
@@ -61,10 +55,10 @@ class Sql extends AbstractSql
     /**
      * Access the select object
      *
-     * @param  array $columns
+     * @param  mixed $columns
      * @return Sql\Select
      */
-    public function select(array $columns = null)
+    public function select($columns = null)
     {
         $this->insert = null;
         $this->update = null;
@@ -74,6 +68,9 @@ class Sql extends AbstractSql
             $this->select = new Sql\Select($this->db);
         }
         if (null !== $columns) {
+            if (!is_array($columns)) {
+                $columns = [$columns];
+            }
             foreach ($columns as $name => $value) {
                 if (!is_numeric($name)) {
                     $this->select->addNamedValue($name, $value);

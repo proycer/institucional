@@ -4,7 +4,7 @@
  *
  * @link       https://github.com/popphp/popphp-framework
  * @author     Nick Sagona, III <dev@nolainteractive.com>
- * @copyright  Copyright (c) 2009-2019 NOLA Interactive, LLC. (http://www.nolainteractive.com)
+ * @copyright  Copyright (c) 2009-2020 NOLA Interactive, LLC. (http://www.nolainteractive.com)
  * @license    http://www.popphp.org/license     New BSD License
  */
 
@@ -13,7 +13,7 @@
  */
 namespace Pop\Pdf\Document\Page\Text;
 
-use Pop\Pdf\Document\Page\Text as Txt;
+use Pop\Pdf\Document\Page;
 use Pop\Pdf\Document\Font;
 
 /**
@@ -22,9 +22,9 @@ use Pop\Pdf\Document\Font;
  * @category   Pop
  * @package    Pop\Pdf
  * @author     Nick Sagona, III <dev@nolainteractive.com>
- * @copyright  Copyright (c) 2009-2019 NOLA Interactive, LLC. (http://www.nolainteractive.com)
+ * @copyright  Copyright (c) 2009-2020 NOLA Interactive, LLC. (http://www.nolainteractive.com)
  * @license    http://www.popphp.org/license     New BSD License
- * @version    3.2.0
+ * @version    4.0.0
  */
 class Alignment extends AbstractAlignment
 {
@@ -76,12 +76,12 @@ class Alignment extends AbstractAlignment
     /**
      * Get strings
      *
-     * @param  Txt  $text
-     * @param  Font $font
-     * @param  int  $startY
+     * @param  Page\Text $text
+     * @param  Font      $font
+     * @param  int       $startY
      * @return array
      */
-    public function getStrings(Txt $text, Font $font, $startY)
+    public function getStrings(Page\Text $text, Font $font, $startY)
     {
         $strings    = [];
         $curString  = '';

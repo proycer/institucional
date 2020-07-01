@@ -4,8 +4,8 @@ namespace ProycerWeb\Http\Controller;
 
 use Pop\Application;
 use Pop\Http\Exception;
-use Pop\Http\Request;
-use Pop\Http\Response;
+use Pop\Http\Server\Request;
+use Pop\Http\Server\Response;
 use Pop\View\View;
 
 abstract class AbstractController extends \Pop\Controller\AbstractController

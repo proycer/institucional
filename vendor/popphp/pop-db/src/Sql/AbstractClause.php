@@ -4,7 +4,7 @@
  *
  * @link       https://github.com/popphp/popphp-framework
  * @author     Nick Sagona, III <dev@nolainteractive.com>
- * @copyright  Copyright (c) 2009-2019 NOLA Interactive, LLC. (http://www.nolainteractive.com)
+ * @copyright  Copyright (c) 2009-2020 NOLA Interactive, LLC. (http://www.nolainteractive.com)
  * @license    http://www.popphp.org/license     New BSD License
  */
 
@@ -19,9 +19,9 @@ namespace Pop\Db\Sql;
  * @category   Pop
  * @package    Pop\Db
  * @author     Nick Sagona, III <dev@nolainteractive.com>
- * @copyright  Copyright (c) 2009-2019 NOLA Interactive, LLC. (http://www.nolainteractive.com)
+ * @copyright  Copyright (c) 2009-2020 NOLA Interactive, LLC. (http://www.nolainteractive.com)
  * @license    http://www.popphp.org/license     New BSD License
- * @version    4.5.0
+ * @version    5.0.0
  */
 abstract class AbstractClause extends AbstractSql
 {
@@ -43,6 +43,34 @@ abstract class AbstractClause extends AbstractSql
      * @var array
      */
     protected $values = [];
+
+    /**
+     * Supported standard SQL aggregate functions
+     * @var array
+     */
+    protected static $aggregateFunctions = [
+        'AVG', 'COUNT', 'MAX', 'MIN', 'SUM'
+    ];
+
+    /**
+     * Supported standard SQL math functions
+     * @var array
+     */
+    protected static $mathFunctions = [
+        'ABS', 'RAND', 'SQRT', 'POW', 'POWER', 'EXP', 'LN', 'LOG', 'LOG10', 'GREATEST', 'LEAST',
+        'DIV', 'MOD', 'ROUND', 'TRUNC', 'CEIL', 'CEILING', 'FLOOR', 'COS', 'ACOS', 'ACOSH', 'SIN',
+        'SINH', 'ASIN', 'ASINH', 'TAN', 'TANH', 'ATANH', 'ATAN2',
+    ];
+
+    /**
+     * Supported standard SQL string functions
+     * @var array
+     */
+    protected static $stringFunctions = [
+        'CONCAT', 'FORMAT', 'INSTR', 'LCASE', 'LEFT', 'LENGTH', 'LOCATE', 'LOWER', 'LPAD',
+        'LTRIM', 'POSITION', 'QUOTE', 'REGEXP', 'REPEAT', 'REPLACE', 'REVERSE', 'RIGHT', 'RPAD',
+        'RTRIM', 'SPACE', 'STRCMP', 'SUBSTRING', 'SUBSTR', 'TRIM', 'UCASE', 'UPPER'
+    ];
 
     /**
      * Set the table
@@ -158,6 +186,24 @@ abstract class AbstractClause extends AbstractSql
     public function getValue($name)
     {
         return (isset($this->values[$name])) ? $this->values[$name] : null;
+    }
+
+    /**
+     * Check if value contains a standard SQL supported function
+     *
+     * @param  string $value
+     * @return boolean
+     */
+    public static function isSupportedFunction($value)
+    {
+        if (strpos($value, '(') !== false) {
+            $value = trim(substr($value, 0, strpos($value, '(')));
+        }
+        $value = strtoupper($value);
+
+        return (in_array($value, static::$aggregateFunctions) ||
+            in_array($value, static::$mathFunctions) ||
+            in_array($value, static::$stringFunctions));
     }
 
     /**

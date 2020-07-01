@@ -6,7 +6,17 @@ namespace Composer\Autoload;
 
 class ComposerStaticInit596a0c4799c22c99b69d7291ebae04c5
 {
+    public static $files = array (
+        'bd9634f2d41831496de0d3dfe4c94881' => __DIR__ . '/..' . '/symfony/polyfill-php56/bootstrap.php',
+    );
+
     public static $prefixLengthsPsr4 = array (
+        'S' => 
+        array (
+            'Symfony\\Polyfill\\Util\\' => 22,
+            'Symfony\\Polyfill\\Php56\\' => 23,
+            'SuperClosure\\' => 13,
+        ),
         'P' => 
         array (
             'Popcorn\\' => 8,
@@ -14,6 +24,7 @@ class ComposerStaticInit596a0c4799c22c99b69d7291ebae04c5
             'Pop\\Validator\\' => 14,
             'Pop\\Utils\\' => 10,
             'Pop\\Session\\' => 12,
+            'Pop\\Queue\\' => 10,
             'Pop\\Pdf\\' => 8,
             'Pop\\Paginator\\' => 14,
             'Pop\\Nav\\' => 8,
@@ -43,10 +54,23 @@ class ComposerStaticInit596a0c4799c22c99b69d7291ebae04c5
             'Pop\\Audit\\' => 10,
             'Pop\\Acl\\' => 8,
             'Pop\\' => 4,
+            'PhpParser\\' => 10,
         ),
     );
 
     public static $prefixDirsPsr4 = array (
+        'Symfony\\Polyfill\\Util\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/symfony/polyfill-util',
+        ),
+        'Symfony\\Polyfill\\Php56\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/symfony/polyfill-php56',
+        ),
+        'SuperClosure\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/jeremeamia/superclosure/src',
+        ),
         'Popcorn\\' => 
         array (
             0 => __DIR__ . '/..' . '/popphp/popcorn/src',
@@ -66,6 +90,10 @@ class ComposerStaticInit596a0c4799c22c99b69d7291ebae04c5
         'Pop\\Session\\' => 
         array (
             0 => __DIR__ . '/..' . '/popphp/pop-session/src',
+        ),
+        'Pop\\Queue\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/popphp/pop-queue/src',
         ),
         'Pop\\Pdf\\' => 
         array (
@@ -182,6 +210,10 @@ class ComposerStaticInit596a0c4799c22c99b69d7291ebae04c5
         'Pop\\' => 
         array (
             0 => __DIR__ . '/..' . '/popphp/popphp/src',
+        ),
+        'PhpParser\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/nikic/php-parser/lib/PhpParser',
         ),
     );
 

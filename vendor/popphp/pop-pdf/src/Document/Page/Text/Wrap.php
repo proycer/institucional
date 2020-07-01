@@ -4,7 +4,7 @@
  *
  * @link       https://github.com/popphp/popphp-framework
  * @author     Nick Sagona, III <dev@nolainteractive.com>
- * @copyright  Copyright (c) 2009-2019 NOLA Interactive, LLC. (http://www.nolainteractive.com)
+ * @copyright  Copyright (c) 2009-2020 NOLA Interactive, LLC. (http://www.nolainteractive.com)
  * @license    http://www.popphp.org/license     New BSD License
  */
 
@@ -13,18 +13,18 @@
  */
 namespace Pop\Pdf\Document\Page\Text;
 
-use Pop\Pdf\Document\Page\Text as Txt;
+use Pop\Pdf\Document\Page;
 use Pop\Pdf\Document\Font;
 
 /**
- * Pdf page text alignment class
+ * Pdf page text wrap class
  *
  * @category   Pop
  * @package    Pop\Pdf
  * @author     Nick Sagona, III <dev@nolainteractive.com>
- * @copyright  Copyright (c) 2009-2019 NOLA Interactive, LLC. (http://www.nolainteractive.com)
+ * @copyright  Copyright (c) 2009-2020 NOLA Interactive, LLC. (http://www.nolainteractive.com)
  * @license    http://www.popphp.org/license     New BSD License
- * @version    3.2.0
+ * @version    4.0.0
  */
 class Wrap extends AbstractAlignment
 {
@@ -50,7 +50,6 @@ class Wrap extends AbstractAlignment
      * @param int    $rightX
      * @param array  $box
      * @param int    $leading
-     * @param int $leading
      */
     public function __construct($alignment = self::LEFT, $leftX = 0, $rightX = 0, $box = [], $leading = 0)
     {
@@ -143,64 +142,78 @@ class Wrap extends AbstractAlignment
     /**
      * Get strings
      *
-     * @param  Txt  $text
-     * @param  Font $font
-     * @param  int  $startY
+     * @param  Page\Text $text
+     * @param  Font      $font
+     * @param  int       $startY
      * @return array
      */
-    public function getStrings(Txt $text, Font $font, $startY)
+    public function getStrings(Page\Text $text, Font $font, $startY)
     {
-        $strings    = [];
-        $curString  = '';
-        $words      = explode(' ', $text->getString());
-        $startX     = $this->leftX;
+        $stringAry = ($text->hasStrings()) ? $text->getStrings() : [$text->getString()];
+        $strings   = [];
+        $append    = false;
 
-        if ((int)$this->leading == 0) {
-            $this->leading = $text->getSize();
-        }
+        foreach ($stringAry as $key => $string) {
+            $stringValue = ($string instanceof Page\Text) ? $string->getString() : $string;
+            if (($append) && !empty($curString)) {
+                $stringValue = $curString . ' ' . $stringValue;
+                $append      = false;
+            }
+            $curString  = '';
+            $words      = explode(' ', $stringValue);
+            $startX     = $this->leftX;
 
-        foreach ($words as $word) {
-            if ($this->isRight()) {
-                if (($startY <= $this->box['top']) && ($startY >= $this->box['bottom'])) {
-                    $wrapLength = abs($this->rightX - $this->box['right']);
-                    $x          = $this->box['right'];
+            if ((int)$this->leading == 0) {
+                $this->leading = $text->getSize();
+            }
+
+            foreach ($words as $word) {
+                if ($this->isRight()) {
+                    if (($startY <= $this->box['top']) && ($startY >= $this->box['bottom'])) {
+                        $wrapLength = abs($this->rightX - $this->box['right']);
+                        $x          = $this->box['right'];
+                    } else {
+                        $wrapLength = abs($this->rightX - $this->leftX);
+                        $x          = $startX;
+                    }
                 } else {
-                    $wrapLength = abs($this->rightX - $this->leftX);
                     $x          = $startX;
+                    $wrapLength = (($startY <= $this->box['top']) && ($startY >= $this->box['bottom'])) ?
+                        abs($this->box['left'] - $this->leftX) : abs($this->rightX - $this->leftX);
                 }
-            } else {
-                $x          = $startX;
-                $wrapLength = (($startY <= $this->box['top']) && ($startY >= $this->box['bottom'])) ?
-                    abs($this->box['left'] - $this->leftX) : abs($this->rightX - $this->leftX);
+
+                $newString = ($curString != '') ? $curString . ' ' . $word : $word;
+                if ($font->getStringWidth($newString, $text->getSize()) <= $wrapLength) {
+                    $curString = $newString;
+                } else {
+                    $strings[] = [
+                        'string' => $curString,
+                        'x'      => $x,
+                        'y'      => $startY
+                    ];
+                    $curString = $word;
+                    $startY   -= $this->leading;
+                }
             }
 
-            $newString = ($curString != '') ? $curString . ' ' . $word : $word;
-            if ($font->getStringWidth($newString, $text->getSize()) <= $wrapLength) {
-                $curString = $newString;
-            } else {
-                $strings[] = [
-                    'string' => $curString,
-                    'x'      => $x,
-                    'y'      => $startY
-                ];
-                $curString = $word;
-                $startY   -= $this->leading;
-            }
-        }
+            if (!empty($curString)) {
+                if ($key == (count($stringAry) - 1)) {
+                    if ($this->isRight()) {
+                        $x = (($startY <= $this->box['top']) && ($startY >= $this->box['bottom'])) ?
+                            $this->box['right'] : $startX;
+                    } else {
+                        $x = $startX;
+                    }
 
-        if (!empty($curString)) {
-            if ($this->isRight()) {
-                $x = (($startY <= $this->box['top']) && ($startY >= $this->box['bottom'])) ?
-                    $this->box['right'] : $startX;
-            } else {
-                $x = $startX;
+                    $strings[] = [
+                        'string' => $curString,
+                        'x'      => $x,
+                        'y'      => $startY
+                    ];
+                } else {
+                    $append = true;
+                }
             }
-
-            $strings[] = [
-                'string' => $curString,
-                'x'      => $x,
-                'y'      => $startY
-            ];
         }
 
         return $strings;

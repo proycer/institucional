@@ -4,7 +4,7 @@
  *
  * @link       https://github.com/popphp/popphp-framework
  * @author     Nick Sagona, III <dev@nolainteractive.com>
- * @copyright  Copyright (c) 2009-2019 NOLA Interactive, LLC. (http://www.nolainteractive.com)
+ * @copyright  Copyright (c) 2009-2020 NOLA Interactive, LLC. (http://www.nolainteractive.com)
  * @license    http://www.popphp.org/license     New BSD License
  */
 
@@ -19,12 +19,36 @@ namespace Pop\Db\Sql;
  * @category   Pop
  * @package    Pop\Db
  * @author     Nick Sagona, III <dev@nolainteractive.com>
- * @copyright  Copyright (c) 2009-2019 NOLA Interactive, LLC. (http://www.nolainteractive.com)
+ * @copyright  Copyright (c) 2009-2020 NOLA Interactive, LLC. (http://www.nolainteractive.com)
  * @license    http://www.popphp.org/license     New BSD License
- * @version    4.5.0
+ * @version    5.0.0
  */
 class Insert extends AbstractClause
 {
+
+    /**
+     * Conflict key for UPSERT
+     * @var string
+     */
+    protected $conflictKey = null;
+
+    /**
+     * Conflict columns for UPSERT
+     * @var array
+     */
+    protected $conflictColumns = [];
+
+    /**
+     * Set into table
+     *
+     * @param  mixed  $table
+     * @return Insert
+     */
+    public function into($table)
+    {
+        $this->setTable($table);
+        return $this;
+    }
 
     /**
      * Set a value
@@ -35,6 +59,32 @@ class Insert extends AbstractClause
     public function values(array $values)
     {
         $this->setValues($values);
+        return $this;
+    }
+
+    /**
+     * Set what to do on a insert conflict (UPSERT - PostgreSQL & SQLite)
+     *
+     * @param  array  $columns
+     * @param  string $key
+     * @return Insert
+     */
+    public function onConflict(array $columns, $key = null)
+    {
+        $this->conflictColumns = $columns;
+        $this->conflictKey     = $key;
+        return $this;
+    }
+
+    /**
+     * Set columns to handle duplicates/conflicts (UPSERT - MySQL-ism)
+     *
+     * @param  array $columns
+     * @return Insert
+     */
+    public function onDuplicateKeyUpdate(array $columns)
+    {
+        $this->onConflict($columns);
         return $this;
     }
 
@@ -61,7 +111,7 @@ class Insert extends AbstractClause
             if ((':' . $colValue == substr($value, 0, strlen(':' . $colValue))) && ($dbType !== self::SQLITE)) {
                 if (($dbType == self::MYSQL) || ($dbType == self::SQLSRV)) {
                     $value = '?';
-                } else if (($dbType == self::PGSQL) && (!($this->db instanceof \Pop\Db\Adapter\Pdo))) {
+                } else if (($dbType == self::PGSQL) && !($this->db instanceof \Pop\Db\Adapter\Pdo)) {
                     $value = '$' . $paramCount;
                     $paramCount++;
                 }
@@ -70,8 +120,28 @@ class Insert extends AbstractClause
             $values[]  = (null === $value) ? 'NULL' : $this->quote($value);
         }
 
-        $sql .= '(' . implode(', ', $columns) . ') VALUES ';
-        $sql .= '(' . implode(', ', $values) . ')';
+        $sql .= '(' . implode(', ', $columns) . ') VALUES (' . implode(', ', $values) . ')';
+
+        // Handle conflicts/duplicates (UPSERT)
+        if (!empty($this->conflictColumns)) {
+            $updates = [];
+            switch ($dbType) {
+                case self::MYSQL:
+                    foreach ($this->conflictColumns as $conflictColumn) {
+                        $updates[] = $this->quoteId($conflictColumn) . ' = VALUES(' . $conflictColumn .')';
+                    }
+                    $sql .= ' ON DUPLICATE KEY UPDATE ' . implode(', ', $updates);
+                    break;
+                case self::SQLITE:
+                case self::PGSQL:
+                    foreach ($this->conflictColumns as $conflictColumn) {
+                        $updates[] = $this->quoteId($conflictColumn) . ' = excluded.' . $conflictColumn;
+                    }
+                    $sql .= ' ON CONFLICT (' . $this->quoteId($this->conflictKey) . ') DO UPDATE SET '
+                        . implode(', ', $updates);
+                    break;
+            }
+        }
 
         return $sql;
     }

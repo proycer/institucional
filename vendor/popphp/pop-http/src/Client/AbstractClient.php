@@ -13,6 +13,8 @@
  */
 namespace Pop\Http\Client;
 
+use Pop\Http\Parser;
+
 /**
  * Abstract HTTP client class
  *
@@ -21,7 +23,7 @@ namespace Pop\Http\Client;
  * @author     Nick Sagona, III <dev@nolainteractive.com>
  * @copyright  Copyright (c) 2009-2020 NOLA Interactive, LLC. (http://www.nolainteractive.com)
  * @license    http://www.popphp.org/license     New BSD License
- * @version    3.5.0
+ * @version    4.0.0
  */
 abstract class AbstractClient implements ClientInterface
 {
@@ -55,6 +57,24 @@ abstract class AbstractClient implements ClientInterface
      * @var Response
      */
     protected $response = null;
+
+    /**
+     * Constructor
+     *
+     * Instantiate the client object
+     *
+     * @param  string $url
+     * @param  string $method
+     */
+    public function __construct($url = null, $method = 'GET')
+    {
+        if (!empty($url)) {
+            $this->setUrl($url);
+        }
+        if (!empty($method)) {
+            $this->setMethod($method);
+        }
+    }
 
     /**
      * Set the URL
@@ -221,6 +241,25 @@ abstract class AbstractClient implements ClientInterface
     }
 
     /**
+     * Get the parsed response
+     *
+     * @return mixed
+     */
+    public function getParsedResponse()
+    {
+        $parsedResponse = null;
+
+        if (($this->hasResponse()) && ($this->getResponse()->hasBody()) && ($this->getResponse()->hasHeader('Content-Type'))) {
+            $rawResponse     = $this->getResponse()->getBody()->getContent();
+            $contentType     = $this->getResponse()->getHeader('Content-Type')->getValue();
+            $contentEncoding = ($this->getResponse()->hasHeader('Content-Encoding')) ? $this->getResponse()->getHeader('Content-Encoding')->getValue() : null;
+            $parsedResponse  = Parser::parseDataByContentType($rawResponse, $contentType, $contentEncoding);
+        }
+
+        return $parsedResponse;
+    }
+
+    /**
      * Get the response object (alias method)
      *
      * @return Response
@@ -372,7 +411,7 @@ abstract class AbstractClient implements ClientInterface
      */
     public function createAsJson()
     {
-        $this->request->createAsJson();
+        $this->getRequest()->createAsJson();
         return $this;
     }
 
@@ -383,7 +422,7 @@ abstract class AbstractClient implements ClientInterface
      */
     public function isJson()
     {
-        return $this->request->isJson();
+        return $this->getRequest()->isJson();
     }
 
     /**
@@ -393,7 +432,7 @@ abstract class AbstractClient implements ClientInterface
      */
     public function createUrlEncodedForm()
     {
-        $this->request->createUrlEncodedForm();
+        $this->getRequest()->createUrlEncodedForm();
         return $this;
     }
 
@@ -404,7 +443,7 @@ abstract class AbstractClient implements ClientInterface
      */
     public function isUrlEncodedForm()
     {
-        return $this->request->isUrlEncodedForm();
+        return $this->getRequest()->isUrlEncodedForm();
     }
 
     /**
@@ -414,7 +453,7 @@ abstract class AbstractClient implements ClientInterface
      */
     public function createMultipartForm()
     {
-        $this->request->createMultipartForm();
+        $this->getRequest()->createMultipartForm();
         return $this;
     }
 
@@ -425,7 +464,7 @@ abstract class AbstractClient implements ClientInterface
      */
     public function isMultipartForm()
     {
-        return $this->request->isMultipartForm();
+        return $this->getRequest()->isMultipartForm();
     }
 
     /**

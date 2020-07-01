@@ -4,7 +4,7 @@
  *
  * @link       https://github.com/popphp/popphp-framework
  * @author     Nick Sagona, III <dev@nolainteractive.com>
- * @copyright  Copyright (c) 2009-2019 NOLA Interactive, LLC. (http://www.nolainteractive.com)
+ * @copyright  Copyright (c) 2009-2020 NOLA Interactive, LLC. (http://www.nolainteractive.com)
  * @license    http://www.popphp.org/license     New BSD License
  */
 
@@ -19,9 +19,9 @@ namespace Pop\Pdf\Document\Page;
  * @category   Pop
  * @package    Pop\Pdf
  * @author     Nick Sagona, III <dev@nolainteractive.com>
- * @copyright  Copyright (c) 2009-2019 NOLA Interactive, LLC. (http://www.nolainteractive.com)
+ * @copyright  Copyright (c) 2009-2020 NOLA Interactive, LLC. (http://www.nolainteractive.com)
  * @license    http://www.popphp.org/license     New BSD License
- * @version    3.2.0
+ * @version    4.0.0
  */
 class Image
 {
@@ -106,8 +106,11 @@ class Image
         $imgSize = getimagesize($file);
 
         if (!isset($imgSize['mime']) ||
-            (isset($imgSize['mime']) && ($imgSize['mime'] != 'image/jpeg') && ($imgSize['mime'] != 'image/gif') && ($imgSize['mime'] != 'image/png'))) {
-            throw new Exception('Error: That image type is not supported. Only GIF, JPG and PNG image types are supported.');
+            (isset($imgSize['mime']) && ($imgSize['mime'] != 'image/jpeg') &&
+                ($imgSize['mime'] != 'image/gif') && ($imgSize['mime'] != 'image/png'))) {
+            throw new Exception(
+                'Error: That image type is not supported. Only GIF, JPG and PNG image types are supported.'
+            );
         }
 
         // Set image properties.
@@ -130,8 +133,11 @@ class Image
         $imgSize = getimagesizefromstring($stream);
 
         if (!isset($imgSize['mime']) ||
-            (isset($imgSize['mime']) && ($imgSize['mime'] != 'image/jpeg') && ($imgSize['mime'] != 'image/gif') && ($imgSize['mime'] != 'image/png'))) {
-            throw new Exception('Error: That image type is not supported. Only GIF, JPG and PNG image types are supported.');
+            (isset($imgSize['mime']) && ($imgSize['mime'] != 'image/jpeg') &&
+                ($imgSize['mime'] != 'image/gif') && ($imgSize['mime'] != 'image/png'))) {
+            throw new Exception(
+                'Error: That image type is not supported. Only GIF, JPG and PNG image types are supported.'
+            );
         }
 
         $this->stream = $stream;

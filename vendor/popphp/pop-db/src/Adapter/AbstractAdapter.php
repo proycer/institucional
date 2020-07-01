@@ -4,7 +4,7 @@
  *
  * @link       https://github.com/popphp/popphp-framework
  * @author     Nick Sagona, III <dev@nolainteractive.com>
- * @copyright  Copyright (c) 2009-2019 NOLA Interactive, LLC. (http://www.nolainteractive.com)
+ * @copyright  Copyright (c) 2009-2020 NOLA Interactive, LLC. (http://www.nolainteractive.com)
  * @license    http://www.popphp.org/license     New BSD License
  */
 
@@ -14,6 +14,7 @@
 namespace Pop\Db\Adapter;
 
 use Pop\Db\Sql;
+use Pop\Utils\CallableObject;
 
 /**
  * Db abstract adapter class
@@ -21,12 +22,18 @@ use Pop\Db\Sql;
  * @category   Pop
  * @package    Pop\Db
  * @author     Nick Sagona, III <dev@nolainteractive.com>
- * @copyright  Copyright (c) 2009-2019 NOLA Interactive, LLC. (http://www.nolainteractive.com)
+ * @copyright  Copyright (c) 2009-2020 NOLA Interactive, LLC. (http://www.nolainteractive.com)
  * @license    http://www.popphp.org/license     New BSD License
- * @version    4.5.0
+ * @version    5.0.0
  */
 abstract class AbstractAdapter implements AdapterInterface
 {
+
+    /**
+     * Database connection options
+     * @var mixed
+     */
+    protected $options = [];
 
     /**
      * Database connection object/resource
@@ -54,7 +61,7 @@ abstract class AbstractAdapter implements AdapterInterface
 
     /**
      * Query listener object/resource
-     * @var mixed
+     * @var CallableObject
      */
     protected $listener = null;
 
@@ -71,7 +78,40 @@ abstract class AbstractAdapter implements AdapterInterface
      *
      * @param  array $options
      */
-    abstract public function __construct(array $options);
+    abstract public function __construct(array $options = []);
+
+    /**
+     * Connect to the database
+     *
+     * @param  array $options
+     * @return AbstractAdapter
+     */
+    abstract public function connect(array $options = []);
+
+    /**
+     * Set database connection options
+     *
+     * @param  array $options
+     * @return AdapterInterface
+     */
+    abstract public function setOptions(array $options);
+
+    /**
+     * Get database connection options
+     *
+     * @return array
+     */
+    public function getOptions()
+    {
+        return $this->options;
+    }
+
+    /**
+     * Has database connection options
+     *
+     * @return boolean
+     */
+    abstract public function hasOptions();
 
     /**
      * Begin a transaction
@@ -222,33 +262,54 @@ abstract class AbstractAdapter implements AdapterInterface
     /**
      * Add query listener to the adapter
      *
-     * @param  mixed $listener
+     * @param  mixed             $listener
+     * @param  mixed             $params
+     * @param  Profiler\Profiler $profiler
      * @return mixed
      */
-    public function listen($listener)
+    public function listen($listener, $params = null, Profiler\Profiler $profiler = null)
     {
+        if (null !== $profiler) {
+            $this->profiler = $profiler;
+        }
         if (null === $this->profiler) {
             $this->profiler = new Profiler\Profiler();
         }
 
-        $obj    = null;
-        $params = [$this->profiler];
-
-        if (is_array($listener) || ($listener instanceof \Closure) || (is_string($listener) && (strpos($listener, '::') !== false))) {
-            $obj = call_user_func_array($listener, $params);
-        } else if (is_string($listener) && (strpos($listener, '->') !== false)) {
-            $ary    = explode('->', $listener);
-            $class  = $ary[0];
-            $method = $ary[1];
-            if (class_exists($class) && method_exists($class, $method)) {
-                $obj = call_user_func_array([new $class(), $method], $params);
+        if (!($listener instanceof CallableObject)) {
+            $this->listener = new CallableObject($listener, [$this->profiler]);
+            if (null !== $params) {
+                if (is_array($params)) {
+                    $this->listener->addParameters($params);
+                } else {
+                    $this->listener->addParameter($params);
+                }
             }
-        } else if (class_exists($listener)) {
-            $reflect = new \ReflectionClass($listener);
-            $obj     = $reflect->newInstanceArgs($params);
+        } else {
+            $this->listener = $listener;
+            if (null !== $params) {
+                if (is_array($params)) {
+                    array_unshift($params, $this->profiler);
+                } else {
+                    $params = [$this->profiler, $params];
+                }
+                $this->listener->addParameters($params);
+            } else {
+                $this->listener->addNamedParameter('profiler', $this->profiler);
+            }
         }
 
-        return $obj;
+        return $this->listener->call();
+    }
+
+    /**
+     * Get query listener
+     *
+     * @return CallableObject
+     */
+    public function getListener()
+    {
+        return $this->listener;
     }
 
     /**

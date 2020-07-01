@@ -4,7 +4,7 @@
  *
  * @link       https://github.com/popphp/popphp-framework
  * @author     Nick Sagona, III <dev@nolainteractive.com>
- * @copyright  Copyright (c) 2009-2019 NOLA Interactive, LLC. (http://www.nolainteractive.com)
+ * @copyright  Copyright (c) 2009-2020 NOLA Interactive, LLC. (http://www.nolainteractive.com)
  * @license    http://www.popphp.org/license     New BSD License
  */
 
@@ -19,9 +19,9 @@ namespace Pop\Db\Sql;
  * @category   Pop
  * @package    Pop\Db
  * @author     Nick Sagona, III <dev@nolainteractive.com>
- * @copyright  Copyright (c) 2009-2019 NOLA Interactive, LLC. (http://www.nolainteractive.com)
+ * @copyright  Copyright (c) 2009-2020 NOLA Interactive, LLC. (http://www.nolainteractive.com)
  * @license    http://www.popphp.org/license     New BSD License
- * @version    4.5.0
+ * @version    5.0.0
  */
 class Schema extends AbstractSql
 {
@@ -225,11 +225,12 @@ class Schema extends AbstractSql
      */
     public function reset()
     {
-        $this->drop     = [];
-        $this->create   = [];
-        $this->alter    = [];
-        $this->rename   = [];
-        $this->truncate = [];
+        $this->drop            = [];
+        $this->create          = [];
+        $this->alter           = [];
+        $this->rename          = [];
+        $this->truncate        = [];
+        $this->foreignKeyCheck = true;
 
         return $this;
     }
@@ -237,9 +238,10 @@ class Schema extends AbstractSql
     /**
      * Execute the schema directly
      *
+     * @param  boolean $reset
      * @return void
      */
-    public function execute()
+    public function execute($reset = true)
     {
         if (!$this->foreignKeyCheck) {
             if ($this->isMysql()) {
@@ -295,6 +297,10 @@ class Schema extends AbstractSql
             } else if ($this->isSqlite()) {
                 $this->db->query('PRAGMA foreign_keys=on');
             }
+        }
+
+        if ($reset) {
+            $this->reset();
         }
     }
 

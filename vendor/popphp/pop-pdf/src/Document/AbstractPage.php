@@ -4,7 +4,7 @@
  *
  * @link       https://github.com/popphp/popphp-framework
  * @author     Nick Sagona, III <dev@nolainteractive.com>
- * @copyright  Copyright (c) 2009-2019 NOLA Interactive, LLC. (http://www.nolainteractive.com)
+ * @copyright  Copyright (c) 2009-2020 NOLA Interactive, LLC. (http://www.nolainteractive.com)
  * @license    http://www.popphp.org/license     New BSD License
  */
 
@@ -22,9 +22,9 @@ use Pop\Pdf\Document\Page\Field;
  * @category   Pop
  * @package    Pop\Pdf
  * @author     Nick Sagona, III <dev@nolainteractive.com>
- * @copyright  Copyright (c) 2009-2019 NOLA Interactive, LLC. (http://www.nolainteractive.com)
+ * @copyright  Copyright (c) 2009-2020 NOLA Interactive, LLC. (http://www.nolainteractive.com)
  * @license    http://www.popphp.org/license     New BSD License
- * @version    3.2.0
+ * @version    4.0.0
  */
 abstract class AbstractPage implements PageInterface
 {
@@ -131,6 +131,12 @@ abstract class AbstractPage implements PageInterface
     protected $text = [];
 
     /**
+     * Text streams array
+     * @var array
+     */
+    protected $textStreams = [];
+
+    /**
      * Annotations array
      * @var array
      */
@@ -235,6 +241,16 @@ abstract class AbstractPage implements PageInterface
     }
 
     /**
+     * Get text stream objects
+     *
+     * @return array
+     */
+    public function getTextStreams()
+    {
+        return $this->textStreams;
+    }
+
+    /**
      * Get annotation objects
      *
      * @return array
@@ -285,6 +301,16 @@ abstract class AbstractPage implements PageInterface
     }
 
     /**
+     * Determine if the page has text stream objects
+     *
+     * @return boolean
+     */
+    public function hasTextStreams()
+    {
+        return (count($this->textStreams) > 0);
+    }
+
+    /**
      * Determine if the page has annotation objects
      *
      * @return boolean
@@ -315,17 +341,31 @@ abstract class AbstractPage implements PageInterface
     }
 
     /**
+     * Clear page content
+     *
+     * @return AbstractPage
+     */
+    public function clearContent()
+    {
+        $this->images      = [];
+        $this->text        = [];
+        $this->textStreams = [];
+        $this->annotations = [];
+        $this->paths       = [];
+        $this->fields      = [];
+
+        return $this;
+    }
+
+    /**
      * Constructor
      *
      * Instantiate a PDF page.
      *
-     * @param  mixed $size
-     * @param  mixed $height
-     * @param  int   $i
      * @throws Exception
      * @return AbstractPage
      */
-    abstract public function __construct($size, $height = null, $i = null);
+    abstract public function __construct();
 
     /**
      * Add an image to the PDF page
@@ -347,6 +387,14 @@ abstract class AbstractPage implements PageInterface
      * @return Page
      */
     abstract public function addText(Page\Text $text, $font, $x = 0, $y = 0);
+
+    /**
+     * Add text stream to the PDF page
+     *
+     * @param  Page\Text\Stream $textStream
+     * @return Page
+     */
+    abstract public function addTextStream(Page\Text\Stream $textStream);
 
     /**
      * Add an annotation to the PDF page

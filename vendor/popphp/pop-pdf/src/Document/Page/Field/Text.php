@@ -4,7 +4,7 @@
  *
  * @link       https://github.com/popphp/popphp-framework
  * @author     Nick Sagona, III <dev@nolainteractive.com>
- * @copyright  Copyright (c) 2009-2019 NOLA Interactive, LLC. (http://www.nolainteractive.com)
+ * @copyright  Copyright (c) 2009-2020 NOLA Interactive, LLC. (http://www.nolainteractive.com)
  * @license    http://www.popphp.org/license     New BSD License
  */
 
@@ -21,9 +21,9 @@ use Pop\Pdf\Document\Page\Color;
  * @category   Pop
  * @package    Pop\Pdf
  * @author     Nick Sagona, III <dev@nolainteractive.com>
- * @copyright  Copyright (c) 2009-2019 NOLA Interactive, LLC. (http://www.nolainteractive.com)
+ * @copyright  Copyright (c) 2009-2020 NOLA Interactive, LLC. (http://www.nolainteractive.com)
  * @license    http://www.popphp.org/license     New BSD License
- * @version    3.2.0
+ * @version    4.0.0
  */
 class Text extends AbstractField
 {
@@ -117,6 +117,26 @@ class Text extends AbstractField
             $this->flagBits[] = 26;
         }
         return $this;
+    }
+
+    /**
+     * Is multiline
+     *
+     * @return boolean
+     */
+    public function isMultiline()
+    {
+        return in_array(13, $this->flagBits);
+    }
+
+    /**
+     * Is password
+     *
+     * @return boolean
+     */
+    public function isPassword()
+    {
+        return in_array(14, $this->flagBits);
     }
 
     /**
