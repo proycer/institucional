@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "a217aa68ee7233001b45587c3d03ea5d",
+    "content-hash": "8633ead783c63d073d382be884fb39be",
     "packages": [
         {
             "name": "jeremeamia/superclosure",
@@ -1624,12 +1624,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/popphp/pop-pdf.git",
-                "reference": "ac591ac7ecd8bcfb361ac856e1d2a135a57a3e64"
+                "reference": "e473b1ed7516e62adfeaa6bc6427f76f3f8f782b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/popphp/pop-pdf/zipball/ac591ac7ecd8bcfb361ac856e1d2a135a57a3e64",
-                "reference": "ac591ac7ecd8bcfb361ac856e1d2a135a57a3e64",
+                "url": "https://api.github.com/repos/popphp/pop-pdf/zipball/e473b1ed7516e62adfeaa6bc6427f76f3f8f782b",
+                "reference": "e473b1ed7516e62adfeaa6bc6427f76f3f8f782b",
                 "shasum": ""
             },
             "require": {
@@ -1679,7 +1679,7 @@
                 "pop",
                 "pop php"
             ],
-            "time": "2020-05-28T19:28:18+00:00"
+            "time": "2020-07-01T19:45:12+00:00"
         },
         {
             "name": "popphp/pop-queue",

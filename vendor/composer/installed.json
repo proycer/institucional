@@ -1676,12 +1676,12 @@
         "source": {
             "type": "git",
             "url": "https://github.com/popphp/pop-pdf.git",
-            "reference": "ac591ac7ecd8bcfb361ac856e1d2a135a57a3e64"
+            "reference": "e473b1ed7516e62adfeaa6bc6427f76f3f8f782b"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/popphp/pop-pdf/zipball/ac591ac7ecd8bcfb361ac856e1d2a135a57a3e64",
-            "reference": "ac591ac7ecd8bcfb361ac856e1d2a135a57a3e64",
+            "url": "https://api.github.com/repos/popphp/pop-pdf/zipball/e473b1ed7516e62adfeaa6bc6427f76f3f8f782b",
+            "reference": "e473b1ed7516e62adfeaa6bc6427f76f3f8f782b",
             "shasum": ""
         },
         "require": {
@@ -1696,7 +1696,7 @@
         "suggest": {
             "ext-gd": "For the image parser"
         },
-        "time": "2020-05-28T19:28:18+00:00",
+        "time": "2020-07-01T19:45:12+00:00",
         "type": "library",
         "extra": {
             "branch-alias": {
