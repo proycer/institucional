@@ -1,4 +1,15 @@
+/* Bootstrap */
 @import "~bootstrap/scss/bootstrap";
+
+/* Jquery UI */
+@import "~jquery-ui/themes/base/base.css";
+
+/* Owl Carousel */
+@import "~owl.carousel/dist/assets/owl.carousel.min.css";
+@import "~owl.carousel/dist/assets/owl.theme.default.min.css";
+
+/* AOS */
+@import "~aos/src/sass/aos";
 
 /* Base */
 @import "site-base";
