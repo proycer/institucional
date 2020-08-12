@@ -1,8 +1,11 @@
+$proycer:    #f1925d !default;
+
 body {
 	line-height: 1.7;
 	color: lighten($black, 50%);
 	font-weight: 400;
 	font-size: $font-size-base;
+	font-family: "Nunito";
 }
 ::-moz-selection { 
 	background: $black;
@@ -21,7 +24,7 @@ a {
 
 h1, h2, h3, h4, h5,
 .h1, .h2, .h3, .h4, .h5 {
-	font-family: $font-family-sans-serif;
+	font-family: "Nunito";
 }
 .bg-light {
 	background: lighten(#eeeeee, 3%)!important;
@@ -42,11 +45,6 @@ h1, h2, h3, h4, h5,
 }
 .color-white-opacity-5 {
 	color: rgba($white, .5);
-}
-
-.offcanvas-menu .site-wrap {
-	// position: absolute;
-	// overflow: hidden;
 }
 
 .site-wrap {
@@ -102,19 +100,19 @@ h1, h2, h3, h4, h5,
 	}
 	&.btn-primary {
 		border-width: 2px;
-		background: $primary;
-		border-color: $primary;
+		background: $proycer;
+		border-color: $proycer;
 		color: $white;
 		position: relative;
 		top: 0;
 		transition: .3s all ease;
-		box-shadow: 0 4px 20px -5px rgba($primary, .4);
+		box-shadow: 0 4px 20px -5px rgba($proycer, .4);
 		&:hover {
 			top: -2px;
-			background: $primary;
-			border-color: $primary;
+			background: $proycer;
+			border-color: $proycer;
 			color: $white;
-			box-shadow: 0 5px 30px -5px rgba($primary, .7)!important;
+			box-shadow: 0 5px 30px -5px rgba($proycer, .7)!important;
 		}
 		
 	}
@@ -130,9 +128,9 @@ h1, h2, h3, h4, h5,
 .form-control {
 	height: 43px;
 	border-radius: 30px;
-	font-family: $font-family-sans-serif;
+	font-family: "Nunito";
 	&:active, &:focus {
-		border-color: $primary;
+		border-color: $proycer;
 	}
 	&:hover, &:active, &:focus {
 		box-shadow: none!important;
@@ -331,7 +329,7 @@ h1, h2, h3, h4, h5,
 	&.primary {
 		li {
 			&:before {
-				color: $primary;
+				color: $proycer;
 			}
 		}
 	}

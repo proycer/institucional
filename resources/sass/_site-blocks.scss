@@ -151,7 +151,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#4286f4', end
 		position: absolute;
 		content: "";
 		top: 0; left: 0; right: 0; bottom: 0;
-		background: rgba($primary, .8);
+		background: rgba($proycer, .8);
 		z-index: 2;
 		height: 100%;
 		width: 100%;
@@ -351,7 +351,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#4286f4', end
 			color: lighten($black, 80%);
 
 			&:hover, &.active {
-				border-bottom: 2px solid $primary;
+				border-bottom: 2px solid $proycer;
 				color: $black;
 
 			}
@@ -455,7 +455,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#4286f4', end
 			}
 			&.active {
 				span {
-					background: $primary;
+					background: $proycer;
 				}
 			}
 		}
@@ -518,7 +518,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#4286f4', end
 				width: 80px;
 				height: 4px;
 				margin-top: -4px;
-				background: $primary;
+				background: $proycer;
 				top: 0;
 			}
 			.heading {
@@ -546,7 +546,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#4286f4', end
 			display: block;
 			border-radius: 50%;
 			opacity: 1;
-			color: $primary!important;
+			color: $proycer!important;
 			&:hover {
 				opacity: 1;
 			}
@@ -590,7 +590,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#4286f4', end
 					}
 				}
 				.meta {
-					color: $primary;
+					color: $proycer;
 				}
 				&:hover {
 					img {
@@ -635,7 +635,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#4286f4', end
 		position: absolute;
 		width: 30px;
 		height: 30px;
-		background: $primary;
+		background: $proycer;
 		border-radius: 50%;
 		color: $white;
 		> span {
@@ -677,7 +677,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#4286f4', end
 			}
 			&.active {
 				a, span {
-					background: $primary;
+					background: $proycer;
 					color: $white;
 					border: 1px solid transparent;
 				}
@@ -790,8 +790,8 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#4286f4', end
   		position: relative;
   		border-radius: 50%;
   		display: inline-block;
-  		background-color: $primary;
-  		box-shadow: 0 4px 20px -5px rgba($primary, .4);
+  		background-color: $proycer;
+  		box-shadow: 0 4px 20px -5px rgba($proycer, .4);
 	    span {
 	      font-size: 2rem;
 	      position: absolute;
@@ -816,13 +816,13 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#4286f4', end
   	margin-bottom: 0;
   }
   &:hover {
-  	background: $primary;
-  	box-shadow: 0 4px 20px -5px rgba($primary, .4);
+  	background: $proycer;
+  	box-shadow: 0 4px 20px -5px rgba($proycer, .4);
   	top: -7px;
   	.icon-wrap {
   		background-color: $white;
   		span {
-  			color: $primary!important;
+  			color: $proycer!important;
   		}
   	}
   	h3 {
@@ -863,7 +863,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#4286f4', end
 }
 
 .feature-1 {
-	background: $primary;
+	background: $proycer;
 	padding: 30px 50px;
 	color: rgba($white, .6);
 	font-size: 15px;
@@ -892,7 +892,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#4286f4', end
 }
 .free-quote {
 	@extend .feature-1;
-	background: darken($primary, 5%);
+	background: darken($proycer, 5%);
 	.form-control {
 		border: 2px solid rgba($white, .5);
 		background: none;
@@ -925,7 +925,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#4286f4', end
 }
 .feature-3 {
 	@extend .feature-1;
-	background: darken($primary, 7%);
+	background: darken($proycer, 7%);
 }
 
 .border-primary {
@@ -939,7 +939,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#4286f4', end
 		bottom: 0;
 		width: 80px;
 		height: 3px;
-		background: $primary;
+		background: $proycer;
 	}
 	&.text-center {
 		&:after {
@@ -985,7 +985,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#4286f4', end
 	.number {
 		width: 50px;
 		height: 50px;
-		background: $primary;
+		background: $proycer;
 		color: $white;
 		line-height: 55px;
 		font-weight: 300;
@@ -1054,7 +1054,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#4286f4', end
 		line-height: 40px;
 		border-radius: 50%;
 		display: inline-block;
-		background: $primary;
+		background: $proycer;
 		color: $white;
 	}
 	span {
@@ -1119,8 +1119,8 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#4286f4', end
 		transition: .1s all ease;
 	}
 	&:hover {
-		background: $primary;
-		box-shadow: 0 5px 30px -5px rgba($primary, .5);
+		background: $proycer;
+		box-shadow: 0 5px 30px -5px rgba($proycer, .5);
 		// top: -10px;
 		.caption {
 			color: $white;
@@ -1132,7 +1132,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#4286f4', end
 			}
 		}
 		.number {
-			background: darken($primary, 5%);
+			background: darken($proycer, 5%);
 			color: $white;
 		}
 	}
@@ -1180,7 +1180,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#4286f4', end
 			font-size: 12px;
 			display: inline-block;
 			padding: 5px 30px;
-			background: $primary;
+			background: $proycer;
 			border-radius: 30px;
 			color: $white;
 			letter-spacing: .2em;
@@ -1227,7 +1227,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#4286f4', end
 }
 
 .accordion-item[aria-expanded="true"] {
-	color: $primary;
+	color: $proycer;
 }
 
 .social-media {
@@ -1274,7 +1274,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#4286f4', end
 		display: inline-block;
 		width: 50px;
 		height: 50px;
-		background: $primary;
+		background: $proycer;
 		margin-right: 1.5rem;
 		border-radius: 50%;
 		line-height: 50px;
@@ -1394,7 +1394,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#4286f4', end
 
 .section-sub-title {
 	font-size: 13px;
-	color: $primary;
+	color: $proycer;
 	letter-spacing: .2em;
 	text-transform: uppercase;
 }
@@ -1461,7 +1461,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#4286f4', end
 	border-radius: 4px;
 	padding:20px;
 	border: 1px solid #eee;
-	border-left: 10px solid $primary;
+	border-left: 10px solid $proycer;
 	*:last-child {
 		margin-bottom: 0;
 	}
@@ -1545,7 +1545,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#4286f4', end
 			top: 10px;
 			right: 10px;
 			bottom: 10px;
-			border: 2px solid $primary;
+			border: 2px solid $proycer;
 			opacity: 1;
 			visibility: visible;
 			transition: .3s all ease;
@@ -1573,7 +1573,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#4286f4', end
 			transform: translateY(100%);
 			left: 0;
 			transition: .3s all ease;
-			background: rgba($primary, 1);
+			background: rgba($proycer, 1);
 			a {
 				display: inline-block;
 				padding: 5px;
@@ -1604,7 +1604,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#4286f4', end
 	letter-spacing: .1em;
 	font-size: 12px;
 	font-weight: 700;
-	color: $primary;
+	color: $proycer;
 	margin-bottom: 10px;
 }
 
@@ -1633,8 +1633,8 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#4286f4', end
 .form-subscribe {
 	.btn {
 		&:hover, &:active, &:focus {
-			background-color: $primary!important;
-			border-color: $primary!important;
+			background-color: $proycer!important;
+			border-color: $proycer!important;
 			color: $white;
 		}
 	}

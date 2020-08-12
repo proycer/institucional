@@ -4,7 +4,7 @@
 <head>
 	<meta charset="utf-8">
 	<title>Proycer</title>
-	<link rel="shortcut icon" href="{{ asset('img/favicon.ico') }}" />
+	<link rel="icon" type="image/png" sizes="16x16" href="{{ asset('images/favicon.png') }}">
 	
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<link href="https://fonts.googleapis.com/css?family=Nunito:300,400,700" rel="stylesheet">
