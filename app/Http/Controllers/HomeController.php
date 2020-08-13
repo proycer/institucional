@@ -15,4 +15,14 @@ class HomeController extends Controller
     {
         return view('us');
     }
+
+    public function schedule()
+    {
+        return view('schedule');
+    }
+
+    public function list()
+    {
+        return view('list');
+    }
 }

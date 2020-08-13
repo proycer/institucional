@@ -22,10 +22,10 @@
                     <ul class="site-menu main-menu js-clone-nav mr-auto d-none d-lg-block ml-0 pl-0">
                         <li><a href="{{ route('home') }}" class="nav-link">Inicio</a></li>
                         <li class="has-children">
-                            <a href="#features-section" class="nav-link">Servicios</a>
+                            <a class="nav-link">Servicios</a>
                             <ul class="dropdown arrow-top">
-                                <li><a href="#" target="_blank" class="nav-link">Gesti&oacute;n de Turnos</a></li>
-                                <li><a href="https://list.proycer.com.ar" target="_blank" class="nav-link">Cat&aacute;logo Online</a></li>
+                                <li><a href="{{ route('schedule') }}" class="nav-link">Gesti&oacute;n de Turnos</a></li>
+                                <li><a href="{{ route('list') }}" class="nav-link">Cat&aacute;logo Online</a></li>
                                 <li><a href="#" class="nav-link">Punto de Venta</a></li>
                                 {{-- <li class="has-children">
                                     <a href="#">More Links</a>
