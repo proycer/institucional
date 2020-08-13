@@ -27,14 +27,14 @@
                                 <li><a href="#" target="_blank" class="nav-link">Gesti&oacute;n de Turnos</a></li>
                                 <li><a href="https://list.proycer.com.ar" target="_blank" class="nav-link">Cat&aacute;logo Online</a></li>
                                 <li><a href="#" class="nav-link">Punto de Venta</a></li>
-                                <li class="has-children">
+                                {{-- <li class="has-children">
                                     <a href="#">More Links</a>
                                     <ul class="dropdown">
                                         <li><a href="#">Menu One</a></li>
                                         <li><a href="#">Menu Two</a></li>
                                         <li><a href="#">Menu Three</a></li>
                                     </ul>
-                                </li>
+                                </li> --}}
                             </ul>
                         </li>
                         <li><a href="#testimonials-section" class="nav-link">Nosotros</a></li>

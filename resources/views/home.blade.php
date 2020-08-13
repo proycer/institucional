@@ -1,21 +1,20 @@
 @extends('partials.layout')
 
 @section('content')
-
 <div class="site-wrap" id="home-section">
 	@include('partials.header')
 	<div class="site-blocks-cover" style="overflow: hidden;">
 		<div class="container">
 			<div class="row align-items-center justify-content-center">
 				<div class="col-md-12" style="position: relative;" data-aos="fade-up" data-aos-delay="200">
-					<img src="{{ asset('images/back.svg') }}" alt="Image" class="img-fluid img-absolute">
+					<img src="{{ asset('images/undraw_investing_7u74.svg') }}" alt="Image" class="img-fluid img-absolute">
 
 					<div class="row mb-4" data-aos="fade-up" data-aos-delay="200">
 						<div class="col-lg-6 mr-auto">
-							<h1>El momento es ahora!</h1>
-							<p class="mb-5">Sc&aacute; provecho de los avances tecnol&oacute;gicos.</p>
+							<h1>Llev&aacute; tu negocio al siguiente nivel!</h1>
+							<p class="mb-5">Sac&aacute; provecho de los avances tecnol&oacute;gicos. Lo hacemos con vos.</p>
 							<div>
-								<a href="#" class="btn btn-primary mr-2 mb-2">Get Started</a>
+								<a href="#" class="btn btn-primary mr-2 mb-2">Conocer m&aacute;s</a>
 							</div>
 						</div>
 					</div>
@@ -28,9 +27,8 @@
 		<div class="container">
 			<div class="row mb-5 justify-content-center text-center" data-aos="fade-up">
 				<div class="col-7 text-center  mb-5">
-					<h2 class="section-title">Imagine Features</h2>
-					<p class="lead">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Fuga quos quaerat
-						sapiente nam, id vero.</p>
+					<h2 class="section-title">Nuestras Soluciones</h2>
+					<p class="lead">La experiencia a lo largo del tiempo nos ha permitido desarrollar soluciones de alta demanda.</p>
 				</div>
 			</div>
 			<div class="row align-items-stretch">
@@ -38,13 +36,12 @@
 
 					<div class="unit-4 d-block">
 						<div class="unit-4-icon mb-3">
-							<span class="icon-wrap"><span class="text-primary icon-autorenew"></span></span>
+							<span class="icon-wrap"><span class="text-primary icon-calendar"></span></span>
 						</div>
 						<div>
-							<h3>Marketing Consulting</h3>
-							<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Perferendis quis molestiae
-								vitae eligendi at.</p>
-							<p><a href="#">Learn More</a></p>
+							<h3>Turnos</h3>
+							<p>Administraci&oacute;n de citas y servicios para el cliente, junto a tu resumen contable, todo en un mismo lugar.</p>
+							<p><a href="#">Ver m&aacute;s</a></p>
 						</div>
 					</div>
 				</div>
@@ -56,10 +53,9 @@
 							<span class="icon-wrap"><span class="text-primary icon-store_mall_directory"></span></span>
 						</div>
 						<div>
-							<h3>Market Analysis</h3>
-							<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Perferendis quis molestiae
-								vitae eligendi at.</p>
-							<p><a href="#">Learn More</a></p>
+							<h3>Punto de Venta</h3>
+							<p>Gesti&oacute;n de compras, ventas, clientes, caja, facturaci&oacute;n electr&oacute;nica, etc. La soluci&oacute;n para el comercio.</p>
+							<p><a href="#">Ver m&aacute;s</a></p>
 						</div>
 					</div>
 				</div>
@@ -70,52 +66,9 @@
 							<span class="icon-wrap"><span class="text-primary icon-shopping_basket"></span></span>
 						</div>
 						<div>
-							<h3>Easy Purchase</h3>
-							<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Perferendis quis molestiae
-								vitae eligendi at.</p>
-							<p><a href="#">Learn More</a></p>
-						</div>
-					</div>
-				</div>
-
-				<div class="col-md-6 col-lg-4 mb-4 mb-lg-4" data-aos="fade-up">
-					<div class="unit-4 d-block">
-						<div class="unit-4-icon mb-3">
-							<span class="icon-wrap"><span class="text-primary icon-settings_backup_restore"></span></span>
-						</div>
-						<div>
-							<h3>Free Updates</h3>
-							<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Perferendis quis molestiae
-								vitae eligendi at.</p>
-							<p><a href="#">Learn More</a></p>
-						</div>
-					</div>
-				</div>
-
-				<div class="col-md-6 col-lg-4 mb-4 mb-lg-4" data-aos="fade-up" data-aos-delay="100">
-					<div class="unit-4 d-block">
-						<div class="unit-4-icon mb-3">
-							<span class="icon-wrap"><span class="text-primary icon-sentiment_satisfied"></span></span>
-						</div>
-						<div>
-							<h3>100% Satistified</h3>
-							<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Perferendis quis molestiae
-								vitae eligendi at.</p>
-							<p><a href="#">Learn More</a></p>
-						</div>
-					</div>
-				</div>
-
-				<div class="col-md-6 col-lg-4 mb-4 mb-lg-4" data-aos="fade-up" data-aos-delay="200">
-					<div class="unit-4 d-block">
-						<div class="unit-4-icon mb-3">
-							<span class="icon-wrap"><span class="text-primary icon-power"></span></span>
-						</div>
-						<div>
-							<h3>Easy Plugin</h3>
-							<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Perferendis quis molestiae
-								vitae eligendi at.</p>
-							<p><a href="#">Learn More</a></p>
+							<h3>Cat&aacute;logo</h3>
+							<p>Venta sencilla por internet, sin la complejidad de un ecommerce, con las herramientas y flexibilidad justa.</p>
+							<p><a href="#">Ver m&aacute;s</a></p>
 						</div>
 					</div>
 				</div>
@@ -127,21 +80,19 @@
 		<div class="container">
 			<div class="row mb-5 site-section">
 				<div class="col-lg-7" data-aos="fade-right">
-					<img src="images/undraw_gift_card_6ekc.svg" alt="Image" class="img-fluid">
+					<img src="images/undraw_bookmarks_r6up.svg" alt="Image" class="img-fluid">
 				</div>
 				<div class="col-lg-5 pl-lg-5 ml-auto mt-md-5">
-					<h2 class="text-black">Communicate and gather feedback</h2>
-					<p class="mb-4">Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatem neque nisi
-						architecto autem molestias corrupti officia veniam.</p>
+					<h2 class="text-black">Informaci&oacute;n centralizada</h2>
 
 					<div class="author-box" data-aos="fade-left">
 						<div class="d-flex mb-4">
 							<div class="mr-3">
-								<img src="images/person_4.jpg" alt="Image" class="img-fluid rounded-circle">
+								<img src="images/25795363.png" alt="Image" class="img-fluid rounded-circle">
 							</div>
 							<div class="mr-auto text-black">
-								<strong class="font-weight-bold mb-0">Grey Simpson</strong> <br>
-								Co-Founder, XYZ Inc.
+								<strong class="font-weight-bold mb-0">John Astete</strong> <br>
+								Co-Founder, Proycer
 							</div>
 						</div>
 						<blockquote>&ldquo;Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ducimus vitae
@@ -156,16 +107,14 @@
 				</div>
 				<div class="col-lg-5 pr-lg-5 mr-auto mt-5 order-2 order-lg-1">
 					<h2 class="text-black">Communicate and gather feedback</h2>
-					<p class="mb-4">Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatem neque nisi
-						architecto autem molestias corrupti officia veniam</p>
 					<div class="author-box" data-aos="fade-right">
 						<div class="d-flex mb-4">
 							<div class="mr-3">
-								<img src="images/person_1.jpg" alt="Image" class="img-fluid rounded-circle">
+								<img src="images/25795363.png" alt="Image" class="img-fluid rounded-circle">
 							</div>
 							<div class="mr-auto text-black">
-								<strong class="font-weight-bold mb-0">Kimberly Gush</strong> <br>
-								Co-Founder, XYZ Inc.
+								<strong class="font-weight-bold mb-0">John Astete</strong> <br>
+								Co-Founder, Proycer
 							</div>
 						</div>
 						<blockquote>&ldquo;Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ducimus vitae
@@ -186,7 +135,7 @@
 					<div>
 						<div class="testimonial">
 							<figure class="mb-4 d-block align-items-center justify-content-center">
-								<div><img src="images/person_3.jpg" alt="Image" class="w-100 img-fluid mb-3 shadow"></div>
+								<div><img src="images/person_5.jpg" alt="Image" class="w-100 img-fluid mb-3 shadow"></div>
 							</figure>
 							<blockquote class="mb-3">
 								<p>&ldquo;Lorem ipsum dolor sit amet consectetur adipisicing elit. Consectetur unde
@@ -199,7 +148,7 @@
 					<div>
 						<div class="testimonial">
 							<figure class="mb-4 d-block align-items-center justify-content-center">
-								<div><img src="images/person_2.jpg" alt="Image" class="w-100 img-fluid mb-3 shadow"></div>
+								<div><img src="images/person_6.jpg" alt="Image" class="w-100 img-fluid mb-3 shadow"></div>
 							</figure>
 
 							<blockquote class="mb-3">
@@ -211,38 +160,9 @@
 							<p class="text-black"><strong>Robert Aguilar</strong></p>
 						</div>
 					</div>
-
-					<div>
-						<div class="testimonial">
-							<figure class="mb-4 d-block align-items-center justify-content-center">
-								<div><img src="images/person_4.jpg" alt="Image" class="w-100 img-fluid mb-3 shadow"></div>
-							</figure>
-							<blockquote class="mb-3">
-								<p>&ldquo;Lorem ipsum dolor sit amet consectetur adipisicing elit. Consectetur unde
-									reprehenderit aperiam quaerat fugiat repudiandae explicabo animi minima fuga beatae
-									illum eligendi incidunt consequatur. Amet dolores excepturi earum unde iusto.&rdquo;</p>
-							</blockquote>
-							<p class="text-black"><strong>Roger Spears</strong></p>
-						</div>
-					</div>
-
-					<div>
-						<div class="testimonial">
-							<figure class="mb-4 d-block align-items-center justify-content-center">
-								<div><img src="images/person_1.jpg" alt="Image" class="w-100 img-fluid mb-3 shadow"></div>
-							</figure>
-							<blockquote class="mb-3">
-								<p>&ldquo;Lorem ipsum dolor sit amet consectetur adipisicing elit. Consectetur unde
-									reprehenderit aperiam quaerat fugiat repudiandae explicabo animi minima fuga beatae
-									illum eligendi incidunt consequatur. Amet dolores excepturi earum unde iusto.&rdquo;</p>
-							</blockquote>
-							<p class="text-black"><strong>Kyle McDonald</strong></p>
-						</div>
-					</div>
 				</div>
 			</div>
 		</div>
 	</div>
 </div>
-
 @endsection
