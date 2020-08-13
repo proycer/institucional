@@ -14,5 +14,6 @@ try {
     window.bootstrap = require('bootstrap');
     window.owlCarousel = require('owl.carousel');
     window.AOS = require('aos');
+    require('./jquery.sticky');
 
 } catch (e) {}
