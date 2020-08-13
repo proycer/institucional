@@ -95,8 +95,7 @@
 								Co-Founder, Proycer
 							</div>
 						</div>
-						<blockquote>&ldquo;Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ducimus vitae
-							ipsa asperiores inventore aperiam iure?&rdquo;</blockquote>
+						<blockquote>&ldquo;Cuando gestion&aacute;s tu negocio desde internet, toda la informaci&oacute;n est&aacute; accesible desde cualquier dispositivo.&rdquo;</blockquote>
 					</div>
 				</div>
 			</div>
@@ -106,7 +105,7 @@
 					<img src="images/undraw_metrics_gtu7.svg" alt="Image" class="img-fluid">
 				</div>
 				<div class="col-lg-5 pr-lg-5 mr-auto mt-5 order-2 order-lg-1">
-					<h2 class="text-black">Communicate and gather feedback</h2>
+					<h2 class="text-black">Mejora en la toma de decisiones</h2>
 					<div class="author-box" data-aos="fade-right">
 						<div class="d-flex mb-4">
 							<div class="mr-3">
@@ -117,13 +116,12 @@
 								Co-Founder, Proycer
 							</div>
 						</div>
-						<blockquote>&ldquo;Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ducimus vitae
-							ipsa asperiores inventore aperiam iure?&rdquo;</blockquote>
+						<blockquote>&ldquo;El orden de la informaci&oacute;n facilita la toma de decisiones para el progreso.&rdquo;</blockquote>
 					</div>
 				</div>
 			</div>
 
-			<div class="site-section testimonial-wrap bg-light" id="testimonials-section">
+			{{-- <div class="site-section testimonial-wrap bg-light" id="testimonials-section">
 				<div class="container">
 					<div class="row mb-5">
 						<div class="col-12 text-center">
@@ -161,7 +159,7 @@
 						</div>
 					</div>
 				</div>
-			</div>
+			</div> --}}
 		</div>
 	</div>
 </div>

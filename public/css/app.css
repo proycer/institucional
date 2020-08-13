@@ -18097,12 +18097,12 @@ body {
 }
 
 ::-moz-selection {
-  background: #000;
+  background: #f1925d;
   color: #fff;
 }
 
 ::selection {
-  background: #000;
+  background: #f1925d;
   color: #fff;
 }
 
@@ -18496,7 +18496,7 @@ h5,
   z-index: 1999;
   position: absolute;
   width: 100%;
-  background: #fff;
+  background: linear-gradient(180deg, #fff, #fff, #ffffff00);
 }
 
 .site-navbar .site-logo {
