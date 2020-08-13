@@ -20,9 +20,9 @@
                 <nav class="site-navigation position-relative text-right" role="navigation">
 
                     <ul class="site-menu main-menu js-clone-nav mr-auto d-none d-lg-block ml-0 pl-0">
-                        <li><a href="#home-section" class="nav-link">Inicio</a></li>
+                        <li><a href="{{ route('home') }}" class="nav-link">Inicio</a></li>
                         <li class="has-children">
-                            <a href="#about-section" class="nav-link">Servicios</a>
+                            <a href="#features-section" class="nav-link">Servicios</a>
                             <ul class="dropdown arrow-top">
                                 <li><a href="#" target="_blank" class="nav-link">Gesti&oacute;n de Turnos</a></li>
                                 <li><a href="https://list.proycer.com.ar" target="_blank" class="nav-link">Cat&aacute;logo Online</a></li>
@@ -37,8 +37,8 @@
                                 </li> --}}
                             </ul>
                         </li>
-                        <li><a href="#testimonials-section" class="nav-link">Nosotros</a></li>
-                        <li><a href="#contact-section" class="nav-link">Autogesti&oacute;n</a></li>
+                        <li><a href="{{ route('us') }}" class="nav-link">Nosotros</a></li>
+                        <li><a href="https://crm.proycer.com.ar" class="nav-link">Autogesti&oacute;n</a></li>
                     </ul>
                 </nav>
             </div>

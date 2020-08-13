@@ -14,7 +14,7 @@
 							<h1>Llev&aacute; tu negocio al siguiente nivel!</h1>
 							<p class="mb-5">Sac&aacute; provecho de los avances tecnol&oacute;gicos. Lo hacemos con vos.</p>
 							<div>
-								<a href="#" class="btn btn-primary mr-2 mb-2">Conocer m&aacute;s</a>
+								<a href="#features-section" class="btn btn-primary mr-2 mb-2">Conocer m&aacute;s</a>
 							</div>
 						</div>
 					</div>
