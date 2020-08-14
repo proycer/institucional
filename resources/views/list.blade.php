@@ -25,22 +25,29 @@
 	<header class="header">
 		<nav class="navbar navbar-expand-lg fixed-top">
 			<div class="container"><a class="navbar-brand" href="{{ route('home') }}"><img src="{{ asset('img/logo.png') }}" alt="" width="100%"></a>
-				<button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse"
-					data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
-					aria-label="Toggle navigation"><i class="fas fa-bars"></i></button>
+				<button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><i class="fas fa-bars"></i></button>
 				<div class="collapse navbar-collapse" id="navbarSupportedContent">
 					<ul class="navbar-nav ml-auto">
-						<li class="nav-item"><a class="nav-link link-scroll" href="#hero">Inicio</a></li>
-						<li class="nav-item"><a class="nav-link link-scroll" href="#about">Planes</a></li>
-						<li class="nav-item"><a class="nav-link link-scroll" href="#services">Funciones</a></li>
+						<li class="nav-item"><a class="nav-link link-scroll" href="{{ route('home') }}">Inicio</a></li>
+						<li class="nav-item dropdown">
+							<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+								Servicios
+							</a>
+							<div class="dropdown-menu" aria-labelledby="navbarDropdown">
+								<a class="dropdown-item" href="{{ route('schedule') }}">Gesti&oacute;n de Turnos</a>
+								<a class="dropdown-item" href="{{ route('list') }}">Cat&aacute;logo Online</a>
+								<a class="dropdown-item" href="#">Punto de Venta</a>
+							</div>
+						</li>
+						<li class="nav-item"><a class="nav-link link-scroll" href="{{ route('us') }}">Nosotros</a></li>
+						<li class="nav-item"><a class="nav-link link-scroll" href="https://crm.proycer.com.ar">Autogesti&oacute;n</a></li>
 					</ul>
 				</div>
 			</div>
 		</nav>
 	</header>
 
-	<section class="hero bg-top" id="hero"
-		style="background: url({{ asset('img/banner-4.png') }}) no-repeat; background-size: 100% 80%">
+	<section class="hero bg-top" id="hero" style="background: url({{ asset('img/banner-4.png') }}) no-repeat; background-size: 100% 80%">
 		<div class="container">
 			<div class="row py-5 px-2">
 				<div class="col-lg-7 col-md-5 py-5" data-aos="fade-up">
@@ -92,14 +99,14 @@
 							<div class="card-body p-5">
 								<h3 class="font-weight-light h5 text-center">La mejor opci&oacute;n!</h3>
 								<p class="text-small mb-0 mt-4">Esto es lo que vas a tener:
-								<ul class="text-small">
-									<li>P&aacute;gina personalizada</li>
-									<li>Lista para vender</li>
-									<li>Botones de redes sociales</li>
-									<li>Visible en pc y celular</li>
-									<li>Administraci&oacute;n sencilla</li>
-									<li>Y m&aacute;s ..</li>
-								</ul>
+									<ul class="text-small">
+										<li>P&aacute;gina personalizada</li>
+										<li>Lista para vender</li>
+										<li>Botones de redes sociales</li>
+										<li>Visible en pc y celular</li>
+										<li>Administraci&oacute;n sencilla</li>
+										<li>Y m&aacute;s ..</li>
+									</ul>
 								</p>
 							</div>
 						</div>
@@ -268,8 +275,7 @@
 							</a>
 						</li>
 						<li class="list-inline-item">
-							<a class="social-link" target="_blank"
-								href="https://api.whatsapp.com/send?phone=+5492996743360">
+							<a class="social-link" target="_blank" href="https://api.whatsapp.com/send?phone=+5492996743360">
 								<i class="fab fa-whatsapp"></i>
 							</a>
 						</li>
@@ -281,8 +287,8 @@
 
 	<script src="{{ asset('js/services.js') }}"></script>
 	<script>
-		$(function () {
-			$(window).on('scroll load', function () {
+		$(function() {
+			$(window).on('scroll load', function() {
 				if ($(window).scrollTop() > 5) {
 					$('.navbar').addClass('active');
 				} else {
@@ -292,8 +298,7 @@
 		});
 	</script>
 
-	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css"
-		integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
 </body>
 
 </html>
