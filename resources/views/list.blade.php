@@ -10,8 +10,9 @@
 
 	<title>Cat&aacute;logo Online</title>
 
-	<link rel="stylesheet" href="https://list.proycer.com.ar/css/style.css">
-	<link rel="shortcut icon" href="https://list.proycer.com.ar/img/favicon.png">
+	<link href="https://fonts.googleapis.com/css?family=Nunito:300,400,700" rel="stylesheet">
+	<link rel="stylesheet" href="{{ asset('css/services.css') }}">
+	<link rel="shortcut icon" type="image/png" sizes="16x16" href="{{ asset('images/favicon.png') }}">
 
 	<!-- Tweaks for older IEs-->
 	<!--[if lt IE 9]>
@@ -23,7 +24,7 @@
 <body>
 	<header class="header">
 		<nav class="navbar navbar-expand-lg fixed-top">
-			<div class="container"><a class="navbar-brand" href="{{ route('home') }}"><img src="https://list.proycer.com.ar/img/logo.png" alt="" width="110"></a>
+			<div class="container"><a class="navbar-brand" href="{{ route('home') }}"><img src="{{ asset('img/logo.png') }}" alt="" width="100%"></a>
 				<button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse"
 					data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
 					aria-label="Toggle navigation"><i class="fas fa-bars"></i></button>
@@ -39,10 +40,10 @@
 	</header>
 
 	<section class="hero bg-top" id="hero"
-		style="background: url(https://list.proycer.com.ar/img/banner-4.png) no-repeat; background-size: 100% 80%">
+		style="background: url({{ asset('img/banner-4.png') }}) no-repeat; background-size: 100% 80%">
 		<div class="container">
 			<div class="row py-5 px-2">
-				<div class="col-lg-7 col-md-5 py-5">
+				<div class="col-lg-7 col-md-5 py-5" data-aos="fade-up">
 					<h1 class="font-weight-bold">Vend&eacute; f&aacute;cil en Internet</h1>
 					<h3 class="">por $399/mes</h3>
 					<p class="my-4 text-muted">Olvidate de la complejidad de una tienda online.<br />Us&aacute; tu
@@ -53,10 +54,10 @@
 						</li>
 					</ul>
 				</div>
-				<div class="col-lg-5 col-md-4 ml-auto">
+				<div class="col-lg-5 col-md-4 ml-auto" data-aos="fade-up">
 					<div class="device-wrapper mx-auto">
 						<div class="device shadow" data-device="iPhoneX" data-orientation="portrait" data-color="black">
-							<div class="screen"><img class="img-fluid" src="https://list.proycer.com.ar/img/mobile.jpg" alt=""></div>
+							<div class="screen"><img class="img-fluid" src="{{ asset('img/mobile.jpg') }}" alt=""></div>
 						</div>
 					</div>
 				</div>
@@ -64,18 +65,17 @@
 		</div>
 	</section>
 
-	<section class="bg-center py-0" id="about"
-		style="background: url(https://list.proycer.com.ar/img/service-bg.svg) no-repeat; background-size: cover">
+	<section class="bg-center py-0" id="about" style="background: url({{ asset('img/service-bg.svg') }}) no-repeat; background-size: cover">
 		<section class="about py-0">
 			<div class="container">
 				<p class="h6 text-uppercase text-primary">Planes</p>
 				<h2 class="mb-5">Avanza a tu ritmo</h2>
 				<div class="row pb-5">
-					<div class="col-lg-4 col-md-6 mb-4 mb-lg-0">
+					<div class="col-lg-4 col-md-6 mb-4 mb-lg-0" data-aos="fade-up">
 						<div class="card border-0 shadow rounded-lg py-4 text-left">
 							<div class="card-body p-5">
 								<div class="text-center">
-									<img src="https://list.proycer.com.ar/img/small-business.png" />
+									<img src="{{ asset('img/small-business.png') }}" />
 								</div>
 								<h3 class="font-weight-normal text-center h4">Cat&aacute;logo Online</h3>
 								<h3 class="font-weight-light h5 text-right">$399/mes</h3>
@@ -87,7 +87,7 @@
 						</div>
 					</div>
 
-					<div class="col-lg-4 col-md-6 mb-4 mb-lg-0">
+					<div class="col-lg-4 col-md-6 mb-4 mb-lg-0" data-aos="fade-up" data-aos-delay="200">
 						<div class="card border-0 shadow rounded-lg py-4 text-left">
 							<div class="card-body p-5">
 								<h3 class="font-weight-light h5 text-center">La mejor opci&oacute;n!</h3>
@@ -105,11 +105,11 @@
 						</div>
 					</div>
 
-					<div class="col-lg-4 col-md-6">
+					<div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="400">
 						<div class="card border-0 shadow rounded-lg py-4 text-left">
 							<div class="card-body p-5">
 								<div class="text-center">
-									<img src="https://list.proycer.com.ar/img/flex-biceps.png" />
+									<img src="{{ asset('img/flex-biceps.png') }}" />
 								</div>
 								<h3 class="font-weight-normal text-center h4">Ayuda extra!</h3>
 								<p class="text-small mb-0 mt-4">Si ten&eacute;s muchos productos para cargar o
@@ -126,9 +126,10 @@
 		<section class="with-pattern-1" id="services">
 			<div class="container">
 				<div class="row align-items-center mb-5">
-					<div class="col-lg-6 mb-5 mb-lg-0"><img class="img-fluid w-100 px-lg-5" src="https://list.proycer.com.ar/img/objects.svg"
-							alt=""></div>
-					<div class="col-lg-6">
+					<div class="col-lg-6 mb-5 mb-lg-0" data-aos="fade-right">
+						<img class="img-fluid w-100 px-lg-5" src="{{ asset('img/objects.svg') }}" alt="">
+					</div>
+					<div class="col-lg-6" data-aos="fade-right">
 						<h2>No tiene que ser dif&iacute;cil</h2>
 						<p class="text-muted">Tu emprendimiento no necesita complic&aacute;rsela m&aacute;s. Nosotros te
 							ayudamos a estar en internet, vos cerr&aacute;s las ventas.</p>
@@ -138,7 +139,7 @@
 					</div>
 				</div>
 				<div class="row align-items-center">
-					<div class="col-lg-6 mb-5 mb-lg-0">
+					<div class="col-lg-6 mb-5 mb-lg-0" data-aos="fade-right">
 						<h2>Ojo!</h2>
 						<p class="text-muted">Eso no significa que no te vamos a dar todas las herramientas que
 							necesitas para vender. Tenemos lo necesario para ayudarte con:</p>
@@ -153,10 +154,10 @@
 					</div>
 					<div class="col-lg-6">
 						<div class="row">
-							<div class="col-lg-6 col-sm-6 mb-4">
+							<div class="col-lg-6 col-sm-6 mb-4" data-aos="fade-right">
 								<div class="card border-0 shadow rounded-lg text-left px-2">
 									<div class="card-body px py-5">
-										<img src="https://list.proycer.com.ar/img/rgb-circle-1--v1.png" />
+										<img src="{{ asset('img/rgb-circle-1--v1.png') }}" />
 										<h3 class="h5 font-weight-normal h4 my-3">Tu estilo</h3>
 										<p class="text-small mb-0 text-muted">Apariencia, opciones y banner a tu gusto.
 										</p>
@@ -164,10 +165,10 @@
 								</div>
 							</div>
 
-							<div class="col-lg-6 col-sm-6 mb-4">
+							<div class="col-lg-6 col-sm-6 mb-4" data-aos="fade-right">
 								<div class="card border-0 shadow rounded-lg text-left px-2">
 									<div class="card-body px py-5">
-										<img src="https://list.proycer.com.ar/img/facebook-messenger.png" />
+										<img src="{{ asset('img/facebook-messenger.png') }}" />
 										<h3 class="h5 font-weight-normal h4 my-3">Redes Sociales</h3>
 										<p class="text-small mb-0 text-muted">Recibe mensajes directamente por Messenger
 											o WhatsApp.</p>
@@ -175,10 +176,10 @@
 								</div>
 							</div>
 
-							<div class="col-lg-6 col-sm-6 mb-4">
+							<div class="col-lg-6 col-sm-6 mb-4" data-aos="fade-right">
 								<div class="card border-0 shadow rounded-lg text-left px-2">
 									<div class="card-body px py-5">
-										<img src="https://list.proycer.com.ar/img/web-design.png" />
+										<img src="{{ asset('img/web-design.png') }}" />
 										<h3 class="h5 font-weight-normal h4 my-3">Marca</h3>
 										<p class="text-small mb-0 text-muted">Tu propio sitio web .com.ar en internet.
 										</p>
@@ -186,10 +187,10 @@
 								</div>
 							</div>
 
-							<div class="col-lg-6 col-sm-6">
+							<div class="col-lg-6 col-sm-6" data-aos="fade-right">
 								<div class="card border-0 shadow rounded-lg text-left px-2">
 									<div class="card-body px py-5">
-										<img src="https://list.proycer.com.ar/img/maintenance.png" />
+										<img src="{{ asset('img/maintenance.png') }}" />
 										<h3 class="h5 font-weight-normal h4 my-3">Gesti&oacute;n</h3>
 										<p class="text-small mb-0 text-muted">Pod&eacute;s autoadministrar tu
 											cat&aacute;logo</p>
@@ -204,7 +205,7 @@
 	</section>
 
 	<a href="https://api.whatsapp.com/send?phone=+5492996743360" class="float-wp" target="_blank">
-		<img class="my-float-wp" src="https://list.proycer.com.ar/img/whatsapp.png" />
+		<img class="my-float-wp" src="{{ asset('img/whatsapp.png') }}" />
 	</a>
 
 	<style>
@@ -232,7 +233,7 @@
 	<footer class="with-pattern-1 position-relative">
 		<div class="container section-padding-y">
 			<div class="row">
-				<div class="col-lg-3 mb-4 mb-lg-0"><img class="mb-4" src="https://list.proycer.com.ar/img/logo.png" alt="" width="110">
+				<div class="col-lg-3 mb-4 mb-lg-0"><img class="mb-4" src="{{ asset('img/logo.png') }}" alt="" width="110">
 					<p class="text-muted">Empoderamos a los emprendedores con tecnolog&iacute;a.</p>
 				</div>
 
@@ -278,7 +279,7 @@
 		</div>
 	</footer>
 
-	<script src="https://list.proycer.com.ar/js/script.js"></script>
+	<script src="{{ asset('js/services.js') }}"></script>
 	<script>
 		$(function () {
 			$(window).on('scroll load', function () {

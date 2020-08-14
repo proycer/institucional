@@ -5,7 +5,7 @@
     @include('partials.header')
     <div class="feature-big">
 		<div class="container">
-			<div class="row site-section">
+			<div class="row" style="padding-top: 5rem;">
 				<div class="col-lg-7 pl-lg-5 ml-auto mt-md-5">
 					<h2 class="text-black">Somos emprendedores j&oacute;venes</h2>
 					<div class="author-box" data-aos="fade-right">

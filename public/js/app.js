@@ -39506,7 +39506,6 @@ AOS.init({
 jQuery(document).ready(function ($) {
   "use strict";
 
-  $(".loader").delay(1000).fadeOut("slow");
   $("#overlayer").delay(1000).fadeOut("slow");
 
   var siteMenuClone = function siteMenuClone() {
@@ -39997,15 +39996,27 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
 
 /***/ }),
 
+/***/ "./resources/sass/services.scss":
+/*!**************************************!*\
+  !*** ./resources/sass/services.scss ***!
+  \**************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
+
+/***/ }),
+
 /***/ 0:
-/*!*************************************************************!*\
-  !*** multi ./resources/js/app.js ./resources/sass/app.scss ***!
-  \*************************************************************/
+/*!********************************************************************************************!*\
+  !*** multi ./resources/js/app.js ./resources/sass/app.scss ./resources/sass/services.scss ***!
+  \********************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(/*! C:\laragon\www\proycer\resources\js\app.js */"./resources/js/app.js");
-module.exports = __webpack_require__(/*! C:\laragon\www\proycer\resources\sass\app.scss */"./resources/sass/app.scss");
+__webpack_require__(/*! C:\laragon\www\proycer\resources\sass\app.scss */"./resources/sass/app.scss");
+module.exports = __webpack_require__(/*! C:\laragon\www\proycer\resources\sass\services.scss */"./resources/sass/services.scss");
 
 
 /***/ })
