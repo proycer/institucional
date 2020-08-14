@@ -28,7 +28,7 @@
 </body>
 
 <a href="https://api.whatsapp.com/send?phone=+5492996743360" class="float-wp" id="whatsapp" target="_blank">
-    <img class="my-float-wp" src="images/whatsapp.png" />
+    <img class="my-float-wp" src="img/whatsapp.png" />
 </a>
 
 <script src="{{ asset('js/services.js') }}"></script>

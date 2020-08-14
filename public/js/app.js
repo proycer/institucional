@@ -39503,7 +39503,7 @@ AOS.init({
   easing: 'slide',
   once: false
 });
-jQuery(document).ready(function ($) {
+$(document).ready(function ($) {
   "use strict";
 
   $("#overlayer").delay(1000).fadeOut("slow");

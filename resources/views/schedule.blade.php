@@ -15,8 +15,13 @@
 				</ul>
 			</div>
 			<div class="col-lg-5 col-md-4 ml-auto" data-aos="fade-up">
-				<div class="device-wrapper mx-auto">
-					<img class="img-fluid" src="{{ asset('images/turnos.png') }}" alt="">
+				<div class="preview owl-carousel owl-theme">
+					<div class="device-wrapper mx-auto">
+						<img class="img-fluid" src="{{ asset('images/catalogo.png') }}" alt="">
+					</div>
+					<div class="device-wrapper mx-auto">
+						<img class="img-fluid" src="{{ asset('images/turnos.png') }}" alt="">
+					</div>
 				</div>
 			</div>
 		</div>
@@ -33,10 +38,10 @@
 					<div class="card border-0 shadow rounded-lg py-4 text-left">
 						<div class="card-body p-5">
 							<div class="text-center">
-								<img src="{{ asset('img/small-business.png') }}" />
+								<img src="{{ asset('img/calendar.png') }}" />
 							</div>
-							<h3 class="font-weight-normal text-center h4">Cat&aacute;logo Online</h3>
-							<h3 class="font-weight-light h5 text-right">$399/mes</h3>
+							<h3 class="font-weight-normal text-center h4">Turnero Online</h3>
+							<h3 class="font-weight-light h5 text-right">$199/mes</h3>
 							<p class="text-small mb-0 mt-4">Te ofrecemos la herramienta que siempre so&ntilde;aste para llevar tu negocio de manera ordenada, segura y hacia más clientes.</p>
 							<p class="text-small mb-0 mt-2">Sin comisiones ni cargos ocultos.</p>
 						</div>

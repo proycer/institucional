@@ -1,6 +1,10 @@
 /* Bootstrap */
 @import "~bootstrap/scss/bootstrap";
 
+/* Owl Carousel */
+@import "~owl.carousel/dist/assets/owl.carousel.min.css";
+@import "~owl.carousel/dist/assets/owl.theme.default.min.css";
+
 /* AOS */
 @import "~aos/src/sass/aos";
 
@@ -1182,16 +1186,29 @@ h3 {
     padding-right: 1.5rem
 }
 
+.dropdown:hover .dropdown-menu {
+    display: block;
+}
+
+.dropdown-menu {
+    border-top: 2px solid $proycer;
+}
+
 .dropdown-item {
     padding: 9px 20px;
+}
+
+.dropdown-item:hover, .dropdown-item.active, .dropdown-item:active {
+    background-color: $proycer;
+    color: #fff;
 }
 
 .float-wp {
 	position: fixed;
 	width: 60px;
 	height: 60px;
-	bottom: 18pt;
-	right: 18pt;
+	bottom: 13pt;
+	right: 13pt;
 	background-color: #40c351;
 	color: #FFF;
 	border-radius: 50px;
@@ -1202,6 +1219,6 @@ h3 {
 }
 
 .my-float-wp {
-	margin-top: 10px;
+	margin-top: 6px;
 	margin-left: 0;
 }
