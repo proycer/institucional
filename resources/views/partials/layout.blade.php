@@ -3,10 +3,13 @@
 
 <head>
 	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="description" content="">
+    <meta name="robots" content="all,follow">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>Proycer</title>
 	<link rel="shortcut icon" type="image/png" sizes="16x16" href="{{ asset('images/favicon.png') }}">
 
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<link href="https://fonts.googleapis.com/css?family=Nunito:300,400,700" rel="stylesheet">
 	<link rel="stylesheet" href="{{ asset('css/app.css') }}">
 </head>
