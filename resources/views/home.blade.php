@@ -41,7 +41,7 @@
 					<div>
 						<h3>Turnos</h3>
 						<p>Administraci&oacute;n de citas y servicios para el cliente, junto a tu resumen contable, todo en un mismo lugar.</p>
-						<p><a href="#">Ver m&aacute;s</a></p>
+						<p><a href="{{ route('schedule') }}">Ver m&aacute;s</a></p>
 					</div>
 				</div>
 			</div>
@@ -68,7 +68,7 @@
 					<div>
 						<h3>Cat&aacute;logo</h3>
 						<p>Venta sencilla por internet, sin la complejidad de un ecommerce, con las herramientas y flexibilidad justa.</p>
-						<p><a href="#">Ver m&aacute;s</a></p>
+						<p><a href="{{ route('list') }}">Ver m&aacute;s</a></p>
 					</div>
 				</div>
 			</div>
