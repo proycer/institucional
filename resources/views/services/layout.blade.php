@@ -8,7 +8,7 @@
     <meta name="robots" content="all,follow">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>Cat&aacute;logo Online</title>
+    <title>Proycer</title>
 
     <link href="https://fonts.googleapis.com/css?family=Nunito:300,400,700" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('css/services.css') }}">
