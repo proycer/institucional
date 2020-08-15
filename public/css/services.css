@@ -13294,6 +13294,12 @@ h3 {
   font-size: 1.75rem;
 }
 
+h3 > a,
+h3 > a:hover,
+h3 > a:active {
+  color: inherit;
+}
+
 .h4 {
   font-size: 1.5rem;
 }
@@ -13344,9 +13350,9 @@ h3 {
   padding-right: 1.5rem;
 }
 
-.dropdown:hover .dropdown-menu {
-  display: block;
-}
+/* .dropdown:hover .dropdown-menu {
+    display: block;
+} */
 
 .dropdown-menu {
   border-top: 2px solid #f1925d;

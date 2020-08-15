@@ -1,165 +1,100 @@
-@extends('partials.layout')
+@extends('services.layout')
 
 @section('content')
+<section class="hero bg-top" id="hero" style="background: url({{ asset('img/banner-4.png') }}) no-repeat; background-size: 100% 80%">
+    <div class="container">
+        <div class="row py-5 px-2">
+            <div class="col-lg-7 col-md-5 py-5" data-aos="fade-up">
+                <h1 class="font-weight-bold">Llev&aacute; tu negocio al siguiente nivel!</h1>
+                <p class="my-4 text-muted">Sac&aacute; provecho de los avances tecnol&oacute;gicos. Lo hacemos con vos.</p>
+                <ul class="list-inline mb-0">
+                    <li class="list-inline-item mb-2 mb-lg-0">
+                        <a class="btn btn-primary btn-lg px-4" href="#about">Conocer m&aacute;s</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="col-lg-5 col-md-4 ml-auto" data-aos="fade-up">
+                <img class="img-fluid" src="{{ asset('images/undraw_investing_7u74.svg') }}" alt="">
+            </div>
+        </div>
+    </div>
+</section>
 
-@include('partials.header')
-<div class="site-blocks-cover" style="overflow: hidden;">
-	<div class="container">
-		<div class="row align-items-center justify-content-center">
-			<div class="col-md-12" style="position: relative;" data-aos="fade-up" data-aos-delay="200">
-				<img src="{{ asset('images/undraw_investing_7u74.svg') }}" alt="Image" class="img-fluid img-absolute">
+<section class="bg-center py-0" id="about" style="background: url({{ asset('img/service-bg.svg') }}) no-repeat; background-size: cover">
+    <section class="about py-0">
+        <div class="container">
+            <p class="h6 text-uppercase text-primary">Nuestras Soluciones</p>
+            <h2 class="mb-5">Desarrollamos propuestas de alta demanda.</h2>
+            <div class="row pb-5">
+                <div class="col-lg-4 col-md-6 mb-4 mb-lg-0" data-aos="fade-up">
+                    <div class="card border-0 shadow rounded-lg py-4 text-left">
+                        <div class="card-body p-5">
+                            <div class="text-center">
+                                <img src="{{ asset('img/calendar.png') }}" />
+                            </div>
+                            <h3 class="font-weight-normal text-center h4"><a href="{{ route('schedule') }}">Turnos Online</a></h3>
+                            <h3 class="font-weight-light h5 text-right">AR$199 /mes</h3>
+                            <p class="text-small mb-0 mt-4">La herramienta que necesit&aacute;s para llevar tu negocio de manera ordenada, segura y hacia más clientes.</p>
+                        </div>
+                    </div>
+                </div>
 
-				<div class="row mb-4" data-aos="fade-up" data-aos-delay="200">
-					<div class="col-lg-6 mr-auto">
-						<h1>Llev&aacute; tu negocio al siguiente nivel!</h1>
-						<p class="mb-5">Sac&aacute; provecho de los avances tecnol&oacute;gicos. Lo hacemos con vos.</p>
-						<div>
-							<a href="#features-section" class="btn btn-primary mr-2 mb-2">Conocer m&aacute;s</a>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-</div>
+                <div class="col-lg-4 col-md-6 mb-4 mb-lg-0" data-aos="fade-up" data-aos-delay="200">
+                    <div class="card border-0 shadow rounded-lg py-4 text-left">
+                        <div class="card-body p-5">
+                            <div class="text-center">
+                                <img src="{{ asset('img/small-business.png') }}" />
+                            </div>
+                            <h3 class="font-weight-normal text-center h4"><a href="{{ route('list') }}">Cat&aacute;logo Online</a></h3>
+                            <h3 class="font-weight-light h5 text-right">AR$399 /mes</h3>
+                            <p class="text-small mb-0 mt-4">Tu sitio web promocionando tus productos y una gesti&oacute;n sencilla con las funciones esenciales.</p>
+                        </div>
+                    </div>
+                </div>
 
-<div class="site-section" id="features-section">
-	<div class="container">
-		<div class="row mb-5 justify-content-center text-center" data-aos="fade-up">
-			<div class="col-7 text-center  mb-5">
-				<h2 class="section-title">Nuestras Soluciones</h2>
-				<p class="lead">La experiencia a lo largo del tiempo nos ha permitido desarrollar soluciones de alta demanda.</p>
-			</div>
-		</div>
-		<div class="row align-items-stretch">
-			<div class="col-md-6 col-lg-4 mb-4 mb-lg-4" data-aos="fade-up">
+                <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="400">
+                    <div class="card border-0 shadow rounded-lg py-4 text-left">
+                        <div class="card-body p-5">
+                            <div class="text-center">
+                                <img src="{{ asset('img/cash-register.png') }}" />
+                            </div>
+                            <h3 class="font-weight-normal text-center h4">Caja Online</h3>
+                            <h3 class="font-weight-light h5 text-right">pr&oacute;ximamente!</h3>
+                            <p class="text-small mb-0 mt-4">Tu punto de venta donde administras compras, ventas, stock y dem&aacute;s de tu negocio.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 
-				<div class="unit-4 d-block">
-					<div class="unit-4-icon mb-3">
-						<span class="icon-wrap"><span class="text-primary icon-calendar"></span></span>
-					</div>
-					<div>
-						<h3>Turnos</h3>
-						<p>Administraci&oacute;n de citas y servicios para el cliente, junto a tu resumen contable, todo en un mismo lugar.</p>
-						<p><a href="{{ route('schedule') }}">Ver m&aacute;s</a></p>
-					</div>
-				</div>
-			</div>
-
-			<div class="col-md-6 col-lg-4 mb-4 mb-lg-4" data-aos="fade-up" data-aos-delay="100">
-
-				<div class="unit-4 d-block">
-					<div class="unit-4-icon mb-3">
-						<span class="icon-wrap"><span class="text-primary icon-store_mall_directory"></span></span>
-					</div>
-					<div>
-						<h3>Punto de Venta</h3>
-						<p>Gesti&oacute;n de compras, ventas, clientes, caja, facturaci&oacute;n electr&oacute;nica, etc. La soluci&oacute;n para el comercio.</p>
-						<p><a href="#">Ver m&aacute;s</a></p>
-					</div>
-				</div>
-			</div>
-
-			<div class="col-md-6 col-lg-4 mb-4 mb-lg-4" data-aos="fade-up" data-aos-delay="200">
-				<div class="unit-4 d-block">
-					<div class="unit-4-icon mb-3">
-						<span class="icon-wrap"><span class="text-primary icon-shopping_basket"></span></span>
-					</div>
-					<div>
-						<h3>Cat&aacute;logo</h3>
-						<p>Venta sencilla por internet, sin la complejidad de un ecommerce, con las herramientas y flexibilidad justa.</p>
-						<p><a href="{{ route('list') }}">Ver m&aacute;s</a></p>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-</div>
-
-<div class="feature-big">
-	<div class="container">
-		<div class="row mb-5 site-section">
-			<div class="col-lg-7" data-aos="fade-right">
-				<img src="images/undraw_bookmarks_r6up.svg" alt="Image" class="img-fluid">
-			</div>
-			<div class="col-lg-5 pl-lg-5 ml-auto mt-md-5">
-				<h2 class="text-black">Informaci&oacute;n centralizada</h2>
-
-				<div class="author-box" data-aos="fade-right">
-					<div class="d-flex mb-4">
-						<div class="mr-3">
-							<img src="images/25795363.png" alt="Image" class="img-fluid rounded-circle">
-						</div>
-						<div class="mr-auto text-black">
-							<strong class="font-weight-bold mb-0">John Astete</strong> <br>
-							Co-Founder, Proycer
-						</div>
-					</div>
-					<blockquote>&ldquo;Cuando gestion&aacute;s tu negocio desde internet, toda la informaci&oacute;n est&aacute; accesible desde cualquier dispositivo.&rdquo;</blockquote>
-				</div>
-			</div>
-		</div>
-
-		<div class="mt-5 row mb-5 site-section ">
-			<div class="col-lg-7 order-1 order-lg-2" data-aos="fade-right">
-				<img src="images/undraw_metrics_gtu7.svg" alt="Image" class="img-fluid">
-			</div>
-			<div class="col-lg-5 pr-lg-5 mr-auto mt-5 order-2 order-lg-1">
-				<h2 class="text-black">Mejora en la toma de decisiones</h2>
-				<div class="author-box" data-aos="fade-right">
-					<div class="d-flex mb-4">
-						<div class="mr-3">
-							<img src="images/25795363.png" alt="Image" class="img-fluid rounded-circle">
-						</div>
-						<div class="mr-auto text-black">
-							<strong class="font-weight-bold mb-0">John Astete</strong> <br>
-							Co-Founder, Proycer
-						</div>
-					</div>
-					<blockquote>&ldquo;El orden de la informaci&oacute;n facilita la toma de decisiones para el progreso.&rdquo;</blockquote>
-				</div>
-			</div>
-		</div>
-
-		{{-- <div class="site-section testimonial-wrap bg-light" id="testimonials-section">
-				<div class="container">
-					<div class="row mb-5">
-						<div class="col-12 text-center">
-							<h2 class="section-title mb-3">Clientes</h2>
-						</div>
-					</div>
-				</div>
-				<div class="slide-one-item home-slider owl-carousel">
-					<div>
-						<div class="testimonial">
-							<figure class="mb-4 d-block align-items-center justify-content-center">
-								<div><img src="images/person_5.jpg" alt="Image" class="w-100 img-fluid mb-3 shadow"></div>
-							</figure>
-							<blockquote class="mb-3">
-								<p>&ldquo;Lorem ipsum dolor sit amet consectetur adipisicing elit. Consectetur unde
-									reprehenderit aperiam quaerat fugiat repudiandae explicabo animi minima fuga beatae
-									illum eligendi incidunt consequatur. Amet dolores excepturi earum unde iusto.&rdquo;</p>
-							</blockquote>
-							<p class="text-black"><strong>John Smith</strong></p>
-						</div>
-					</div>
-					<div>
-						<div class="testimonial">
-							<figure class="mb-4 d-block align-items-center justify-content-center">
-								<div><img src="images/person_6.jpg" alt="Image" class="w-100 img-fluid mb-3 shadow"></div>
-							</figure>
-
-							<blockquote class="mb-3">
-								<p>&ldquo;Lorem ipsum dolor sit amet consectetur adipisicing elit. Consectetur unde
-									reprehenderit aperiam quaerat fugiat repudiandae explicabo animi minima fuga beatae
-									illum eligendi incidunt consequatur. Amet dolores excepturi earum unde iusto.&rdquo;</p>
-							</blockquote>
-
-							<p class="text-black"><strong>Robert Aguilar</strong></p>
-						</div>
-					</div>
-				</div>
-			</div> --}}
-	</div>
-</div>
+    <section class="with-pattern-1" id="services">
+        <div class="container">
+            <div class="row align-items-center mb-5">
+                <div class="col-lg-6 mb-5 mb-lg-0" data-aos="fade-right">
+                    <img class="img-fluid w-100 px-lg-5" src="{{ asset('images/undraw_bookmarks_r6up.svg') }}" alt="">
+                </div>
+                <div class="col-lg-6" data-aos="fade-right">
+                    <h2>Informaci&oacute;n centralizada</h2>
+                    <p class="text-muted">&ldquo;Cuando gestion&aacute;s tu negocio desde internet, toda la informaci&oacute;n est&aacute; accesible desde cualquier dispositivo.&rdquo;</p>
+                    <a href="#about" class="btn btn-lg btn-primary">
+                        Saber m&aacute;s!
+                    </a>
+                </div>
+            </div>
+            <div class="row align-items-center mb-5">
+                <div class="col-lg-6" data-aos="fade-right">
+                    <h2>Mejora en la toma de decisiones</h2>
+                    <p class="text-muted">&ldquo;El orden de la informaci&oacute;n facilita la toma de decisiones para el progreso.&rdquo;</p>
+                    <a href="#about" class="btn btn-lg btn-primary">
+                        Saber m&aacute;s!
+                    </a>
+                </div>
+                <div class="col-lg-6 mb-5 mb-lg-0" data-aos="fade-right">
+                    <img class="img-fluid w-100 px-lg-5" src="{{ asset('images/undraw_metrics_gtu7.svg') }}" alt="">
+                </div>
+            </div>
+        </div>
+    </section>
+</section>
 @endsection

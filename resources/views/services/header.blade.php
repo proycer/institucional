@@ -15,7 +15,7 @@
                             <a class="dropdown-item" href="#">Punto de Venta</a>
                         </div>
                     </li>
-                    <li class="nav-item"><a class="nav-link link-scroll" href="{{ route('us') }}">Nosotros</a></li>
+                    {{-- <li class="nav-item"><a class="nav-link link-scroll" href="{{ route('us') }}">Nosotros</a></li> --}}
                     <li class="nav-item"><a class="nav-link link-scroll" href="https://crm.proycer.com.ar">Autogesti&oacute;n</a></li>
                 </ul>
             </div>

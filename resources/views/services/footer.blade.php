@@ -6,12 +6,12 @@
             </div>
 
             <div class="col-lg-2 offset-lg-1 mb-4 mb-lg-0">
-                <h2 class="h5 mb-4">Enlaces</h2>
+                <h2 class="h5 mb-4">Servicios</h2>
                 <div class="d-flex">
                     <ul class="list-unstyled mr-4 mb-0">
-                        <li class="mb-2"><a class="footer-link" href="#hero">Inicio</a></li>
-                        <li class="mb-2"><a class="footer-link" href="#about">Planes</a></li>
-                        <li class="mb-2"><a class="footer-link" href="#services">Funciones</a></li>
+                        <li class="mb-2"><a class="footer-link" href="{{ route('schedule') }}">Gesti&oacute;n de Turnos</a></li>
+                        <li class="mb-2"><a class="footer-link" href="{{ route('list') }}">Cat&aacute;logo Online</a></li>
+                        <li class="mb-2"><a class="footer-link" href="#">Punto de Venta</a></li>
                     </ul>
                 </div>
             </div>
