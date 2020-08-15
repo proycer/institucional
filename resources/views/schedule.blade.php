@@ -37,9 +37,9 @@
 							<div class="text-center">
 								<img src="{{ asset('img/calendar.png') }}" />
 							</div>
-							<h3 class="font-weight-normal text-center h4">Turnero Online</h3>
+							<h3 class="font-weight-normal text-center h4">Turnos Online</h3>
 							<h3 class="font-weight-light h5 text-right">$199/mes</h3>
-							<p class="text-small mb-0 mt-4">Te ofrecemos la herramienta que siempre so&ntilde;aste para llevar tu negocio de manera ordenada, segura y hacia más clientes.</p>
+							<p class="text-small mb-0 mt-4">La herramienta que necesit&aacute;s para llevar tu negocio de manera ordenada, segura y hacia más clientes. Si necesit&aacute;s gestionar a varios profesionales, tambi&eacute;n tenemos esa modalidad.</p>
 							<p class="text-small mb-0 mt-2">Sin comisiones ni cargos ocultos.</p>
 						</div>
 					</div>
@@ -52,9 +52,9 @@
 							<p class="text-small mb-0 mt-4">Esto es lo que vas a tener:
 								<ul class="text-small">
 									<li>P&aacute;gina personalizada</li>
-									<li>Lista para vender</li>
+									<li>Lista para usar</li>
 									<li>Botones de redes sociales</li>
-									<li>Visible en pc y celular</li>
+									<li>Visible en pc, tablet y celular</li>
 									<li>Administraci&oacute;n sencilla</li>
 									<li>Y m&aacute;s ..</li>
 								</ul>
@@ -70,9 +70,7 @@
 								<img src="{{ asset('img/flex-biceps.png') }}" />
 							</div>
 							<h3 class="font-weight-normal text-center h4">Ayuda extra!</h3>
-							<p class="text-small mb-0 mt-4">Si ten&eacute;s muchos productos para cargar o
-								necesit&aacute;s ayuda con las redes sociales tenemos disponible especialistas para
-								hacerlo por vos!.</p>
+							<p class="text-small mb-0 mt-4">Si necesit&aacute;s ayuda con las redes sociales tenemos disponible especialistas para hacerlo por vos!.</p>
 							<p class="text-small text-center mb-0 mt-2">$599 por &uacute;nica vez!</p>
 						</div>
 					</div>
@@ -90,34 +88,34 @@
 				<div class="col-lg-6" data-aos="fade-right">
 					<h2>No tiene que ser dif&iacute;cil</h2>
 					<p class="text-muted">Tu emprendimiento no necesita complic&aacute;rsela m&aacute;s. Nosotros te
-						ayudamos a estar en internet, vos cerr&aacute;s las ventas.</p>
-					<button class="btn btn-primary js-modal-btn" data-video-id="B6uuIHpFkuo">
+						facilitamos la herramienta, vos hac&eacute;s tu negocio.</p>
+					<a href="https://api.whatsapp.com/send?phone=+5492996743360" class="btn btn-lg btn-primary">
 						Solicitar ya!
-					</button>
+					</a>
 				</div>
 			</div>
 			<div class="row align-items-center">
 				<div class="col-lg-6 mb-5 mb-lg-0" data-aos="fade-right">
 					<h2>Ojo!</h2>
 					<p class="text-muted">Eso no significa que no te vamos a dar todas las herramientas que
-						necesitas para vender. Tenemos lo necesario para ayudarte con:</p>
+						necesitas para trabajar. Tenemos lo necesario para ayudarte con:</p>
 					<ul class="list-check">
-						<li class="text-muted mb-2">La publicaci&oacute;n de tus productos</li>
+						<li class="text-muted mb-2">La carga de tus servicios</li>
 						<li class="text-muted mb-2">Compartir en las redes sociales</li>
 						<li class="text-muted mb-2">Una gesti&oacute;n f&aacute;cil pensada en vos</li>
 					</ul>
-					<button class="btn btn-primary js-modal-btn" data-video-id="B6uuIHpFkuo">
+					<a href="https://api.whatsapp.com/send?phone=+5492996743360" class="btn btn-lg btn-primary">
 						Solicitar ya!
-					</button>
+					</a>
 				</div>
 				<div class="col-lg-6">
 					<div class="row">
 						<div class="col-lg-6 col-sm-6 mb-4" data-aos="fade-right">
 							<div class="card border-0 shadow rounded-lg text-left px-2">
 								<div class="card-body px py-5">
-									<img src="{{ asset('img/rgb-circle-1--v1.png') }}" />
-									<h3 class="h5 font-weight-normal h4 my-3">Tu estilo</h3>
-									<p class="text-small mb-0 text-muted">Apariencia, opciones y banner a tu gusto.
+									<img src="{{ asset('img/wallet.png') }}" />
+									<h3 class="h5 font-weight-normal h4 my-3">Control</h3>
+									<p class="text-small mb-0 text-muted">Mayor conocimiento de tus ganancias.
 									</p>
 								</div>
 							</div>
@@ -126,10 +124,9 @@
 						<div class="col-lg-6 col-sm-6 mb-4" data-aos="fade-right">
 							<div class="card border-0 shadow rounded-lg text-left px-2">
 								<div class="card-body px py-5">
-									<img src="{{ asset('img/facebook-messenger.png') }}" />
-									<h3 class="h5 font-weight-normal h4 my-3">Redes Sociales</h3>
-									<p class="text-small mb-0 text-muted">Recibe mensajes directamente por Messenger
-										o WhatsApp.</p>
+									<img src="{{ asset('img/gmail.png') }}" />
+									<h3 class="h5 font-weight-normal h4 my-3">Notificaciones</h3>
+									<p class="text-small mb-0 text-muted">Recibe mensajes directamente en tu email.</p>
 								</div>
 							</div>
 						</div>
@@ -139,7 +136,7 @@
 								<div class="card-body px py-5">
 									<img src="{{ asset('img/web-design.png') }}" />
 									<h3 class="h5 font-weight-normal h4 my-3">Marca</h3>
-									<p class="text-small mb-0 text-muted">Tu propio sitio web .com.ar en internet.
+									<p class="text-small mb-0 text-muted">Tu propio sitio web en internet.
 									</p>
 								</div>
 							</div>
@@ -150,8 +147,8 @@
 								<div class="card-body px py-5">
 									<img src="{{ asset('img/maintenance.png') }}" />
 									<h3 class="h5 font-weight-normal h4 my-3">Gesti&oacute;n</h3>
-									<p class="text-small mb-0 text-muted">Pod&eacute;s autoadministrar tu
-										cat&aacute;logo</p>
+									<p class="text-small mb-0 text-muted">Pod&eacute;s autoadministrar tus
+										servicios</p>
 								</div>
 							</div>
 						</div>

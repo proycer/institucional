@@ -20,7 +20,7 @@
                 <h2 class="h5 mb-4">Info de Contacto</h2>
                 <ul class="list-unstyled mr-4 mb-3">
                     <li class="mb-2 text-muted">Argentina</li>
-                    <li class="mb-2"><a class="footer-link" href="tel:619-851-4132">+549 299 674 7311</a></li>
+                    <li class="mb-2"><a class="footer-link" href="https://api.whatsapp.com/send?phone=+5492996743360">+549 299 674 3360</a></li>
                     <li class="mb-2"><a class="footer-link" href="mailto:Nova@example.com">hola@proycer.com.ar</a>
                     </li>
                 </ul>
