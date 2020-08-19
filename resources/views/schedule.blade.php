@@ -17,7 +17,10 @@
 			<div class="col-lg-5 col-md-4 ml-auto" data-aos="fade-up">
 				<div class="preview owl-carousel owl-theme">
 					<div class="device-wrapper mx-auto">
-						<img class="img-fluid" src="{{ asset('images/turnos.png') }}" alt="">
+						<img class="img-fluid" src="{{ asset('images/turnos-1.png') }}" alt="">
+					</div>
+					<div class="device-wrapper mx-auto">
+						<img class="img-fluid" src="{{ asset('images/turnos-2.png') }}" alt="">
 					</div>
 				</div>
 			</div>
