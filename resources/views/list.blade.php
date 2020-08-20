@@ -6,7 +6,7 @@
 		<div class="row py-5 px-2">
 			<div class="col-lg-7 col-md-5 py-5" data-aos="fade-up">
 				<h1 class="font-weight-bold">Vend&eacute; f&aacute;cil en Internet</h1>
-				<h3 class="">a s&oacute;lo $399/mes</h3>
+				<h3 class="">a s&oacute;lo AR$399 /mes</h3>
 				<p class="my-4 text-muted">Olvidate de la complejidad de una tienda online.<br />Us&aacute; tu
 					propio cat&aacute;logo.</p>
 				<ul class="list-inline mb-0">
@@ -39,7 +39,7 @@
 								<img src="{{ asset('img/small-business.png') }}" />
 							</div>
 							<h3 class="font-weight-normal text-center h4">Cat&aacute;logo Online</h3>
-							<h3 class="font-weight-light h5 text-right">$399/mes</h3>
+							<h3 class="font-weight-light h5 text-right">AR$399 /mes</h3>
 							<p class="text-small mb-0 mt-4">Tu sitio web promocionando tus productos y una
 								gesti&oacute;n
 								sencilla con las funciones esenciales.</p>
