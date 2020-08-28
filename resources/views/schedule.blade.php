@@ -9,8 +9,10 @@
 				<h3 class="">a s&oacute;lo AR$399 /mes</h3>
 				<p class="my-4 text-muted">Un sistema de gesti&oacute;n sencillo para trabajadores de la belleza.</p>
 				<ul class="list-inline mb-0">
-					<li class="list-inline-item mb-2 mb-lg-0"><a class="btn btn-primary btn-lg px-4" href="#">
-							Prob&aacute; una demo</a>
+					<li class="list-inline-item mb-2 mb-lg-0">
+						<a class="btn btn-primary btn-lg px-4" href="https://turnos.proycer.com.ar/login?email=admin@demo.com&pass=admindemo" target="_blank">
+							Prob&aacute; una demo
+						</a>
 					</li>
 				</ul>
 			</div>
