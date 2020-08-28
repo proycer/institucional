@@ -2,7 +2,7 @@
     <div class="container section-padding-y">
         <div class="row">
             <div class="col-lg-3 mb-4 mb-lg-0"><img class="mb-4" src="{{ asset('img/logo.png') }}" alt="" width="110">
-                <p class="text-muted">Empoderamos a los emprendedores con tecnolog&iacute;a.</p>
+                <p class="text-muted">Empoderamos a los emprendedores con tecnolog&iacute;a accesible.</p>
             </div>
 
             <div class="col-lg-2 offset-lg-1 mb-4 mb-lg-0">

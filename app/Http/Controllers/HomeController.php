@@ -8,21 +8,25 @@ class HomeController extends Controller
 {
     public function home()
     {
-        return view('home');
+        $title = 'Sistemas Online';
+        return view('home', compact('title'));
     }
 
     public function us()
     {
-        return view('us');
+        $title = 'Nosotros';
+        return view('us', compact('title'));
     }
 
     public function schedule()
     {
-        return view('schedule');
+        $title = 'Turnos Online';
+        return view('schedule', compact('title'));
     }
 
     public function list()
     {
-        return view('list');
+        $title = 'Catalogo Online';
+        return view('list', compact('title'));
     }
 }

@@ -5,9 +5,9 @@
 	<div class="container">
 		<div class="row py-5 px-2">
 			<div class="col-lg-7 col-md-5 py-5" data-aos="fade-up">
-				<h1 class="font-weight-bold">Turnos, Reservas &amp; Gesti&oacute;n</h1>
+				<h1 class="font-weight-bold">Gesti&oacute;n de Turnos &amp; Reservas</h1>
 				<h3 class="">a s&oacute;lo AR$399 /mes</h3>
-				<p class="my-4 text-muted">Un sistema de gesti&oacute;n sencillo para trabajadores de la belleza.</p>
+				<p class="my-4 text-muted" style="font-size: 18px;">Un sistema de gesti&oacute;n sencillo para llevar control de tu negocio.</p>
 				<ul class="list-inline mb-0">
 					<li class="list-inline-item mb-2 mb-lg-0">
 						<a class="btn btn-primary btn-lg px-4" href="https://turnos.proycer.com.ar/login?email=admin@demo.com&pass=admindemo" target="_blank">
