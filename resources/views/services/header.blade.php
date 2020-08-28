@@ -5,7 +5,9 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav ml-auto">
                     <li class="nav-item"><a class="nav-link link-scroll" href="{{ route('home') }}">Inicio</a></li>
-                    <li class="nav-item dropdown">
+                    <li class="nav-item"><a class="nav-link link-scroll" href="{{ route('schedule') }}">Gesti&oacute;n de Turnos</a></li>
+                    <li class="nav-item"><a class="nav-link link-scroll" href="{{ route('list') }}">Cat&aacute;logo Online</a></li>
+                    {{-- <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             Servicios
                         </a>
@@ -14,9 +16,9 @@
                             <a class="dropdown-item" href="{{ route('list') }}">Cat&aacute;logo Online</a>
                             <a class="dropdown-item" href="#">Punto de Venta</a>
                         </div>
-                    </li>
+                    </li> --}}
                     {{-- <li class="nav-item"><a class="nav-link link-scroll" href="{{ route('us') }}">Nosotros</a></li> --}}
-                    <li class="nav-item"><a class="nav-link link-scroll" href="https://crm.proycer.com.ar">Autogesti&oacute;n</a></li>
+                    <li class="nav-item"><a class="nav-link link-scroll" href="https://crm.proycer.com.ar">Autogesti&oacute;n Clientes</a></li>
                 </ul>
             </div>
         </div>
