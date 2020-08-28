@@ -29,4 +29,9 @@ class HomeController extends Controller
         $title = 'Catalogo Online';
         return view('list', compact('title'));
     }
+
+    public function sitemap()
+    {
+        return response()->file('sitemap.txt');
+    }
 }

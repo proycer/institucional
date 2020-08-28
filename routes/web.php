@@ -17,3 +17,4 @@ Route::get('/', 'HomeController@home')->name('home');
 Route::get('/nosotros', 'HomeController@us')->name('us');
 Route::get('/turnos', 'HomeController@schedule')->name('schedule');
 Route::get('/catalogo', 'HomeController@list')->name('list');
+Route::get('/sitemap.txt', 'HomeController@sitemap');
