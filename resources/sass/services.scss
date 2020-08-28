@@ -1,12 +1,12 @@
 /* Bootstrap */
-@import "~bootstrap/scss/bootstrap";
+@import "~bootstrap/dist/css/bootstrap.min.css";
 
 /* Owl Carousel */
 @import "~owl.carousel/dist/assets/owl.carousel.min.css";
 @import "~owl.carousel/dist/assets/owl.theme.default.min.css";
 
 /* AOS */
-@import "~aos/src/sass/aos";
+@import "~aos/dist/aos.css";
 
 $proycer: #f1925d;
 
@@ -1223,6 +1223,6 @@ h3>a, h3>a:hover, h3>a:active {
 }
 
 .my-float-wp {
-	margin-top: 6px;
-	margin-left: 0;
+	margin-top: 11px;
+	margin-left: 1px;
 }

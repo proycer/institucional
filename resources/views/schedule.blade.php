@@ -5,14 +5,17 @@
 	<div class="container">
 		<div class="row py-5 px-2">
 			<div class="col-lg-7 col-md-5 py-5" data-aos="fade-up">
-				<h1 class="font-weight-bold">Gesti&oacute;n de Turnos &amp; Reservas</h1>
+				<h1 class="font-weight-bold">Gesti&oacute;n de Turnos Online</h1>
 				<h3 class="">a s&oacute;lo AR$399 /mes</h3>
-				<p class="my-4 text-muted" style="font-size: 18px;">Un sistema de gesti&oacute;n sencillo para llevar control de tu negocio.</p>
+				<p class="my-4 text-muted" style="font-size: 18px;">Un sistema de turnos online sencillo para llevar control de tu negocio.</p>
 				<ul class="list-inline mb-0">
 					<li class="list-inline-item mb-2 mb-lg-0">
 						<a class="btn btn-primary btn-lg px-4" href="https://turnos.proycer.com.ar/login?email=admin@demo.com&pass=admindemo" target="_blank">
-							Prob&aacute; una demo
+							Probalo gratis
 						</a>
+					</li>
+					<li class="list-inline-item mb-2 mb-lg-0" style="font-size: 14px;">
+					(no necesit&aacute;s registrarte)
 					</li>
 				</ul>
 			</div>
@@ -34,7 +37,7 @@
 	<section class="about py-0">
 		<div class="container">
 			<p class="h6 text-uppercase text-primary">Planes</p>
-			<h2 class="mb-5">Avanza a tu ritmo</h2>
+			<h2 class="mb-5">Avanz&aacute; a tu ritmo</h2>
 			<div class="row pb-5">
 				<div class="col-lg-4 col-md-6 mb-4 mb-lg-0" data-aos="fade-up">
 					<div class="card border-0 shadow rounded-lg py-4 text-left">
@@ -42,9 +45,9 @@
 							<div class="text-center">
 								<img src="{{ asset('img/calendar.png') }}" />
 							</div>
-							<h3 class="font-weight-normal text-center h4">Turnos Online</h3>
+							<h3 class="font-weight-normal text-center h4">Turnero Online</h3>
 							<h3 class="font-weight-light h5 text-right">AR$399 /mes</h3>
-							<p class="text-small mb-0 mt-4">La herramienta que necesit&aacute;s para llevar tu negocio de manera ordenada, segura y hacia más clientes. Si necesit&aacute;s gestionar a varios profesionales, tambi&eacute;n tenemos esa modalidad.</p>
+							<p class="text-small mb-0 mt-4">La herramienta que necesit&aacute;s para llevar tu negocio de manera ordenada, segura y hacia más clientes.</p>
 							<p class="text-small mb-0 mt-2">Sin comisiones ni cargos ocultos.</p>
 						</div>
 					</div>
@@ -56,9 +59,9 @@
 							<h3 class="font-weight-light h5 text-center">La mejor opci&oacute;n!</h3>
 							<p class="text-small mb-0 mt-4">Esto es lo que vas a tener:
 								<ul class="text-small">
-									<li>P&aacute;gina personalizada</li>
-									<li>Lista para usar</li>
-									<li>Botones de redes sociales</li>
+									<li>Opciones personalizables</li>
+									<li>Env&iacute;o de notificaciones</li>
+									<li>Panel con resumen de ganancias</li>
 									<li>Visible en pc, tablet y celular</li>
 									<li>Administraci&oacute;n sencilla</li>
 									<li>Y m&aacute;s ..</li>
@@ -75,8 +78,8 @@
 								<img src="{{ asset('img/flex-biceps.png') }}" />
 							</div>
 							<h3 class="font-weight-normal text-center h4">Ayuda extra!</h3>
-							<p class="text-small mb-0 mt-4">Si necesit&aacute;s ayuda con las redes sociales tenemos disponible especialistas para hacerlo por vos!.</p>
-							<p class="text-small text-center mb-0 mt-2">$599 por &uacute;nica vez!</p>
+							<p class="text-small mb-0 mt-4">Si necesit&aacute;s gestionar tu local con varios profesionales, pod&eacute;s administrar a cada trabajador con sus ganancias, calendario y usuario!.</p>
+							<p class="text-small text-center mb-0 mt-2">AR$199 por cada profesional adicional!</p>
 						</div>
 					</div>
 				</div>

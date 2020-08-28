@@ -45,8 +45,8 @@
                             <div class="text-center">
                                 <img src="{{ asset('img/small-business.png') }}" />
                             </div>
-                            <h3 class="font-weight-normal text-center h4"><a href="{{ route('list') }}">Cat&aacute;logo Online</a></h3>
-                            <h3 class="font-weight-light h5 text-right">AR$399 /mes</h3>
+                            <h3 class="font-weight-normal text-center h4">Cat&aacute;logo Online</h3>
+                            <h3 class="font-weight-light h5 text-right">pr&oacute;ximamente!</h3>
                             <p class="text-small mb-0 mt-4">Tu sitio web promocionando tus productos y una gesti&oacute;n sencilla con las funciones esenciales.</p>
                         </div>
                     </div>
