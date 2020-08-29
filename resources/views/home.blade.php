@@ -33,7 +33,7 @@
                                 <img src="{{ asset('img/calendar.png') }}" />
                             </div>
                             <h3 class="font-weight-normal text-center h4"><a href="{{ route('schedule') }}">Turnos Online</a></h3>
-                            <h3 class="font-weight-light h5 text-right">AR$399 /mes</h3>
+                            <h3 class="font-weight-light h5 text-right">AR$199 /mes</h3>
                             <p class="text-small mb-0 mt-4">La herramienta que necesit&aacute;s para llevar tu negocio de manera ordenada, segura y hacia más clientes.</p>
                         </div>
                     </div>
