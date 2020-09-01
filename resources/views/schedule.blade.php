@@ -68,7 +68,7 @@
 								</ul>
 							</p>
 							<div class="text-center">
-								<a href="https://api.whatsapp.com/send?phone=+5492996743360" class="btn btn-lg btn-primary">
+								<a href="{{ route('buy', 1) }}" class="btn btn-lg btn-primary">
 									Solicitar ya!
 								</a>
 							</div>

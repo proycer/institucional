@@ -34,4 +34,10 @@ class HomeController extends Controller
     {
         return response()->file('sitemap.txt');
     }
+
+    public function buy(int $service_id)
+    {
+        $title = 'Pagar Servicio';
+        return view('buy', compact('title'));
+    }
 }

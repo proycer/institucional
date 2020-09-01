@@ -18,3 +18,4 @@ Route::get('/nosotros', 'HomeController@us')->name('us');
 Route::get('/turnos', 'HomeController@schedule')->name('schedule');
 Route::get('/catalogo', 'HomeController@list')->name('list');
 Route::get('/sitemap.txt', 'HomeController@sitemap');
+Route::get('/pagar/{service_id}', 'HomeController@buy')->name('buy');
