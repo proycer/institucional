@@ -6,7 +6,7 @@
 		<div class="row py-5 px-2">
 			<div class="col-lg-7 col-md-5 py-5" data-aos="fade-up">
 				<h1 class="font-weight-bold">Gesti&oacute;n de Turnos Online</h1>
-				<h3 class="">a s&oacute;lo AR$199 /mes</h3>
+				<h3 class="">desde AR$199 /mes</h3>
 				<p class="my-4 text-muted" style="font-size: 18px;">Un sistema de turnos online sencillo para llevar control de tu negocio.</p>
 				<ul class="list-inline mb-0">
 					<li class="list-inline-item mb-2 mb-lg-0">
@@ -67,6 +67,11 @@
 									<li>Y m&aacute;s ..</li>
 								</ul>
 							</p>
+							<div class="text-center">
+								<a href="https://api.whatsapp.com/send?phone=+5492996743360" class="btn btn-lg btn-primary">
+									Solicitar ya!
+								</a>
+							</div>
 						</div>
 					</div>
 				</div>
