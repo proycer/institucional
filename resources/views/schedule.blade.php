@@ -47,7 +47,7 @@
 							</div>
 							<h3 class="font-weight-normal text-center h4">Turnero Online</h3>
 							<h3 class="font-weight-light h5 text-right">AR$199 /mes</h3>
-							<p class="text-small mb-0 mt-4">La herramienta que necesit&aacute;s para llevar tu negocio de manera ordenada, segura y hacia más clientes.</p>
+							<p class="text-small mb-0 mt-4">Manej&aacute;s tus turnos por las redes sociales y respond&eacute;s mensajes todo el tiempo? Organizalo con tu calendario web!</p>
 							<p class="text-small mb-0 mt-2">Sin comisiones ni cargos ocultos.</p>
 						</div>
 					</div>

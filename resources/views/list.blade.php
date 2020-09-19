@@ -7,18 +7,28 @@
 			<div class="col-lg-7 col-md-5 py-5" data-aos="fade-up">
 				<h1 class="font-weight-bold">Vend&eacute; f&aacute;cil en Internet</h1>
 				<h3 class="">a s&oacute;lo AR$399 /mes</h3>
-				<p class="my-4 text-muted">Olvidate de la complejidad de una tienda online.<br />Us&aacute; tu
-					propio cat&aacute;logo.</p>
+				<p class="my-4 text-muted">Olvidate de la complejidad de una tienda online.<br />Us&aacute; tu propio cat&aacute;logo.</p>
 				<ul class="list-inline mb-0">
-					<li class="list-inline-item mb-2 mb-lg-0"><a class="btn btn-primary btn-lg px-4" href="#">
-							Prob&aacute; una demo</a>
+					<li class="list-inline-item mb-2 mb-lg-0">
+						<a class="btn btn-primary btn-lg px-4" href="{{ route('list_demo') }}">
+							Probalo gratis
+						</a>
+					</li>
+					<li class="list-inline-item mb-2 mb-lg-0" style="font-size: 14px;">
+					(no necesit&aacute;s registrarte)
 					</li>
 				</ul>
 			</div>
 			<div class="col-lg-5 col-md-4 ml-auto" data-aos="fade-up">
 				<div class="preview owl-carousel owl-theme">
 					<div class="device-wrapper mx-auto">
-						<img class="img-fluid" src="{{ asset('images/catalogo.png') }}" alt="">
+						<img class="img-fluid" src="{{ asset('images/catalogo-1.png') }}" alt="">
+					</div>
+					<div class="device-wrapper mx-auto">
+						<img class="img-fluid" src="{{ asset('images/catalogo-2.png') }}" alt="">
+					</div>
+					<div class="device-wrapper mx-auto">
+						<img class="img-fluid" src="{{ asset('images/catalogo-3.png') }}" alt="">
 					</div>
 				</div>
 			</div>
@@ -40,10 +50,8 @@
 							</div>
 							<h3 class="font-weight-normal text-center h4">Cat&aacute;logo Online</h3>
 							<h3 class="font-weight-light h5 text-right">AR$399 /mes</h3>
-							<p class="text-small mb-0 mt-4">Tu sitio web promocionando tus productos y una
-								gesti&oacute;n
-								sencilla con las funciones esenciales.</p>
-							<p class="text-small mb-0 mt-2">Sin comisiones ni cargos ocultos.</p>
+							<p class="text-small mb-0 mt-4">Vend&eacute;s por WhatsApp, necesit&aacute;s ordenar tus ventas y dejar de enviar precios? Que tu cat&aacute;logo venda por vos!</p>
+							<p class="text-small mb-0 mt-2">Sin comisiones ni cargos ocultos <i>(costo de activaci&oacute;n en 4hs: AR$999</i></p>
 						</div>
 					</div>
 				</div>
@@ -62,6 +70,11 @@
 									<li>Y m&aacute;s ..</li>
 								</ul>
 							</p>
+							<div class="text-center">
+								<a href="https://api.whatsapp.com/send?phone=+5492996743360" class="btn btn-lg btn-primary">
+									Solicitar ya!
+								</a>
+							</div>
 						</div>
 					</div>
 				</div>
@@ -76,7 +89,6 @@
 							<p class="text-small mb-0 mt-4">Si ten&eacute;s muchos productos para cargar o
 								necesit&aacute;s ayuda con las redes sociales tenemos disponible especialistas para
 								hacerlo por vos!.</p>
-							<p class="text-small text-center mb-0 mt-2">$599 por &uacute;nica vez!</p>
 						</div>
 					</div>
 				</div>
@@ -94,9 +106,9 @@
 					<h2>No tiene que ser dif&iacute;cil</h2>
 					<p class="text-muted">Tu emprendimiento no necesita complic&aacute;rsela m&aacute;s. Nosotros te
 						ayudamos a estar en internet, vos cerr&aacute;s las ventas.</p>
-					<button class="btn btn-primary js-modal-btn" data-video-id="B6uuIHpFkuo">
+					<a href="https://api.whatsapp.com/send?phone=+5492996743360" class="btn btn-lg btn-primary">
 						Solicitar ya!
-					</button>
+					</a>
 				</div>
 			</div>
 			<div class="row align-items-center">
@@ -109,9 +121,9 @@
 						<li class="text-muted mb-2">Compartir en las redes sociales</li>
 						<li class="text-muted mb-2">Una gesti&oacute;n f&aacute;cil pensada en vos</li>
 					</ul>
-					<button class="btn btn-primary js-modal-btn" data-video-id="B6uuIHpFkuo">
+					<a href="https://api.whatsapp.com/send?phone=+5492996743360" class="btn btn-lg btn-primary">
 						Solicitar ya!
-					</button>
+					</a>
 				</div>
 				<div class="col-lg-6">
 					<div class="row">

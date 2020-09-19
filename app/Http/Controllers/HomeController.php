@@ -30,6 +30,12 @@ class HomeController extends Controller
         return view('list', compact('title'));
     }
 
+    public function listDemo()
+    {
+        $title = 'Demo Catalogo Online';
+        return view('list-demo', compact('title'));
+    }
+
     public function sitemap()
     {
         return response()->file('sitemap.txt');
