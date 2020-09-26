@@ -51,7 +51,7 @@
 							<h3 class="font-weight-normal text-center h4">Cat&aacute;logo Online</h3>
 							<h3 class="font-weight-light h5 text-right">AR$399 /mes</h3>
 							<p class="text-small mb-0 mt-4">Vend&eacute;s por WhatsApp, necesit&aacute;s ordenar tus ventas y dejar de enviar precios? Que tu cat&aacute;logo venda por vos!</p>
-							<p class="text-small mb-0 mt-2">Sin comisiones ni cargos ocultos <i>(costo de activaci&oacute;n en 4hs: AR$999</i></p>
+							<p class="text-small mb-0 mt-2">Sin comisiones ni cargos ocultos.</p>
 						</div>
 					</div>
 				</div>
