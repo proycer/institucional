@@ -15,7 +15,7 @@
 						</a>
 					</li>
 					<li class="list-inline-item mb-2 mb-lg-0" style="font-size: 14px;">
-					(no necesit&aacute;s registrarte)
+						(no necesit&aacute;s registrarte)
 					</li>
 				</ul>
 			</div>
@@ -176,4 +176,93 @@
 		</div>
 	</section>
 </section>
+
+<style>
+	#myImg {
+		border-radius: 5px;
+		cursor: pointer;
+		transition: 0.3s;
+	}
+
+	#myImg:hover {
+		opacity: 0.7;
+	}
+
+	.modal {
+		display: none;
+		position: fixed;
+		z-index: 1;
+		padding-top: 100px;
+		left: 0;
+		top: 0;
+		width: 100%;
+		height: 100%;
+		overflow: auto;
+		background-color: rgb(0, 0, 0);
+		background-color: rgba(0, 0, 0, 0.9);
+	}
+
+	.modal-content {
+		margin: auto;
+		display: block;
+		width: 80%;
+		max-width: 500px;
+	}
+
+	.modal-content,
+	#caption {
+		animation-name: zoom;
+		animation-duration: 0.6s;
+	}
+
+	@keyframes zoom {
+		from {
+			transform: scale(0)
+		}
+
+		to {
+			transform: scale(1)
+		}
+	}
+
+	.close {
+		position: absolute;
+		top: 100px;
+		right: 35px;
+		color: #000;
+		font-size: 40px;
+		font-weight: bold;
+		transition: 0.3s;
+		z-index: 9999;
+	}
+
+	.close:hover,
+	.close:focus {
+		color: #bbb;
+		text-decoration: none;
+		cursor: pointer;
+	}
+
+	@media only screen and (max-width: 700px) {
+		.modal-content {
+			width: 100%;
+		}
+	}
+</style>
+
+<div id="myModal" class="modal">
+	<span class="close" id="close">&times;</span>
+	<img class="modal-content" src="{{ asset('images/descuento.jpg') }}" id="img01">
+</div>
+
+<script>
+	var modal = document.getElementById("myModal");
+	modal.style.display = "block";
+
+	var span = document.getElementById("close");
+
+	span.onclick = function() {
+		modal.style.display = "none";
+	}
+</script>
 @endsection
