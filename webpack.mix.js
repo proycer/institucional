@@ -2,6 +2,8 @@ const mix = require('laravel-mix');
 
 require('laravel-mix-critical');
 
+// require('laravel-mix-purgecss');
+
 /*
  |--------------------------------------------------------------------------
  | Mix Asset Management
@@ -13,10 +15,9 @@ require('laravel-mix-critical');
  |
  */
 
-mix.js('resources/js/app.js', 'public/js')
-    .js('resources/js/services.js', 'public/js')
-    .sass('resources/sass/app.scss', 'public/css')
+mix.js('resources/js/services.js', 'public/js')
     .sass('resources/sass/services.scss', 'public/css')
+    // .purgeCss()
     .critical({
         enabled: mix.inProduction(),
         urls: [
