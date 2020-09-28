@@ -1,5 +1,7 @@
 const mix = require('laravel-mix');
 
+require('laravel-mix-critical');
+
 /*
  |--------------------------------------------------------------------------
  | Mix Asset Management
@@ -14,4 +16,16 @@ const mix = require('laravel-mix');
 mix.js('resources/js/app.js', 'public/js')
     .js('resources/js/services.js', 'public/js')
     .sass('resources/sass/app.scss', 'public/css')
-    .sass('resources/sass/services.scss', 'public/css');
+    .sass('resources/sass/services.scss', 'public/css')
+    .critical({
+        enabled: mix.inProduction(),
+        urls: [
+            { src: 'https://proycer.test/', dest: 'public/css/home_critical.min.css' },
+            { src: 'https://proycer.test/turnos', dest: 'public/css/turnos_critical.min.css' },
+            { src: 'https://proycer.test/catalogo', dest: 'public/css/catalogo_critical.min.css' },
+            { src: 'https://proycer.test/catalogo/demo', dest: 'public/css/catalogo-demo_critical.min.css' }
+        ],
+        options: {
+            minify: true,
+        },
+    });
