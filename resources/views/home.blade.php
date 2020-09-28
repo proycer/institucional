@@ -33,7 +33,7 @@
                                 <img src="{{ asset('img/calendar.png') }}" />
                             </div>
                             <h3 class="font-weight-normal text-center h4"><a href="{{ route('schedule') }}">Turnos Online</a></h3>
-                            <h3 class="font-weight-light h5 text-right">AR$199 /mes</h3>
+                            <h3 class="font-weight-light h5 text-right">AR$399 /mes</h3>
                             <p class="text-small mb-0 mt-4">Manej&aacute;s tus turnos por las redes sociales y respond&eacute;s mensajes todo el tiempo? Organizalo con tu calendario web!</p>
                             <div class="text-center">
 								<a href="{{ route('schedule') }}" class="btn btn-lg btn-primary">
@@ -51,7 +51,7 @@
                                 <img src="{{ asset('img/small-business.png') }}" />
                             </div>
                             <h3 class="font-weight-normal text-center h4"><a href="{{ route('list') }}">Cat&aacute;logo Online</a></h3>
-                            <h3 class="font-weight-light h5 text-right">AR$399 /mes</h3>
+                            <h3 class="font-weight-light h5 text-right">AR$799 /mes</h3>
                             <p class="text-small mb-0 mt-4">Vend&eacute;s por WhatsApp, necesit&aacute;s ordenar tus ventas y dejar de enviar precios? Que tu cat&aacute;logo venda por vos!</p>
                             <div class="text-center">
 								<a href="{{ route('list') }}" class="btn btn-lg btn-primary">

@@ -6,7 +6,7 @@
 		<div class="row py-5 px-2">
 			<div class="col-lg-7 col-md-5 py-5" data-aos="fade-up">
 				<h1 class="font-weight-bold">Vend&eacute; f&aacute;cil en Internet</h1>
-				<h3 class="">a s&oacute;lo AR$399 /mes</h3>
+				<h3 class="">a s&oacute;lo AR$799 /mes</h3>
 				<p class="my-4 text-muted">Olvidate de la complejidad de una tienda online.<br />Us&aacute; tu propio cat&aacute;logo.</p>
 				<ul class="list-inline mb-0">
 					<li class="list-inline-item mb-2 mb-lg-0">
@@ -49,7 +49,7 @@
 								<img src="{{ asset('img/small-business.png') }}" />
 							</div>
 							<h3 class="font-weight-normal text-center h4">Cat&aacute;logo Online</h3>
-							<h3 class="font-weight-light h5 text-right">AR$399 /mes</h3>
+							<h3 class="font-weight-light h5 text-right">AR$799 /mes</h3>
 							<p class="text-small mb-0 mt-4">Vend&eacute;s por WhatsApp, necesit&aacute;s ordenar tus ventas y dejar de enviar precios? Que tu cat&aacute;logo venda por vos!</p>
 							<p class="text-small mb-0 mt-2">Sin comisiones ni cargos ocultos.</p>
 						</div>
@@ -176,93 +176,4 @@
 		</div>
 	</section>
 </section>
-
-<style>
-	#myImg {
-		border-radius: 5px;
-		cursor: pointer;
-		transition: 0.3s;
-	}
-
-	#myImg:hover {
-		opacity: 0.7;
-	}
-
-	.modal {
-		display: none;
-		position: fixed;
-		z-index: 1;
-		padding-top: 100px;
-		left: 0;
-		top: 0;
-		width: 100%;
-		height: 100%;
-		overflow: auto;
-		background-color: rgb(0, 0, 0);
-		background-color: rgba(0, 0, 0, 0.9);
-	}
-
-	.modal-content {
-		margin: auto;
-		display: block;
-		width: 80%;
-		max-width: 500px;
-	}
-
-	.modal-content,
-	#caption {
-		animation-name: zoom;
-		animation-duration: 0.6s;
-	}
-
-	@keyframes zoom {
-		from {
-			transform: scale(0)
-		}
-
-		to {
-			transform: scale(1)
-		}
-	}
-
-	.close {
-		position: absolute;
-		top: 100px;
-		right: 35px;
-		color: #000;
-		font-size: 40px;
-		font-weight: bold;
-		transition: 0.3s;
-		z-index: 9999;
-	}
-
-	.close:hover,
-	.close:focus {
-		color: #bbb;
-		text-decoration: none;
-		cursor: pointer;
-	}
-
-	@media only screen and (max-width: 700px) {
-		.modal-content {
-			width: 100%;
-		}
-	}
-</style>
-
-<div id="myModal" class="modal">
-	<span class="close" id="close">&times;</span>
-	<img class="modal-content" src="{{ asset('images/descuento.jpg') }}" id="img01">
-</div>
-
-<script>
-	var modal = document.getElementById("myModal");
-	modal.style.display = "block";
-
-	var span = document.getElementById("close");
-
-	span.onclick = function() {
-		modal.style.display = "none";
-	}
-</script>
 @endsection
